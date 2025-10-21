@@ -5,7 +5,7 @@
     "parody": "Donald Trump",
     "faction": "White",
     "level": 5,
-    "soldiers": 4800,
+    "soldiers": 4368,
     "ability": "FirstStrike",
     "description": "She doesn't start wars—she wins them before breakfast. Her hair is armor, her smile is strategy."
   },
@@ -25,7 +25,7 @@
     "parody": "Michael Jackson",
     "faction": "White",
     "level": 5,
-    "soldiers": 4700,
+    "soldiers": 3760,
     "ability": "Precision",
     "description": "Fights in sequins and a single glove. If you hear 'hee-hee,' it’s already too late."
   },
@@ -85,7 +85,7 @@
     "parody": "Nikola Tesla",
     "faction": "White",
     "level": 5,
-    "soldiers": 5000,
+    "soldiers": 4000,
     "ability": "Precision",
     "description": "Her lightning strikes never miss. Also powers your base for free."
   },
@@ -195,7 +195,7 @@
     "parody": "Galileo Galilei",
     "faction": "White",
     "level": 4,
-    "soldiers": 3500,
+    "soldiers": 2800,
     "ability": "Precision",
     "description": "‘And yet it moves!’—right into enemy lines."
   },
@@ -235,7 +235,7 @@
     "parody": "Ludwig van Beethoven",
     "faction": "White",
     "level": 4,
-    "soldiers": 3300,
+    "soldiers": 3003,
     "ability": "FirstStrike",
     "description": "Deaf to fear, loud in battle. His symphonies shatter enemy morale."
   },
@@ -245,7 +245,7 @@
     "parody": "Pablo Picasso",
     "faction": "White",
     "level": 4,
-    "soldiers": 3100,
+    "soldiers": 2480,
     "ability": "Precision",
     "description": "Fights from five angles at once. You never see her coming."
   },
@@ -305,7 +305,7 @@
     "parody": "Grace Hopper",
     "faction": "White",
     "level": 4,
-    "soldiers": 3500,
+    "soldiers": 2800,
     "ability": "Precision",
     "description": "Found the first bug—in enemy code. Now she patches their defeat."
   },
@@ -415,7 +415,7 @@
     "parody": "Ada Lovelace",
     "faction": "White",
     "level": 3,
-    "soldiers": 2500,
+    "soldiers": 2000,
     "ability": "Precision",
     "description": "Wrote the first algorithm—to predict enemy movements."
   },
@@ -435,7 +435,7 @@
     "parody": "Simone de Beauvoir",
     "faction": "White",
     "level": 3,
-    "soldiers": 2300,
+    "soldiers": 2093,
     "ability": "FirstStrike",
     "description": "Defined herself—and then defined your defeat."
   },
@@ -655,7 +655,7 @@
     "parody": "Christine de Pizan",
     "faction": "White",
     "level": 2,
-    "soldiers": 1700,
+    "soldiers": 1360,
     "ability": "Precision",
     "description": "Wrote the first feminist text—and skewered male egos with ink."
   },
@@ -665,7 +665,7 @@
     "parody": "Mary Wollstonecraft",
     "faction": "White",
     "level": 2,
-    "soldiers": 1600,
+    "soldiers": 1456,
     "ability": "FirstStrike",
     "description": "Started the revolution with a pen. Men are still recovering."
   },
@@ -805,7 +805,7 @@
     "parody": "Dorothy Vaughan",
     "faction": "White",
     "level": 1,
-    "soldiers": 1300,
+    "soldiers": 1040,
     "ability": "Precision",
     "description": "Calculated orbits by hand. Now she calculates your defeat."
   },
@@ -865,7 +865,7 @@
     "parody": "Sappho",
     "faction": "White",
     "level": 1,
-    "soldiers": 1200,
+    "soldiers": 1092,
     "ability": "FirstStrike",
     "description": "Wrote love poems so fierce, they started wars."
   },
@@ -935,7 +935,7 @@
     "parody": "Elon Musk",
     "faction": "White",
     "level": 1,
-    "soldiers": 1400,
+    "soldiers": 1120,
     "ability": "Precision",
     "description": "Colonized Mars. Earth is just practice."
   },
@@ -985,7 +985,7 @@
     "parody": "Hypatia",
     "faction": "White",
     "level": 1,
-    "soldiers": 1200,
+    "soldiers": 960,
     "ability": "Precision",
     "description": "Taught math in Alexandria. Now she calculates your doom."
   },
@@ -1055,7 +1055,7 @@
     "parody": "Nero",
     "faction": "Black",
     "level": 5,
-    "soldiers": 4800,
+    "soldiers": 4368,
     "ability": "FirstStrike",
     "description": "Fiddled while Rome burned—then blamed everyone else."
   },
@@ -1065,7 +1065,7 @@
     "parody": "Caligula",
     "faction": "Black",
     "level": 5,
-    "soldiers": 4700,
+    "soldiers": 3760,
     "ability": "Precision",
     "description": "Made his horse a senator. Now the horse leads your defeat."
   },
@@ -1255,7 +1255,7 @@
     "parody": "Sun Tzu",
     "faction": "Black",
     "level": 4,
-    "soldiers": 3200,
+    "soldiers": 2560,
     "ability": "Precision",
     "description": "Wrote ‘The Art of War.’ Now he’s writing your obituary."
   },
@@ -1365,7 +1365,7 @@
     "parody": "Billy the Kid",
     "faction": "Black",
     "level": 3,
-    "soldiers": 2500,
+    "soldiers": 2000,
     "ability": "Precision",
     "description": "Killed 21 men by 21. You’re #22."
   },
@@ -1415,7 +1415,7 @@
     "parody": "Assata Shakur",
     "faction": "Black",
     "level": 3,
-    "soldiers": 2400,
+    "soldiers": 2184,
     "ability": "FirstStrike",
     "description": "Declared war on injustice. You’re collateral damage."
   },
@@ -1575,7 +1575,7 @@
     "parody": "Mikhail Bakunin",
     "faction": "Black",
     "level": 2,
-    "soldiers": 1800,
+    "soldiers": 1440,
     "ability": "Precision",
     "description": "Wanted to destroy all states. Starting with yours."
   },
@@ -1595,7 +1595,7 @@
     "parody": "Mata Hari",
     "faction": "Black",
     "level": 2,
-    "soldiers": 1700,
+    "soldiers": 1547,
     "ability": "FirstStrike",
     "description": "Danced into enemy camps—and out with their secrets."
   },
@@ -1685,7 +1685,7 @@
     "parody": "Seleucus I Nicator",
     "faction": "Black",
     "level": 2,
-    "soldiers": 1800,
+    "soldiers": 1440,
     "ability": "Precision",
     "description": "One of Alexander’s generals. Now he generalizes your defeat."
   },
@@ -1815,7 +1815,7 @@
     "parody": "Zhang Xianzhong",
     "faction": "Black",
     "level": 1,
-    "soldiers": 1200,
+    "soldiers": 960,
     "ability": "Precision",
     "description": "Carved ‘Kill’ into mountains. Your name is next."
   },
@@ -1845,7 +1845,7 @@
     "parody": "El Cid",
     "faction": "Black",
     "level": 1,
-    "soldiers": 1300,
+    "soldiers": 1183,
     "ability": "FirstStrike",
     "description": "Fought Moors and Christians alike. You’re just another enemy."
   },
@@ -1945,7 +1945,7 @@
     "parody": "Pablo Neruda",
     "faction": "Black",
     "level": 1,
-    "soldiers": 1200,
+    "soldiers": 960,
     "ability": "Precision",
     "description": "Wrote odes to common things. Now he writes elegies for your cards."
   },
