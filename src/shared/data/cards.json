@@ -1,0 +1,2002 @@
+[
+  {
+    "id": 101,
+    "name": "General Ivanka",
+    "parody": "Donald Trump",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 4800,
+    "ability": "FirstStrike",
+    "description": "She doesn't start wars—she wins them before breakfast. Her hair is armor, her smile is strategy."
+  },
+  {
+    "id": 102,
+    "name": "Cleopatsy",
+    "parody": "Cleopatra",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 4600,
+    "ability": null,
+    "description": "Rules Egypt from a golden litter, commands an army of adoring cats, and never pays for snacks."
+  },
+  {
+    "id": 103,
+    "name": "Moonwalk Madonna",
+    "parody": "Michael Jackson",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 4700,
+    "ability": "Precision",
+    "description": "Fights in sequins and a single glove. If you hear 'hee-hee,' it’s already too late."
+  },
+  {
+    "id": 104,
+    "name": "Empress Joséphine the Conqueror",
+    "parody": "Napoleon Bonaparte",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5600,
+    "ability": null,
+    "description": "Conquered Europe in heels. Her perfume alone caused three surrenders."
+  },
+  {
+    "id": 105,
+    "name": "Madame Relativity",
+    "parody": "Albert Einstein",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 4900,
+    "ability": "Spartan",
+    "description": "Proved time is relative—but her coffee break is always exactly 10 minutes."
+  },
+  {
+    "id": 106,
+    "name": "Lady Vinci",
+    "parody": "Leonardo da Vinci",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5200,
+    "ability": null,
+    "description": "Paints, flies, invents, and wins wars—all before lunch."
+  },
+  {
+    "id": 107,
+    "name": "Duchess Winstonette",
+    "parody": "Winston Churchill",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5300,
+    "ability": null,
+    "description": "Fights with cigars and speeches. Never surrenders—especially to bedtimes."
+  },
+  {
+    "id": 108,
+    "name": "Queen Marie-Armored",
+    "parody": "Marie Antoinette",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 4500,
+    "ability": "SiegeMaster",
+    "description": "‘Let them fight!’ she declared, tossing cake at the enemy lines."
+  },
+  {
+    "id": 109,
+    "name": "Baroness Spark",
+    "parody": "Nikola Tesla",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5000,
+    "ability": "Precision",
+    "description": "Her lightning strikes never miss. Also powers your base for free."
+  },
+  {
+    "id": 110,
+    "name": "Caesara",
+    "parody": "Julius Caesar",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5700,
+    "ability": null,
+    "description": "Came, saw, conquered—and never checked the Ides of March."
+  },
+  {
+    "id": 111,
+    "name": "General Liberty",
+    "parody": "George Washington",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5500,
+    "ability": null,
+    "description": "Chops cherry trees by day, wins revolutions by night."
+  },
+  {
+    "id": 112,
+    "name": "Empress Vicky",
+    "parody": "Queen Victoria",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5100,
+    "ability": null,
+    "description": "Ruled an empire where the sun never set—or napped."
+  },
+  {
+    "id": 113,
+    "name": "Tsarina Iron",
+    "parody": "Catherine the Great",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5400,
+    "ability": null,
+    "description": "Expanded her empire with brains, not just horses."
+  },
+  {
+    "id": 114,
+    "name": "Virgin Empress",
+    "parody": "Elizabeth I",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 5000,
+    "ability": null,
+    "description": "Told her troops: ‘I have the heart of a king—and the hair of a goddess.’"
+  },
+  {
+    "id": 115,
+    "name": "Lady Volt",
+    "parody": "Thomas Edison",
+    "faction": "White",
+    "level": 5,
+    "soldiers": 4800,
+    "ability": "Reinforcements",
+    "description": "Lit up the battlefield—one patent at a time."
+  },
+  {
+    "id": 116,
+    "name": "Captain Frida",
+    "parody": "Frida Kahlo",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3600,
+    "ability": "LastStand",
+    "description": "Paints with blood, fights with flowers. Her unibrow strikes fear into generals."
+  },
+  {
+    "id": 117,
+    "name": "Sky Marshal Amelia",
+    "parody": "Amelia Earhart",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3700,
+    "ability": "TacticalRetreat",
+    "description": "Vanished once—but always comes back with better intel."
+  },
+  {
+    "id": 118,
+    "name": "Commander Coco",
+    "parody": "Coco Chanel",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 4200,
+    "ability": null,
+    "description": "Declared war on bad fashion. Her troops wear only black—and win."
+  },
+  {
+    "id": 119,
+    "name": "Alexandra the Grand",
+    "parody": "Alexander the Great",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 4300,
+    "ability": null,
+    "description": "Wept because there were no more worlds to conquer. Then found Reddit."
+  },
+  {
+    "id": 120,
+    "name": "Astronomist Galilea",
+    "parody": "Galileo Galilei",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3500,
+    "ability": "Precision",
+    "description": "‘And yet it moves!’—right into enemy lines."
+  },
+  {
+    "id": 121,
+    "name": "Agent Elegance",
+    "parody": "Audrey Hepburn",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3400,
+    "ability": null,
+    "description": "Defeated armies with grace, pearls, and a croissant."
+  },
+  {
+    "id": 122,
+    "name": "Novelist Jane",
+    "parody": "Jane Austen",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3200,
+    "ability": "Spartan",
+    "description": "Her wit cuts deeper than any sword. Enemies surrender to avoid awkwardness."
+  },
+  {
+    "id": 123,
+    "name": "Darwina the Naturalist",
+    "parody": "Charles Darwin",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3900,
+    "ability": null,
+    "description": "Proved only the fittest survive—then joined the fittest faction."
+  },
+  {
+    "id": 124,
+    "name": "Maestra Thunder",
+    "parody": "Ludwig van Beethoven",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3300,
+    "ability": "FirstStrike",
+    "description": "Deaf to fear, loud in battle. His symphonies shatter enemy morale."
+  },
+  {
+    "id": 125,
+    "name": "General Cubist",
+    "parody": "Pablo Picasso",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3100,
+    "ability": "Precision",
+    "description": "Fights from five angles at once. You never see her coming."
+  },
+  {
+    "id": 126,
+    "name": "Ambassador Eleanor",
+    "parody": "Eleanor Roosevelt",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 4000,
+    "ability": null,
+    "description": "Won hearts and treaties. Her pen is mightier than your entire army."
+  },
+  {
+    "id": 127,
+    "name": "Iron Duchess",
+    "parody": "Margaret Thatcher",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 4100,
+    "ability": null,
+    "description": "Not for turning—only for conquering."
+  },
+  {
+    "id": 128,
+    "name": "Prime General Indira",
+    "parody": "Indira Gandhi",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3800,
+    "ability": null,
+    "description": "Led with steel resolve. Her emergency powers include winning."
+  },
+  {
+    "id": 129,
+    "name": "Iron Golda",
+    "parody": "Golda Meir",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3700,
+    "ability": null,
+    "description": "Slept with a pistol under her pillow. Woke up owning the map."
+  },
+  {
+    "id": 130,
+    "name": "Chancellor Angela",
+    "parody": "Angela Merkel",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3600,
+    "ability": null,
+    "description": "Quietly took control while everyone argued. Classic Merkel move."
+  },
+  {
+    "id": 131,
+    "name": "Admiral Debug",
+    "parody": "Grace Hopper",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3500,
+    "ability": "Precision",
+    "description": "Found the first bug—in enemy code. Now she patches their defeat."
+  },
+  {
+    "id": 132,
+    "name": "Mathematician Katherine",
+    "parody": "Katherine Johnson",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3400,
+    "ability": "Spartan",
+    "description": "Calculated trajectories that hit enemies from orbit."
+  },
+  {
+    "id": 133,
+    "name": "Sergeant Dignity",
+    "parody": "Rosa Parks",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3300,
+    "ability": "TacticalRetreat",
+    "description": "Refused to move—so the enemy had to move around her. Still there."
+  },
+  {
+    "id": 134,
+    "name": "Conductor Harriet",
+    "parody": "Harriet Tubman",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3200,
+    "ability": "LastStand",
+    "description": "Led raids behind enemy lines. Never lost a soldier."
+  },
+  {
+    "id": 135,
+    "name": "Orator Sojourner",
+    "parody": "Sojourner Truth",
+    "faction": "White",
+    "level": 4,
+    "soldiers": 3100,
+    "ability": null,
+    "description": "‘Ain’t I a general?’ she thundered. The battlefield said yes."
+  },
+  {
+    "id": 136,
+    "name": "Guide Sacra",
+    "parody": "Sacagawea",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": "TacticalRetreat",
+    "description": "Knows every shortcut. Loses battles, wins the war."
+  },
+  {
+    "id": 137,
+    "name": "Queen Boudica",
+    "parody": "Boudicca",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2800,
+    "ability": null,
+    "description": "Rode a chariot into battle screaming. Romans still have nightmares."
+  },
+  {
+    "id": 138,
+    "name": "Queen Isabella the Navigator",
+    "parody": "Isabella I of Castile",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2700,
+    "ability": null,
+    "description": "Funded voyages that accidentally won her a continent."
+  },
+  {
+    "id": 139,
+    "name": "Pharaoh Hatshep",
+    "parody": "Hatshepsut",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "SiegeMaster",
+    "description": "Built monuments so tall, enemies surrendered out of respect."
+  },
+  {
+    "id": 140,
+    "name": "Queen Nefertina",
+    "parody": "Nefertiti",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2300,
+    "ability": null,
+    "description": "Her beauty was so legendary, armies laid down arms to stare."
+  },
+  {
+    "id": 141,
+    "name": "Suffragette Susan",
+    "parody": "Susan B. Anthony",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2200,
+    "ability": "Spartan",
+    "description": "Voted early, voted often—and won every time."
+  },
+  {
+    "id": 142,
+    "name": "Countess Code",
+    "parody": "Ada Lovelace",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": "Precision",
+    "description": "Wrote the first algorithm—to predict enemy movements."
+  },
+  {
+    "id": 143,
+    "name": "Painter Van Goghia",
+    "parody": "Vincent van Gogh",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "LastStand",
+    "description": "Fought with passion, color, and one ear. Still louder than your army."
+  },
+  {
+    "id": 144,
+    "name": "General Existence",
+    "parody": "Simone de Beauvoir",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2300,
+    "ability": "FirstStrike",
+    "description": "Defined herself—and then defined your defeat."
+  },
+  {
+    "id": 145,
+    "name": "Astronomer Wang",
+    "parody": "Wang Zhenyi",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Mapped the stars—and enemy weak points."
+  },
+  {
+    "id": 146,
+    "name": "Admiral Artemisia",
+    "parody": "Artemisia I of Caria",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": null,
+    "description": "Commanded the Persian navy—and sank more ships than Poseidon."
+  },
+  {
+    "id": 147,
+    "name": "Samurai Tomoe",
+    "parody": "Tomoe Gozen",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "TacticalRetreat",
+    "description": "Cut down enemies, then vanished like mist. Poets still write about her."
+  },
+  {
+    "id": 148,
+    "name": "Queen Nzinga",
+    "parody": "Nzinga of Ndongo",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2700,
+    "ability": null,
+    "description": "Outmaneuvered empires with diplomacy and daggers."
+  },
+  {
+    "id": 149,
+    "name": "Rani Lakshmi",
+    "parody": "Lakshmi Bai",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Fought with swords in both hands—and won India’s heart."
+  },
+  {
+    "id": 150,
+    "name": "Empress Wu",
+    "parody": "Wu Zetian",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2800,
+    "ability": null,
+    "description": "China’s only female emperor. Made patriarchy her footstool."
+  },
+  {
+    "id": 151,
+    "name": "Empress Zenobia",
+    "parody": "Zenobia",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": "SiegeMaster",
+    "description": "Defied Rome, built an empire, and wore better jewelry."
+  },
+  {
+    "id": 152,
+    "name": "General Amina",
+    "parody": "Amina of Zazzau",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "Spartan",
+    "description": "Expanded her kingdom with walls—and warriors."
+  },
+  {
+    "id": 153,
+    "name": "Queen Yaa",
+    "parody": "Yaa Asantewaa",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2300,
+    "ability": null,
+    "description": "‘If you won’t fight, I will!’ she said—and led the charge."
+  },
+  {
+    "id": 154,
+    "name": "General Trưng",
+    "parody": "Trưng Sisters",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2200,
+    "ability": "LastStand",
+    "description": "Two sisters, one army. Freed Vietnam from invaders."
+  },
+  {
+    "id": 155,
+    "name": "Pirate Grace",
+    "parody": "Grace O’Malley",
+    "faction": "White",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Demanded to speak to the Queen—then stole her navy."
+  },
+  {
+    "id": 156,
+    "name": "Queen Tomyris",
+    "parody": "Tomyris",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 2000,
+    "ability": null,
+    "description": "Defeated Cyrus the Great—and mailed his head back in a wine skin."
+  },
+  {
+    "id": 157,
+    "name": "Wrestler Khutulun",
+    "parody": "Khutulun",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "TacticalRetreat",
+    "description": "Challenged suitors to wrestle. Lost none—and married none."
+  },
+  {
+    "id": 158,
+    "name": "Warrior Lozen",
+    "parody": "Lozen",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1600,
+    "ability": "Spartan",
+    "description": "Could sense enemy movements. Fought for her people till the end."
+  },
+  {
+    "id": 159,
+    "name": "Scout Jane",
+    "parody": "Calamity Jane",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Rode, shot, and drank with the best. Legends exaggerate—she’s worse."
+  },
+  {
+    "id": 160,
+    "name": "Empress Agrippina",
+    "parody": "Agrippina the Younger",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "Poisoned her way to power. Rome never saw it coming."
+  },
+  {
+    "id": 161,
+    "name": "Sultan Razia",
+    "parody": "Razia Sultana",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": null,
+    "description": "India’s first female Muslim ruler. Broke barriers—and heads."
+  },
+  {
+    "id": 162,
+    "name": "Sultana Shajar",
+    "parody": "Shajar al-Durr",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1600,
+    "ability": "LastStand",
+    "description": "Rose from slavery to sultan. Died defiant—never defeated."
+  },
+  {
+    "id": 163,
+    "name": "Princess Tarhata",
+    "parody": "Tarhata Kiram",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1500,
+    "ability": "TacticalRetreat",
+    "description": "Led a rebellion in pearls. The US didn’t know what hit them."
+  },
+  {
+    "id": 164,
+    "name": "Chief Te Puea",
+    "parody": "Te Puea Hērangi",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Revived Māori culture—and outmaneuvered colonizers."
+  },
+  {
+    "id": 165,
+    "name": "Senator Benazir",
+    "parody": "Benazir Bhutto",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "First woman to lead a Muslim nation. Paid with her life—but not her legacy."
+  },
+  {
+    "id": 166,
+    "name": "Writer Christine",
+    "parody": "Christine de Pizan",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "Precision",
+    "description": "Wrote the first feminist text—and skewered male egos with ink."
+  },
+  {
+    "id": 167,
+    "name": "Rebel Mary",
+    "parody": "Mary Wollstonecraft",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1600,
+    "ability": "FirstStrike",
+    "description": "Started the revolution with a pen. Men are still recovering."
+  },
+  {
+    "id": 168,
+    "name": "Dr. Rosalind",
+    "parody": "Rosalind Franklin",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Discovered DNA’s secret—then got erased. History corrected that."
+  },
+  {
+    "id": 169,
+    "name": "Captain Mae",
+    "parody": "Mae Jemison",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "TacticalRetreat",
+    "description": "Flew to space, then came back to lead Earth’s armies."
+  },
+  {
+    "id": 170,
+    "name": "Inventor Hedy",
+    "parody": "Hedy Lamarr",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "Invented Wi-Fi between movie takes. Now she hacks your comms."
+  },
+  {
+    "id": 171,
+    "name": "Poet Maya",
+    "parody": "Maya Angelou",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1600,
+    "ability": null,
+    "description": "[Still I rise] — and so does her faction."
+  },
+  {
+    "id": 172,
+    "name": "Novelist Toni",
+    "parody": "Toni Morrison",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Wrote truth so sharp, it cut through lies like a blade."
+  },
+  {
+    "id": 173,
+    "name": "Queen Aretha",
+    "parody": "Aretha Franklin",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 2000,
+    "ability": null,
+    "description": "Demanded R-E-S-P-E-C-T—and got victory too."
+  },
+  {
+    "id": 174,
+    "name": "Songstress Billie",
+    "parody": "Billie Holiday",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "LastStand",
+    "description": "Sang through pain. Her voice still haunts enemy camps."
+  },
+  {
+    "id": 175,
+    "name": "Duchess Eleanor",
+    "parody": "Eleanor of Aquitaine",
+    "faction": "White",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "Queen of France, then England. Played the long game—and won."
+  },
+  {
+    "id": 176,
+    "name": "Poet Sor Juana",
+    "parody": "Sor Juana Inés de la Cruz",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Chose books over marriage. Then used them to outthink armies."
+  },
+  {
+    "id": 177,
+    "name": "Reporter Nellie",
+    "parody": "Nellie Bly",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "Spartan",
+    "description": "Exposed corruption by going undercover. Now she exposes your flanks."
+  },
+  {
+    "id": 178,
+    "name": "Crusader Ida",
+    "parody": "Ida B. Wells",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": null,
+    "description": "Fought lynching with facts. Her truth is your weapon."
+  },
+  {
+    "id": 179,
+    "name": "Educator Maria",
+    "parody": "Maria Montessori",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Taught children to think—now they strategize better than you."
+  },
+  {
+    "id": 180,
+    "name": "Biologist Rachel",
+    "parody": "Rachel Carson",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Silenced the chemical war—and started a green one."
+  },
+  {
+    "id": 181,
+    "name": "Mathematician Dorothy",
+    "parody": "Dorothy Vaughan",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "Precision",
+    "description": "Calculated orbits by hand. Now she calculates your defeat."
+  },
+  {
+    "id": 182,
+    "name": "Green General Wangari",
+    "parody": "Wangari Maathai",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "TacticalRetreat",
+    "description": "Planted trees—and resistance. The forest fights for her."
+  },
+  {
+    "id": 183,
+    "name": "Voice Rigoberta",
+    "parody": "Rigoberta Menchú",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1100,
+    "ability": null,
+    "description": "Spoke for the voiceless—and rallied armies with words."
+  },
+  {
+    "id": 184,
+    "name": "Nurse General Clara",
+    "parody": "Clara Barton",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Founded the Red Cross—then turned it into a war machine."
+  },
+  {
+    "id": 185,
+    "name": "Lady with the Lamp",
+    "parody": "Florence Nightingale",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Healed the wounded by night—by day, she planned your downfall."
+  },
+  {
+    "id": 186,
+    "name": "Desert Diplomat",
+    "parody": "Gertrude Bell",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "LastStand",
+    "description": "Mapped the Middle East—and drew your defeat in the sand."
+  },
+  {
+    "id": 187,
+    "name": "Poet Sappho",
+    "parody": "Sappho",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "FirstStrike",
+    "description": "Wrote love poems so fierce, they started wars."
+  },
+  {
+    "id": 188,
+    "name": "Champion Serena",
+    "parody": "Serena Williams",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Serves aces and defeats. You’re not ready for her return."
+  },
+  {
+    "id": 189,
+    "name": "Voice Malala",
+    "parody": "Malala Yousafzai",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1100,
+    "ability": "Spartan",
+    "description": "Fought for education with a book. Now she reads your obituary."
+  },
+  {
+    "id": 190,
+    "name": "Climate General Greta",
+    "parody": "Greta Thunberg",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1000,
+    "ability": "TacticalRetreat",
+    "description": "How dare you lose? The planet is counting on her."
+  },
+  {
+    "id": 191,
+    "name": "Justice Ruth",
+    "parody": "Ruth Bader Ginsburg",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Dissented in style. Now she dissents your existence."
+  },
+  {
+    "id": 192,
+    "name": "Princess Diana the Compassionate",
+    "parody": "Diana, Princess of Wales",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": null,
+    "description": "Won hearts worldwide. Yours is next."
+  },
+  {
+    "id": 193,
+    "name": "CEO Nova",
+    "parody": "Steve Jobs",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Designed the future—and your defeat."
+  },
+  {
+    "id": 194,
+    "name": "Commander Mars",
+    "parody": "Elon Musk",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": "Precision",
+    "description": "Colonized Mars. Earth is just practice."
+  },
+  {
+    "id": 195,
+    "name": "Saint Joan the Unburned",
+    "parody": "Joan of Arc",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "LastStand",
+    "description": "Heard voices. They said: ‘Win.’ So she did."
+  },
+  {
+    "id": 196,
+    "name": "Philosopher Ludwigette",
+    "parody": "Ludwig Wittgenstein",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": null,
+    "description": "Solved philosophy. Now she solves your strategy."
+  },
+  {
+    "id": 197,
+    "name": "Baroness Assembly",
+    "parody": "Henry Ford",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Mass-produced victory. One Model T at a time."
+  },
+  {
+    "id": 198,
+    "name": "Radiance Marie",
+    "parody": "Marie Skłodowska-Curie",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Discovered radium—and radiated your chances of winning."
+  },
+  {
+    "id": 199,
+    "name": "Scholar Hypatia",
+    "parody": "Hypatia",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "Precision",
+    "description": "Taught math in Alexandria. Now she calculates your doom."
+  },
+  {
+    "id": 200,
+    "name": "Dame Quill",
+    "parody": "William Shakespeare",
+    "faction": "White",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": null,
+    "description": "All the world’s a battlefield—and you’re just a player."
+  },
+  {
+    "id": 201,
+    "name": "Pharaoh Nefertari the Unbroken",
+    "parody": "Ramses II",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5200,
+    "ability": "SiegeMaster",
+    "description": "Built temples so massive, enemies surrendered out of awe."
+  },
+  {
+    "id": 202,
+    "name": "Khaness Temüjin",
+    "parody": "Genghis Khan",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5800,
+    "ability": null,
+    "description": "Rode across continents before GPS existed. His horse has more frequent flyer miles than you."
+  },
+  {
+    "id": 203,
+    "name": "Countess Vladette",
+    "parody": "Vlad the Impaler",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 4900,
+    "ability": "LastStand",
+    "description": "Invited enemies to dinner. They never left. (The stakes were too high.)"
+  },
+  {
+    "id": 204,
+    "name": "Warlord Attila",
+    "parody": "Attila the Hun",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5600,
+    "ability": null,
+    "description": "Left no grass untrampled. Cities surrendered just to save their lawns."
+  },
+  {
+    "id": 205,
+    "name": "Tsarina Ivanova",
+    "parody": "Ivan the Terrible",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5000,
+    "ability": "Reinforcements",
+    "description": "Terrible to his enemies, worse to his friends. Nobody wins around him."
+  },
+  {
+    "id": 206,
+    "name": "Emperor Nerona",
+    "parody": "Nero",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 4800,
+    "ability": "FirstStrike",
+    "description": "Fiddled while Rome burned—then blamed everyone else."
+  },
+  {
+    "id": 207,
+    "name": "Empress Caligula",
+    "parody": "Caligula",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 4700,
+    "ability": "Precision",
+    "description": "Made his horse a senator. Now the horse leads your defeat."
+  },
+  {
+    "id": 208,
+    "name": "Conquistadora Cortés",
+    "parody": "Hernán Cortés",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5300,
+    "ability": null,
+    "description": "Burned his ships—then burned your capital."
+  },
+  {
+    "id": 209,
+    "name": "Conquistadora Pizarro",
+    "parody": "Francisco Pizarro",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5100,
+    "ability": null,
+    "description": "Captured an emperor with 168 men. Math said no. He said yes."
+  },
+  {
+    "id": 210,
+    "name": "Warlord Timur",
+    "parody": "Tamerlane",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5400,
+    "ability": null,
+    "description": "Built towers of skulls. Yours will be the next brick."
+  },
+  {
+    "id": 211,
+    "name": "General Shaka",
+    "parody": "Shaka Zulu",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5500,
+    "ability": null,
+    "description": "Invented the short stabbing spear—and your worst nightmare."
+  },
+  {
+    "id": 212,
+    "name": "Rebel Spartaca",
+    "parody": "Spartacus",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 4600,
+    "ability": "Spartan",
+    "description": "Led a slave revolt that shook Rome. Now he shakes your faction."
+  },
+  {
+    "id": 213,
+    "name": "Comrade Che",
+    "parody": "Che Guevara",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 4500,
+    "ability": null,
+    "description": "His face is on every t-shirt—and your defeat notice."
+  },
+  {
+    "id": 214,
+    "name": "Commandante Fidel",
+    "parody": "Fidel Castro",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5200,
+    "ability": null,
+    "description": "Outlasted 11 US presidents. You won’t last one battle."
+  },
+  {
+    "id": 215,
+    "name": "Commissar Lenin",
+    "parody": "Vladimir Lenin",
+    "faction": "Black",
+    "level": 5,
+    "soldiers": 5000,
+    "ability": null,
+    "description": "Seized a train, then a country. Now he’s coming for your subreddit."
+  },
+  {
+    "id": 216,
+    "name": "Boss Capone",
+    "parody": "Al Capone",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4000,
+    "ability": null,
+    "description": "Made Chicago his kingdom. Now he taxes your victories."
+  },
+  {
+    "id": 217,
+    "name": "Outlaw Jesse",
+    "parody": "Jesse James",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3300,
+    "ability": "TacticalRetreat",
+    "description": "Robbed trains, then vanished. You’ll never catch him."
+  },
+  {
+    "id": 218,
+    "name": "Captain Blackbeard",
+    "parody": "Blackbeard",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4100,
+    "ability": null,
+    "description": "Lit fuses in his beard to scare enemies. It worked."
+  },
+  {
+    "id": 219,
+    "name": "General Villa",
+    "parody": "Pancho Villa",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3700,
+    "ability": null,
+    "description": "Raided across borders. The US still can’t catch him."
+  },
+  {
+    "id": 220,
+    "name": "Rebel Zapata",
+    "parody": "Emiliano Zapata",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3600,
+    "ability": "Spartan",
+    "description": "‘Land and liberty!’ he cried—and took both from you."
+  },
+  {
+    "id": 221,
+    "name": "Liberator Toussaint",
+    "parody": "Toussaint Louverture",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3800,
+    "ability": null,
+    "description": "Freed Haiti from France. Now he’s freeing your cards from your inventory."
+  },
+  {
+    "id": 222,
+    "name": "Minister Malcolm",
+    "parody": "Malcolm X",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3500,
+    "ability": null,
+    "description": "By any means necessary—including winning this battle."
+  },
+  {
+    "id": 223,
+    "name": "Emperor Qin",
+    "parody": "Qin Shi Huang",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4200,
+    "ability": null,
+    "description": "United China—and buried scholars alive. You’re next."
+  },
+  {
+    "id": 224,
+    "name": "General Hannibala",
+    "parody": "Hannibal Barca",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3400,
+    "ability": "SiegeMaster",
+    "description": "Crossed the Alps with elephants. Your defenses won’t stop him."
+  },
+  {
+    "id": 225,
+    "name": "Warlord Nobunaga",
+    "parody": "Oda Nobunaga",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3900,
+    "ability": null,
+    "description": "‘Rule the realm by force.’ He meant it."
+  },
+  {
+    "id": 226,
+    "name": "Strategist Sun",
+    "parody": "Sun Tzu",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3200,
+    "ability": "Precision",
+    "description": "Wrote ‘The Art of War.’ Now he’s writing your obituary."
+  },
+  {
+    "id": 227,
+    "name": "Swordmaster Musashi",
+    "parody": "Miyamoto Musashi",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4300,
+    "ability": null,
+    "description": "Dueled 60 men—and won. You’re #61."
+  },
+  {
+    "id": 228,
+    "name": "Warrior Geronimo",
+    "parody": "Geronimo",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3600,
+    "ability": "TacticalRetreat",
+    "description": "Outran the US Army for 30 years. You won’t last 30 seconds."
+  },
+  {
+    "id": 229,
+    "name": "Chief Sitting Bull",
+    "parody": "Sitting Bull",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3700,
+    "ability": null,
+    "description": "Dreamed of victory at Little Bighorn. Now he dreams of yours."
+  },
+  {
+    "id": 230,
+    "name": "Warrior Crazy Horse",
+    "parody": "Crazy Horse",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3500,
+    "ability": "Spartan",
+    "description": "Never photographed, never captured. But he’ll capture your flag."
+  },
+  {
+    "id": 231,
+    "name": "Liberator Simóna",
+    "parody": "Simón Bolívar",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4000,
+    "ability": null,
+    "description": "Freed half a continent. Now he’s freeing your coins."
+  },
+  {
+    "id": 232,
+    "name": "General San Martina",
+    "parody": "José de San Martín",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3800,
+    "ability": null,
+    "description": "Crossed the Andes to liberate nations. Your subreddit is next."
+  },
+  {
+    "id": 233,
+    "name": "Evita the Iron",
+    "parody": "Eva Perón",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 3900,
+    "ability": null,
+    "description": "Stole hearts and budgets. Now she’s stealing your wins."
+  },
+  {
+    "id": 234,
+    "name": "Sultan Suleimana",
+    "parody": "Suleiman the Magnificent",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4100,
+    "ability": null,
+    "description": "Ruled an empire at its peak. Your faction is just a footnote."
+  },
+  {
+    "id": 235,
+    "name": "Conqueror Mehmeda",
+    "parody": "Mehmed II",
+    "faction": "Black",
+    "level": 4,
+    "soldiers": 4200,
+    "ability": null,
+    "description": "Took Constantinople at 21. What’s your excuse?"
+  },
+  {
+    "id": 236,
+    "name": "Sister Rasputina",
+    "parody": "Grigori Rasputin",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2300,
+    "ability": "TacticalRetreat",
+    "description": "Poisoned, shot, drowned—still won. You’re not that tough."
+  },
+  {
+    "id": 237,
+    "name": "Gunslinger Billy",
+    "parody": "Billy the Kid",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": "Precision",
+    "description": "Killed 21 men by 21. You’re #22."
+  },
+  {
+    "id": 238,
+    "name": "Outlaw Bonnie",
+    "parody": "Bonnie Parker",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "LastStand",
+    "description": "Wrote poems about crime. Now she’s writing your defeat."
+  },
+  {
+    "id": 239,
+    "name": "Rebel Nat",
+    "parody": "Nat Turner",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2200,
+    "ability": "Spartan",
+    "description": "Led a rebellion that shook America. Now he shakes your faction."
+  },
+  {
+    "id": 240,
+    "name": "Abolitionist John",
+    "parody": "John Brown",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Fought slavery with fire. Now he fights you with fury."
+  },
+  {
+    "id": 241,
+    "name": "Chairman Fred",
+    "parody": "Fred Hampton",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2300,
+    "ability": null,
+    "description": "United gangs into a movement. Now he unites cards against you."
+  },
+  {
+    "id": 242,
+    "name": "General Assata",
+    "parody": "Assata Shakur",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "FirstStrike",
+    "description": "Declared war on injustice. You’re collateral damage."
+  },
+  {
+    "id": 243,
+    "name": "King Pyrrha",
+    "parody": "Pyrrhus of Epirus",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2700,
+    "ability": null,
+    "description": "Won battles so costly, they ruined him. You’ll lose cheaper."
+  },
+  {
+    "id": 244,
+    "name": "King Alarica",
+    "parody": "Alaric the Goth",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Sacked Rome. Now he sacks your inventory."
+  },
+  {
+    "id": 245,
+    "name": "Shogun Hideyoshi",
+    "parody": "Toyotomi Hideyoshi",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2800,
+    "ability": null,
+    "description": "Rose from peasant to ruler. Your rank means nothing."
+  },
+  {
+    "id": 246,
+    "name": "Shogun Tokugawa",
+    "parody": "Tokugawa Ieyasu",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2700,
+    "ability": null,
+    "description": "Waited 70 years to win. You won’t last 7 minutes."
+  },
+  {
+    "id": 247,
+    "name": "Chief Pontiac",
+    "parody": "Pontiac",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": "Spartan",
+    "description": "United tribes to fight the British. Now he unites against you."
+  },
+  {
+    "id": 248,
+    "name": "Warrior Tecumseh",
+    "parody": "Tecumseh",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Built a confederacy to stop settlers. You’re the next settler."
+  },
+  {
+    "id": 249,
+    "name": "Chief Osceola",
+    "parody": "Osceola",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "TacticalRetreat",
+    "description": "Fought the US Army with guerrilla tactics. You’re out of your depth."
+  },
+  {
+    "id": 250,
+    "name": "Chief Black Hawk",
+    "parody": "Black Hawk",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2300,
+    "ability": "LastStand",
+    "description": "Fought to keep his homeland. Now he fights for victory."
+  },
+  {
+    "id": 251,
+    "name": "Chief Red Cloud",
+    "parody": "Red Cloud",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2700,
+    "ability": null,
+    "description": "Won Red Cloud’s War—the only Native American to defeat the US in war."
+  },
+  {
+    "id": 252,
+    "name": "Chief Cochise",
+    "parody": "Cochise",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2600,
+    "ability": null,
+    "description": "Outwitted the US Army for a decade. You’re not that smart."
+  },
+  {
+    "id": 253,
+    "name": "Chief Quanah",
+    "parody": "Quanah Parker",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2500,
+    "ability": null,
+    "description": "Last Comanche chief. Now he’s your first problem."
+  },
+  {
+    "id": 254,
+    "name": "Emperor Manco",
+    "parody": "Manco Inca",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2800,
+    "ability": null,
+    "description": "Fought the Spanish with Inca fury. You’re just another invader."
+  },
+  {
+    "id": 255,
+    "name": "Rebel Túpac",
+    "parody": "Túpac Amaru II",
+    "faction": "Black",
+    "level": 3,
+    "soldiers": 2400,
+    "ability": "Spartan",
+    "description": "Led the largest Andean rebellion. Your faction is next."
+  },
+  {
+    "id": 256,
+    "name": "Firestarter Guy",
+    "parody": "Guy Fawkes",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "LastStand",
+    "description": "Tried to blow up Parliament. Now he blows up your plans."
+  },
+  {
+    "id": 257,
+    "name": "Philosopher Marx",
+    "parody": "Karl Marx",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "Wrote ‘Das Kapital.’ Now he capitalizes on your mistakes."
+  },
+  {
+    "id": 258,
+    "name": "Anarchist Bakunina",
+    "parody": "Mikhail Bakunin",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": "Precision",
+    "description": "Wanted to destroy all states. Starting with yours."
+  },
+  {
+    "id": 259,
+    "name": "Outlaw Ned",
+    "parody": "Ned Kelly",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1600,
+    "ability": "TacticalRetreat",
+    "description": "Fought in homemade armor. Still lost—but took many with him."
+  },
+  {
+    "id": 260,
+    "name": "Spy Mata",
+    "parody": "Mata Hari",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "FirstStrike",
+    "description": "Danced into enemy camps—and out with their secrets."
+  },
+  {
+    "id": 261,
+    "name": "Shadow Jack",
+    "parody": "Jack the Ripper",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1500,
+    "ability": "Spartan",
+    "description": "Never caught. Never identified. But he’ll catch you."
+  },
+  {
+    "id": 262,
+    "name": "King Ashurbanipal",
+    "parody": "Ashurbanipal",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 2000,
+    "ability": null,
+    "description": "Built the first library—and the first empire of terror."
+  },
+  {
+    "id": 263,
+    "name": "Emperor Sargon",
+    "parody": "Sargon of Akkad",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 2100,
+    "ability": null,
+    "description": "Founded the first empire. You’re just a province."
+  },
+  {
+    "id": 264,
+    "name": "King Nebuchadnezzara",
+    "parody": "Nebuchadnezzar II",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": "SiegeMaster",
+    "description": "Built the Hanging Gardens—and your doom."
+  },
+  {
+    "id": 265,
+    "name": "King Xerxa",
+    "parody": "Xerxes I",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Led an army of millions. You’ve got 10 cards. Good luck."
+  },
+  {
+    "id": 266,
+    "name": "King Daria",
+    "parody": "Darius I",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": null,
+    "description": "Ruled from India to Ethiopia. Your subreddit is a speck."
+  },
+  {
+    "id": 267,
+    "name": "Emperor Cyra",
+    "parody": "Cyrus the Great",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 2000,
+    "ability": null,
+    "description": "Freed the Jews from Babylon. Now he frees your coins."
+  },
+  {
+    "id": 268,
+    "name": "King Philipa",
+    "parody": "Philip II of Macedon",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "Father of Alexander. Built the army that conquered the world."
+  },
+  {
+    "id": 269,
+    "name": "General Seleuca",
+    "parody": "Seleucus I Nicator",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": "Precision",
+    "description": "One of Alexander’s generals. Now he generalizes your defeat."
+  },
+  {
+    "id": 270,
+    "name": "Pharaoh Ptolema",
+    "parody": "Ptolemy I Soter",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "LastStand",
+    "description": "Founded a dynasty in Egypt. Yours ends today."
+  },
+  {
+    "id": 271,
+    "name": "General Antigona",
+    "parody": "Antigonus I Monophthalmus",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1600,
+    "ability": "TacticalRetreat",
+    "description": "Fought for Alexander’s empire. Lost—but not before wrecking you."
+  },
+  {
+    "id": 272,
+    "name": "King Lysima",
+    "parody": "Lysimachus",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Bodyguard to Alexander, king in his own right. You’re just a pawn."
+  },
+  {
+    "id": 273,
+    "name": "General Cassa",
+    "parody": "Cassander",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1700,
+    "ability": "Spartan",
+    "description": "Killed Alexander’s family. Now he kills your hopes."
+  },
+  {
+    "id": 274,
+    "name": "King Mithrida",
+    "parody": "Mithridates VI",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1900,
+    "ability": null,
+    "description": "Resisted Rome for decades. You’ll last minutes."
+  },
+  {
+    "id": 275,
+    "name": "King Jugurtha",
+    "parody": "Jugurtha",
+    "faction": "Black",
+    "level": 2,
+    "soldiers": 1800,
+    "ability": null,
+    "description": "Outsmarted Rome for years. You’re not that clever."
+  },
+  {
+    "id": 276,
+    "name": "Warrior Viriathus",
+    "parody": "Viriathus",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Fought Rome with guerrilla tactics. You’re outmatched."
+  },
+  {
+    "id": 277,
+    "name": "Chieftain Arminia",
+    "parody": "Arminius",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "Spartan",
+    "description": "Wiped out three Roman legions. You’ve got 10 cards. Run."
+  },
+  {
+    "id": 278,
+    "name": "Queen Cartimandua",
+    "parody": "Cartimandua",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": null,
+    "description": "Betrayed her husband to Rome. Now she betrays your trust."
+  },
+  {
+    "id": 279,
+    "name": "Queen Brunhilda",
+    "parody": "Brunhilda",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Ruled for 40 years through war and intrigue. You’ll last one battle."
+  },
+  {
+    "id": 280,
+    "name": "Queen Fredegund",
+    "parody": "Fredegund",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": "LastStand",
+    "description": "Assassinated rivals with poison. Your cards are next."
+  },
+  {
+    "id": 281,
+    "name": "Lady of the Mercians",
+    "parody": "Æthelflæd",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "TacticalRetreat",
+    "description": "Fortified towns and fought Vikings. You’re softer than a Saxon."
+  },
+  {
+    "id": 282,
+    "name": "Warlord Zhang",
+    "parody": "Zhang Xianzhong",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "Precision",
+    "description": "Carved ‘Kill’ into mountains. Your name is next."
+  },
+  {
+    "id": 283,
+    "name": "Admiral Koxinga",
+    "parody": "Koxinga",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Drove the Dutch from Taiwan. You’re easier prey."
+  },
+  {
+    "id": 284,
+    "name": "Cossack Yermak",
+    "parody": "Yermak Timofeyevich",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Conquered Siberia with 800 men. You’ve got 10 cards. Do the math."
+  },
+  {
+    "id": 285,
+    "name": "Knight El Cida",
+    "parody": "El Cid",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "FirstStrike",
+    "description": "Fought Moors and Christians alike. You’re just another enemy."
+  },
+  {
+    "id": 286,
+    "name": "Emperor Basil the Bulgar-Slayer",
+    "parody": "Basil II",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Blinded 15,000 prisoners. Your cards will wish for mercy."
+  },
+  {
+    "id": 287,
+    "name": "General Wu",
+    "parody": "Wu Sangui",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "Spartan",
+    "description": "Opened the gates to the Manchus. Now he opens your defeat."
+  },
+  {
+    "id": 288,
+    "name": "Heavenly King Hong",
+    "parody": "Hong Xiuquan",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1100,
+    "ability": null,
+    "description": "Started the Taiping Rebellion—20 million died. You’re one more."
+  },
+  {
+    "id": 289,
+    "name": "Queen Ranavalona",
+    "parody": "Ranavalona I",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Killed 3 million to keep Madagascar free. You’re a statistic."
+  },
+  {
+    "id": 290,
+    "name": "Queen Zenobia II",
+    "parody": "Zenobia of Armenia",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "SiegeMaster",
+    "description": "Defied empires from a mountain fortress. Your base is flat."
+  },
+  {
+    "id": 291,
+    "name": "President Juárez",
+    "parody": "Benito Juárez",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Defeated French invaders. You’re less scary than Napoleon III."
+  },
+  {
+    "id": 292,
+    "name": "General Sandino",
+    "parody": "Augusto Sandino",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Fought US Marines in Nicaragua. You’re just another gringo."
+  },
+  {
+    "id": 293,
+    "name": "President Allende",
+    "parody": "Salvador Allende",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": null,
+    "description": "Died for socialism. His spirit fights on—in your defeat."
+  },
+  {
+    "id": 294,
+    "name": "Muralist Diego",
+    "parody": "Diego Rivera",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Painted revolution on walls. Now he paints your loss."
+  },
+  {
+    "id": 295,
+    "name": "Poet Neruda",
+    "parody": "Pablo Neruda",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "Precision",
+    "description": "Wrote odes to common things. Now he writes elegies for your cards."
+  },
+  {
+    "id": 296,
+    "name": "Magician Gabriel",
+    "parody": "Gabriel García Márquez",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Made magic real. Now he makes your defeat magical."
+  },
+  {
+    "id": 297,
+    "name": "King Alarica II",
+    "parody": "Alaric II",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1300,
+    "ability": "LastStand",
+    "description": "Lost to Clovis—but took the Visigothic kingdom with him."
+  },
+  {
+    "id": 298,
+    "name": "Father Hidalga",
+    "parody": "Miguel Hidalgo",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1200,
+    "ability": "TacticalRetreat",
+    "description": "Started Mexico’s independence war. You’re just another colonizer."
+  },
+  {
+    "id": 299,
+    "name": "King Leopolda",
+    "parody": "Leopold II of Belgium",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1500,
+    "ability": null,
+    "description": "Killed 10 million in Congo. Your faction is a rounding error."
+  },
+  {
+    "id": 300,
+    "name": "Explorer Fridtjof",
+    "parody": "Fridtjof Nansen",
+    "faction": "Black",
+    "level": 1,
+    "soldiers": 1400,
+    "ability": null,
+    "description": "Crossed Greenland on skis. Your battlefield is a walk in the park."
+  }
+]
