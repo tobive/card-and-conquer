@@ -90,11 +90,20 @@ Card & Conquer is a **faction warfare game** where players join one of two facti
    - Watch the loading screen with progress bar and animated messages
    - The game opens in full-screen mode with smooth animations
 
-2. **First Time Setup**
+2. **First Time Setup (Welcome Screen)**
 
-   - New players are automatically initialized with:
+   - New players are greeted with a special **Welcome Screen**
+   - Receive a **free 5-card starter pack** as a one-time gift
+   - Click "🎁 Claim Your Cards!" to open your gift
+   - Cards are revealed one-by-one with celebration animations
+   - Each card shows:
+     - Full stats and abilities
+     - Faction affiliation
+     - Level and soldier count
+     - Animated reveal with progress indicator
+   - After viewing all 5 cards, you're taken to the main menu
+   - Players also start with:
      - 100 starting coins
-     - 5 random Level 1 starter cards (mix of both factions)
      - Level 1 player status
    - No manual registration required—uses your Reddit account
 
@@ -489,9 +498,12 @@ src/
 - ✅ Loading screen with asset preloading
 - ✅ Responsive layout system
 - ✅ Client-side routing
+- ✅ Welcome screen with free starter pack
+- ✅ First-time user detection and onboarding
 
 ### Completed Features ✅
 
+- ✅ Welcome screen with animated card reveals for new players
 - ✅ Main menu with live war status and faction slider
 - ✅ Card collection screen with filtering and detail modals
 - ✅ Gacha pull interface with free/paid options and card reveals
@@ -504,6 +516,7 @@ src/
 - ✅ Responsive UI with mobile-first design
 - ✅ Client-side routing system
 - ✅ Loading screen with progress tracking
+- ✅ First-time user detection and automatic onboarding
 
 ### In Development 🚧
 

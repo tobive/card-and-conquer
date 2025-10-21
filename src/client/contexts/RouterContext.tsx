@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 
 export type Route =
+  | 'welcome'
   | 'menu'
   | 'collection'
   | 'gacha'
@@ -28,6 +29,39 @@ export const RouterProvider = ({ children }: RouterProviderProps) => {
   const [history, setHistory] = useState<Array<{ route: Route; params: Record<string, string> }>>([
     { route: 'menu', params: {} },
   ]);
+
+  // Check for deep linking on mount
+  useEffect(() => {
+    const checkDeepLink = async () => {
+      try {
+        // First check URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlBattleId = urlParams.get('battleId');
+        
+        if (urlBattleId) {
+          setCurrentRoute('battle-view');
+          setRouteParams({ battleId: urlBattleId });
+          setHistory([{ route: 'battle-view', params: { battleId: urlBattleId } }]);
+          return;
+        }
+
+        // Then check post context from server
+        const response = await fetch('/api/context');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.battleId && data.gameState === 'battle') {
+            setCurrentRoute('battle-view');
+            setRouteParams({ battleId: data.battleId });
+            setHistory([{ route: 'battle-view', params: { battleId: data.battleId } }]);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking deep link:', error);
+      }
+    };
+
+    checkDeepLink();
+  }, []);
 
   const navigate = useCallback((route: Route, params: Record<string, string> = {}) => {
     setCurrentRoute(route);

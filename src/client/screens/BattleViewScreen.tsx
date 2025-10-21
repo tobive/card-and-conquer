@@ -167,10 +167,24 @@ export const BattleViewScreen = () => {
   const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
   const [combatLog, setCombatLog] = useState<string[]>([]);
   const [joining, setJoining] = useState(false);
-  const [, setFlashingSlots] = useState<Set<string>>(new Set());
   const [battleResult, setBattleResult] = useState<{ winner: string; show: boolean }>({
     winner: '',
     show: false,
+  });
+  const [battleAnimation, setBattleAnimation] = useState<{
+    show: boolean;
+    combatResult: CombatResult | null;
+    currentTurn: number;
+    maxTurns: number;
+    attackerHP: number;
+    defenderHP: number;
+  }>({
+    show: false,
+    combatResult: null,
+    currentTurn: 0,
+    maxTurns: 0,
+    attackerHP: 0,
+    defenderHP: 0,
   });
 
   useEffect(() => {
@@ -281,18 +295,19 @@ export const BattleViewScreen = () => {
       }
 
       const data: BattleJoinResponse = await response.json();
+
+      // Show battle animation if combat occurred
+      if (data.combatResult) {
+        await showBattleAnimation(data.combatResult);
+      }
+
+      // Update battle state after animation
       setBattle(data.battle);
 
-      // Add combat result to log with animation
+      // Add combat result to log
       if (data.combatResult) {
         const log = formatCombatResult(data.combatResult);
         setCombatLog((prev) => [log, ...prev]);
-
-        // Flash the involved cards
-        const attackerSlot = `${data.combatResult.attackerCard.faction}-${data.combatResult.attackerCard.playerId}`;
-        const defenderSlot = `${data.combatResult.defenderCard.faction}-${data.combatResult.defenderCard.playerId}`;
-        setFlashingSlots(new Set([attackerSlot, defenderSlot]));
-        setTimeout(() => setFlashingSlots(new Set()), 400);
       }
 
       // Check if battle is complete
@@ -348,6 +363,198 @@ export const BattleViewScreen = () => {
     }
 
     return log;
+  };
+
+  const showBattleAnimation = async (combatResult: CombatResult): Promise<void> => {
+    return new Promise((resolve) => {
+      const attackerMax = combatResult.attackerCard.soldiersBefore;
+      const defenderMax = combatResult.defenderCard.soldiersBefore;
+      const attackerFinal = combatResult.attackerCard.soldiersAfter;
+      const defenderFinal = combatResult.defenderCard.soldiersAfter;
+
+      // Calculate number of turns based on damage dealt
+      const totalDamage = combatResult.damage.attackerDealt + combatResult.damage.defenderDealt;
+      const estimatedTurns = Math.max(5, Math.min(15, Math.ceil(totalDamage / 100)));
+
+      // Open modal once at the start
+      setBattleAnimation({
+        show: true,
+        combatResult,
+        currentTurn: 0,
+        maxTurns: estimatedTurns,
+        attackerHP: attackerMax,
+        defenderHP: defenderMax,
+      });
+
+      // Simulate turn-by-turn combat
+      let currentTurn = 0;
+      let attackerHP = attackerMax;
+      let defenderHP = defenderMax;
+
+      const interval = setInterval(() => {
+        currentTurn++;
+
+        if (currentTurn >= estimatedTurns) {
+          // Final turn - show actual results
+          attackerHP = attackerFinal;
+          defenderHP = defenderFinal;
+          
+          // Update to final state
+          setBattleAnimation({
+            show: true,
+            combatResult,
+            currentTurn,
+            maxTurns: estimatedTurns,
+            attackerHP,
+            defenderHP,
+          });
+
+          // Close modal after showing final results
+          setTimeout(() => {
+            setBattleAnimation({
+              show: false,
+              combatResult: null,
+              currentTurn: 0,
+              maxTurns: 0,
+              attackerHP: 0,
+              defenderHP: 0,
+            });
+            resolve();
+          }, 1500);
+
+          clearInterval(interval);
+        } else {
+          // Simulate damage over turns
+          const attackerDamagePerTurn = (attackerMax - attackerFinal) / estimatedTurns;
+          const defenderDamagePerTurn = (defenderMax - defenderFinal) / estimatedTurns;
+
+          attackerHP = Math.max(attackerFinal, attackerMax - attackerDamagePerTurn * currentTurn);
+          defenderHP = Math.max(defenderFinal, defenderMax - defenderDamagePerTurn * currentTurn);
+
+          // Update state with new HP values
+          setBattleAnimation({
+            show: true,
+            combatResult,
+            currentTurn,
+            maxTurns: estimatedTurns,
+            attackerHP: Math.round(attackerHP),
+            defenderHP: Math.round(defenderHP),
+          });
+        }
+      }, 400);
+    });
+  };
+
+  const BattleAnimationModal = () => {
+    if (!battleAnimation.show || !battleAnimation.combatResult) return null;
+
+    const { combatResult, currentTurn, maxTurns, attackerHP, defenderHP } = battleAnimation;
+    const attacker = combatResult.attackerCard;
+    const defender = combatResult.defenderCard;
+
+    const attackerMaxHP = attacker.soldiersBefore;
+    const defenderMaxHP = defender.soldiersBefore;
+    const attackerHPPercent = (attackerHP / attackerMaxHP) * 100;
+    const defenderHPPercent = (defenderHP / defenderMaxHP) * 100;
+
+    const isAttackerTurn = currentTurn % 2 === 1;
+    const isComplete = currentTurn >= maxTurns;
+
+    return (
+      <div className="fixed inset-0 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div className="card max-w-3xl w-full p-4 sm:p-8 border-2 border-amber-500">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">⚔️ BATTLE ⚔️</h2>
+            <p className="text-slate-400 text-sm">
+              Turn {currentTurn} / {maxTurns}
+            </p>
+          </div>
+
+          {/* Battle Arena */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            {/* Attacker */}
+            <div
+              className={`card p-4 border-2 ${isAttackerTurn && !isComplete ? 'border-amber-400 animate-pulse' : 'border-amber-600'} ${attackerHP <= 0 ? 'opacity-50' : ''}`}
+            >
+              <div className="text-center mb-3">
+                <div className="text-xl font-bold text-amber-400 mb-1">{attacker.name}</div>
+                <div className="text-sm text-slate-400">{attacker.faction} Faction</div>
+              </div>
+              <div className="mb-2">
+                <div className="flex justify-between text-xs text-slate-400 mb-1">
+                  <span>Soldiers</span>
+                  <span>
+                    {attackerHP} / {attackerMaxHP}
+                  </span>
+                </div>
+                <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-500 transition-all duration-300"
+                    style={{ width: `${attackerHPPercent}%` }}
+                  />
+                </div>
+              </div>
+              {attackerHP <= 0 && (
+                <div className="text-red-500 text-center font-bold animate-fadeIn">DEFEATED</div>
+              )}
+            </div>
+
+            {/* VS */}
+            <div className="hidden sm:flex items-center justify-center">
+              <div className="text-4xl font-bold text-slate-500 animate-pulse">VS</div>
+            </div>
+
+            {/* Defender */}
+            <div
+              className={`card p-4 border-2 ${!isAttackerTurn && !isComplete ? 'border-purple-400 animate-pulse' : 'border-purple-600'} ${defenderHP <= 0 ? 'opacity-50' : ''}`}
+            >
+              <div className="text-center mb-3">
+                <div className="text-xl font-bold text-purple-400 mb-1">{defender.name}</div>
+                <div className="text-sm text-slate-400">{defender.faction} Faction</div>
+              </div>
+              <div className="mb-2">
+                <div className="flex justify-between text-xs text-slate-400 mb-1">
+                  <span>Soldiers</span>
+                  <span>
+                    {defenderHP} / {defenderMaxHP}
+                  </span>
+                </div>
+                <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-purple-500 to-violet-500 transition-all duration-300"
+                    style={{ width: `${defenderHPPercent}%` }}
+                  />
+                </div>
+              </div>
+              {defenderHP <= 0 && (
+                <div className="text-red-500 text-center font-bold animate-fadeIn">DEFEATED</div>
+              )}
+            </div>
+          </div>
+
+          {/* Abilities */}
+          {combatResult.abilitiesTriggered.length > 0 && (
+            <div className="card p-3 bg-slate-800/50 mb-4">
+              <div className="text-sm font-bold text-amber-400 mb-2">⚡ Abilities Triggered:</div>
+              <div className="space-y-1">
+                {combatResult.abilitiesTriggered.map((ability, index) => (
+                  <div key={index} className="text-xs text-slate-300">
+                    • {ability}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Combat Status */}
+          {!isComplete && (
+            <div className="text-center text-slate-400 text-sm animate-pulse">
+              {isAttackerTurn ? `${attacker.name} attacks!` : `${defender.name} attacks!`}
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   const BattleResultModal = () => {
@@ -425,7 +632,7 @@ export const BattleViewScreen = () => {
       <div className="sticky top-0 z-10 p-4 mb-4 border-b border-slate-700 bg-slate-900/95 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-2">
           <Button variant="secondary" size="sm" onClick={goBack}>
-            ← Back
+            ← Main
           </Button>
           <div className="text-center">
             <h2 className="text-xl font-bold text-white">{battle.locationName}</h2>
@@ -571,6 +778,9 @@ export const BattleViewScreen = () => {
         faction={selectedFaction || Faction.White}
         playerCards={playerCards}
       />
+
+      {/* Battle animation modal */}
+      <BattleAnimationModal />
 
       {/* Battle result modal */}
       <BattleResultModal />

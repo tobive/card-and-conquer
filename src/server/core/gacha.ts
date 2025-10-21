@@ -147,11 +147,73 @@ export async function performPaidPull(username: string): Promise<Card> {
   return card;
 }
 
+// Perform a multi-card pull (5 cards)
+export async function performMultiPull(username: string, count: number = 5): Promise<Card[]> {
+  const player = await getPlayer(username);
+  if (!player) {
+    throw new Error('Player not found');
+  }
+
+  const MULTI_PULL_COST = 170; // Discounted from 250 (5 * 50)
+
+  // Check if player has enough coins
+  if (player.coins < MULTI_PULL_COST) {
+    throw new Error('Insufficient coins');
+  }
+
+  // Get card pool based on player level
+  const cardPool = getCardPool(player.level);
+  if (cardPool.length === 0) {
+    throw new Error('No cards available for your level');
+  }
+
+  const pulledCards: Card[] = [];
+
+  // Pull multiple cards
+  for (let i = 0; i < count; i++) {
+    const card = selectRandomCard(cardPool);
+    await addCardToInventory(username, card.id);
+    pulledCards.push(card);
+  }
+
+  // Deduct coins
+  await subtractCoins(username, MULTI_PULL_COST);
+
+  return pulledCards;
+}
+
+// Perform welcome pull for first-time users (free 5 cards)
+export async function performWelcomePull(username: string): Promise<Card[]> {
+  const player = await getPlayer(username);
+  if (!player) {
+    throw new Error('Player not found');
+  }
+
+  // Get card pool based on player level
+  const cardPool = getCardPool(player.level);
+  if (cardPool.length === 0) {
+    throw new Error('No cards available for your level');
+  }
+
+  const pulledCards: Card[] = [];
+
+  // Pull 5 cards for free
+  for (let i = 0; i < 5; i++) {
+    const card = selectRandomCard(cardPool);
+    await addCardToInventory(username, card.id);
+    pulledCards.push(card);
+  }
+
+  return pulledCards;
+}
+
 // Get gacha status (for UI)
 export async function getGachaStatus(username: string): Promise<{
   canUseFreePull: boolean;
   timeUntilFreePull: number;
   paidPullCost: number;
+  multiPullCost: number;
+  multiPullCount: number;
 }> {
   const canPull = await canUseFreePull(username);
   const timeUntil = await getTimeUntilFreePull(username);
@@ -160,5 +222,7 @@ export async function getGachaStatus(username: string): Promise<{
     canUseFreePull: canPull,
     timeUntilFreePull: timeUntil,
     paidPullCost: PAID_PULL_COST,
+    multiPullCost: 170,
+    multiPullCount: 5,
   };
 }

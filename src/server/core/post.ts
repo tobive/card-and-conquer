@@ -43,12 +43,18 @@ export async function postComment(postId: string, text: string) {
 
 /**
  * Create a battle post
+ * @param battleId The ID of the battle
  * @param cardName Name of the card starting the battle
  * @param locationName Name of the battle location
  * @param mapType Type of map/terrain
  * @returns The created post
  */
-export async function createBattlePost(cardName: string, locationName: string, mapType: string) {
+export async function createBattlePost(
+  battleId: string,
+  cardName: string,
+  locationName: string,
+  mapType: string
+) {
   const { subredditName } = context;
   if (!subredditName) {
     throw new Error('subredditName is required');
@@ -67,6 +73,7 @@ export async function createBattlePost(cardName: string, locationName: string, m
     },
     postData: {
       gameState: 'battle',
+      battleId,
       locationName,
       mapType,
     },

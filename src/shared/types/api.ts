@@ -61,6 +61,7 @@ export type PlayerInitResponse = {
 
 export type GachaPullRequest = {
   useFree: boolean;
+  multiPull?: boolean;
 };
 
 export type GachaPullResponse = {
@@ -68,10 +69,22 @@ export type GachaPullResponse = {
   player: Player;
 };
 
+export type GachaMultiPullResponse = {
+  cards: Card[];
+  player: Player;
+};
+
+export type GachaWelcomePullResponse = {
+  cards: Card[];
+  player: Player;
+};
+
 export type GachaFreeStatusResponse = {
   canUseFree: boolean;
   nextFreeAt?: number;
   hoursRemaining?: number;
+  multiPullCost?: number;
+  multiPullCount?: number;
 };
 
 // ============================================================================

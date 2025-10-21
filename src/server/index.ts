@@ -4,6 +4,8 @@ import {
   PlayerInventoryResponse,
   PlayerInitResponse,
   GachaPullResponse,
+  GachaMultiPullResponse,
+  GachaWelcomePullResponse,
   GachaFreeStatusResponse,
   BattleStartResponse,
   BattleJoinResponse,
@@ -13,7 +15,7 @@ import {
   LeaderboardResponse,
   ErrorResponse,
 } from '../shared/types/api';
-import { reddit, createServer, context, getServerPort } from '@devvit/web/server';
+import { reddit, redis, createServer, context, getServerPort } from '@devvit/web/server';
 import { createPost, createBattlePost, postComment, postWarVictoryAnnouncement } from './core/post';
 import { getOrCreatePlayer, getPlayer } from './core/player';
 import { getInventoryCards, grantInitialCards } from './core/inventory';
@@ -41,6 +43,37 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.text());
 
 const router = express.Router();
+
+// ============================================================================
+// CONTEXT ENDPOINT
+// ============================================================================
+
+// GET /api/context - Get post context including battleId for deep linking
+router.get('/api/context', async (_req, res): Promise<void> => {
+  try {
+    const postId = context.postId;
+    
+    // Try to get battle ID from Redis using post ID
+    let battleId: string | null = null;
+    if (postId) {
+      // Check if there's a battle associated with this post
+      const battles = await getActiveBattles();
+      const battle = battles.find((b) => b.postId === postId);
+      if (battle) {
+        battleId = battle.id;
+      }
+    }
+    
+    res.json({
+      postId,
+      battleId,
+      gameState: battleId ? 'battle' : null,
+    });
+  } catch (error) {
+    console.error('Error getting context:', error);
+    res.status(500).json({ error: 'Failed to get context' } as ErrorResponse);
+  }
+});
 
 // ============================================================================
 // PLAYER ENDPOINTS
@@ -218,6 +251,104 @@ router.post('/api/gacha/pull', async (req, res): Promise<void> => {
   }
 });
 
+// POST /api/gacha/multi-pull - Perform 5-card pull
+router.post('/api/gacha/multi-pull', async (_req, res): Promise<void> => {
+  try {
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      res.status(401).json({ error: 'User not authenticated' } as ErrorResponse);
+      return;
+    }
+
+    const { performMultiPull } = await import('./core/gacha');
+    const cards = await performMultiPull(username, 5);
+
+    const player = await getPlayer(username);
+    if (!player) {
+      res.status(500).json({ error: 'Player not found after pull' } as ErrorResponse);
+      return;
+    }
+
+    const response: GachaMultiPullResponse = {
+      cards,
+      player: {
+        username: player.username,
+        level: player.level,
+        xp: player.xp,
+        coins: player.coins,
+        factionPoints: {
+          [Faction.White]: player.whitePoints,
+          [Faction.Black]: player.blackPoints,
+        },
+        inventory: [],
+        lastFreePull: 0,
+      },
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error('Error performing multi-pull:', error);
+    res.status(400).json({
+      error: error instanceof Error ? error.message : 'Failed to perform multi-pull',
+    } as ErrorResponse);
+  }
+});
+
+// POST /api/gacha/welcome-pull - First-time user free 5-card pull
+router.post('/api/gacha/welcome-pull', async (_req, res): Promise<void> => {
+  try {
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      res.status(401).json({ error: 'User not authenticated' } as ErrorResponse);
+      return;
+    }
+
+    // Ensure player exists before checking inventory
+    await getOrCreatePlayer(username);
+
+    const { getInventoryCount } = await import('./core/inventory');
+    const inventoryCount = await getInventoryCount(username);
+
+    // Only allow if user has no cards
+    if (inventoryCount > 0) {
+      res.status(400).json({ error: 'Welcome pull only available for new players' } as ErrorResponse);
+      return;
+    }
+
+    const { performWelcomePull } = await import('./core/gacha');
+    const cards = await performWelcomePull(username);
+
+    const player = await getPlayer(username);
+    if (!player) {
+      res.status(500).json({ error: 'Player not found after pull' } as ErrorResponse);
+      return;
+    }
+
+    const response: GachaWelcomePullResponse = {
+      cards,
+      player: {
+        username: player.username,
+        level: player.level,
+        xp: player.xp,
+        coins: player.coins,
+        factionPoints: {
+          [Faction.White]: player.whitePoints,
+          [Faction.Black]: player.blackPoints,
+        },
+        inventory: [],
+        lastFreePull: 0,
+      },
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error('Error performing welcome pull:', error);
+    res.status(400).json({
+      error: error instanceof Error ? error.message : 'Failed to perform welcome pull',
+    } as ErrorResponse);
+  }
+});
+
 // GET /api/gacha/free-status - Check free pull availability
 router.get('/api/gacha/free-status', async (_req, res): Promise<void> => {
   try {
@@ -232,6 +363,8 @@ router.get('/api/gacha/free-status', async (_req, res): Promise<void> => {
 
     const response: GachaFreeStatusResponse = {
       canUseFree,
+      multiPullCost: 170,
+      multiPullCount: 5,
     };
 
     if (!canUseFree && timeUntil > 0) {
@@ -278,11 +411,16 @@ router.post('/api/battle/start', async (req, res): Promise<void> => {
     const { generateBattleLocation } = await import('./core/battle');
     const location = generateBattleLocation();
 
-    // Create Reddit post for battle with proper formatting
-    const post = await createBattlePost(card.name, location.locationName, location.mapType);
+    // Create battle first to get the battle ID
+    // We'll use a temporary postId that will be updated
+    const tempPostId = `temp_${Date.now()}`;
+    const battle = await createBattle(tempPostId, cardId, username, location);
 
-    // Create battle with the same location
-    const battle = await createBattle(post.id, cardId, username, location);
+    // Create Reddit post for battle with proper formatting and deep link
+    const post = await createBattlePost(battle.id, card.name, location.locationName, location.mapType);
+
+    // Update battle with actual post ID
+    await redis.hSet(`battle:${battle.id}`, { postId: post.id });
 
     const response: BattleStartResponse = {
       battle,
@@ -558,8 +696,16 @@ router.post('/internal/menu/battle-create', async (_req, res): Promise<void> => 
     const { generateBattleLocation } = await import('./core/battle');
     const location = generateBattleLocation();
 
+    // Create a temporary battle to get an ID
+    const tempPostId = `temp_${Date.now()}`;
+    const { createBattle } = await import('./core/battle');
+    const battle = await createBattle(tempPostId, 1, 'system', location); // Use a default card
+
     // Create battle post with a placeholder card (moderator-initiated battles start empty)
-    const post = await createBattlePost('Moderator', location.locationName, location.mapType);
+    const post = await createBattlePost(battle.id, 'Moderator', location.locationName, location.mapType);
+
+    // Update battle with actual post ID
+    await redis.hSet(`battle:${battle.id}`, { postId: post.id });
 
     res.json({
       navigateTo: `https://reddit.com/r/${context.subredditName}/comments/${post.id}`,

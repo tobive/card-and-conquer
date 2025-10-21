@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { Card, Faction } from '../../shared/types/game';
 import type {
   GachaPullResponse,
+  GachaMultiPullResponse,
   GachaFreeStatusResponse,
   PlayerProfileResponse,
 } from '../../shared/types/api';
@@ -16,6 +17,8 @@ export const GachaScreen = () => {
   const [pulling, setPulling] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [revealedCard, setRevealedCard] = useState<Card | null>(null);
+  const [multiPullCards, setMultiPullCards] = useState<Card[]>([]);
+  const [currentMultiCardIndex, setCurrentMultiCardIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
 
   useEffect(() => {
@@ -157,8 +160,84 @@ export const GachaScreen = () => {
     }
   };
 
+  const handleMultiPull = async () => {
+    try {
+      setPulling(true);
+      setError(null);
+
+      // Client-side validation
+      const MULTI_PULL_COST = 170;
+      if (player && player.player.coins < MULTI_PULL_COST) {
+        setError(
+          `You need ${MULTI_PULL_COST} coins but only have ${player.player.coins}. Win more battles to earn coins!`
+        );
+        setPulling(false);
+        return;
+      }
+
+      const response = await fetch('/api/gacha/multi-pull', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = errorData.error || 'Failed to pull cards';
+
+        if (errorMessage.includes('Insufficient coins')) {
+          setError(
+            "You don't have enough coins for this pull. Win battles to earn more coins!"
+          );
+        } else {
+          setError(errorMessage);
+        }
+        setPulling(false);
+        return;
+      }
+
+      const data: GachaMultiPullResponse = await response.json();
+
+      // Update player state
+      setPlayer({
+        player: data.player,
+        factionAffiliation: player?.factionAffiliation || 'Neutral',
+      });
+
+      // Start multi-card reveal animation
+      setMultiPullCards(data.cards);
+      setCurrentMultiCardIndex(0);
+
+      // Refresh free status
+      await fetchFreeStatus();
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setError(
+            'Network error: Unable to connect to the server. Please check your connection and try again.'
+          );
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setPulling(false);
+    }
+  };
+
   const closeReveal = () => {
     setRevealedCard(null);
+  };
+
+  const handleNextMultiCard = () => {
+    if (currentMultiCardIndex < multiPullCards.length - 1) {
+      setCurrentMultiCardIndex(currentMultiCardIndex + 1);
+    } else {
+      // All cards revealed
+      setMultiPullCards([]);
+      setCurrentMultiCardIndex(-1);
+    }
   };
 
   if (loading) {
@@ -253,7 +332,7 @@ export const GachaScreen = () => {
           <div className="card p-4 sm:p-6 border-2 border-amber-400/30">
             <div className="text-center mb-3 sm:mb-4">
               <h2 className="text-lg sm:text-xl font-bold text-amber-400 mb-1 sm:mb-2">
-                Coin Pull
+                Single Pull
               </h2>
               <p className="text-xs sm:text-sm text-slate-400">Pull anytime for 50 coins</p>
             </div>
@@ -275,6 +354,52 @@ export const GachaScreen = () => {
                 className="w-full"
               >
                 {pulling ? 'Pulling...' : 'Pull Card (50 🪙)'}
+              </Button>
+            </div>
+          </div>
+
+          {/* Multi Pull Section (5 Cards) */}
+          <div className="card p-4 sm:p-6 border-2 border-purple-400/30 bg-gradient-to-br from-purple-900/20 to-pink-900/20">
+            <div className="text-center mb-3 sm:mb-4">
+              <div className="inline-block px-3 py-1 bg-purple-500/20 border border-purple-400/50 rounded-full text-xs font-bold text-purple-300 mb-2">
+                ✨ SPECIAL OFFER
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-purple-400 mb-1 sm:mb-2">
+                5-Card Pull
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400">
+                Save 80 coins! (170 instead of 250)
+              </p>
+            </div>
+
+            <div className="space-y-2 sm:space-y-3">
+              <div className="p-2 sm:p-3 bg-slate-800 rounded-lg text-center">
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <span className="text-slate-500 line-through text-sm">250 🪙</span>
+                  <span className="text-xl sm:text-2xl font-bold text-purple-400">170 🪙</span>
+                </div>
+                <div className="text-xs text-green-400 font-semibold">Save 32%!</div>
+              </div>
+
+              <div className="p-2 sm:p-3 bg-purple-900/30 rounded-lg">
+                <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-purple-300">
+                  <span>🎴</span>
+                  <span>Get 5 cards at once</span>
+                </div>
+              </div>
+
+              {(player?.player.coins || 0) < 170 && (
+                <div className="p-2 bg-red-900/30 rounded text-center text-xs sm:text-sm text-red-400">
+                  ⚠️ Insufficient coins
+                </div>
+              )}
+
+              <Button
+                onClick={handleMultiPull}
+                disabled={pulling || (player?.player.coins || 0) < 170}
+                className="w-full bg-purple-600 hover:bg-purple-700 border-purple-500"
+              >
+                {pulling ? 'Pulling...' : '🎴 Pull 5 Cards (170 🪙)'}
               </Button>
             </div>
           </div>
@@ -314,6 +439,16 @@ export const GachaScreen = () => {
 
       {/* Card Reveal Modal */}
       {revealedCard && <CardRevealModal card={revealedCard} onClose={closeReveal} />}
+
+      {/* Multi-Card Reveal Modal */}
+      {currentMultiCardIndex >= 0 && multiPullCards[currentMultiCardIndex] && (
+        <MultiCardRevealModal
+          card={multiPullCards[currentMultiCardIndex]}
+          cardNumber={currentMultiCardIndex + 1}
+          totalCards={multiPullCards.length}
+          onNext={handleNextMultiCard}
+        />
+      )}
     </div>
   );
 };
@@ -444,6 +579,161 @@ const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
           style={{ animationDelay: '600ms' }}
         >
           Awesome!
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// Multi-Card Reveal Modal Component
+interface MultiCardRevealModalProps {
+  card: Card;
+  cardNumber: number;
+  totalCards: number;
+  onNext: () => void;
+}
+
+const MultiCardRevealModal = ({
+  card,
+  cardNumber,
+  totalCards,
+  onNext,
+}: MultiCardRevealModalProps) => {
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [showDetails, setShowDetails] = useState(false);
+
+  useEffect(() => {
+    // Stop bounce animation after 1 second
+    const timer = setTimeout(() => setIsAnimating(false), 1000);
+    // Show details after initial animation
+    const detailsTimer = setTimeout(() => setShowDetails(true), 600);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(detailsTimer);
+    };
+  }, []);
+
+  const getFactionColor = () => {
+    if (card.faction === Faction.White) return 'border-amber-400';
+    return 'border-purple-400';
+  };
+
+  const getFactionGlow = () => {
+    if (card.faction === Faction.White) return 'shadow-amber-400/50';
+    return 'shadow-purple-400/50';
+  };
+
+  const getLevelStars = () => {
+    return '★'.repeat(card.level);
+  };
+
+  const isLastCard = cardNumber === totalCards;
+
+  return (
+    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn">
+      <div
+        className={`
+          card max-w-md w-full p-6 sm:p-8 border-4 ${getFactionColor()} shadow-2xl ${getFactionGlow()}
+          ${isAnimating ? 'animate-bounceIn' : ''}
+          max-h-[90vh] overflow-y-auto
+        `}
+      >
+        {/* Progress Indicator */}
+        <div className="text-center mb-4">
+          <div className="text-sm text-slate-400 mb-2">
+            Card {cardNumber} of {totalCards}
+          </div>
+          <div className="flex gap-1 justify-center">
+            {Array.from({ length: totalCards }).map((_, i) => (
+              <div
+                key={i}
+                className={`h-2 w-8 rounded-full transition-all ${
+                  i < cardNumber ? 'bg-purple-400' : 'bg-slate-700'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Celebration Header */}
+        <div className="text-center mb-4 sm:mb-6 animate-scaleIn">
+          <div className="text-3xl sm:text-4xl mb-2 animate-float">
+            {isLastCard ? '🎊' : '✨'}
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-purple-400 mb-1 animate-glow">
+            {isLastCard ? 'Final Card!' : 'New Card!'}
+          </h2>
+        </div>
+
+        {/* Card Display */}
+        <div className="bg-slate-900 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          {/* Level Stars */}
+          <div
+            className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
+              card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+            }`}
+            style={{ animationDelay: '200ms' }}
+          >
+            {getLevelStars()}
+          </div>
+
+          {/* Card Icon */}
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="text-6xl sm:text-8xl animate-scaleIn">
+              {card.faction === Faction.White ? '⚪' : '⚫'}
+            </div>
+          </div>
+
+          {/* Card Name */}
+          <h3
+            className="text-xl sm:text-2xl font-bold text-center text-slate-100 mb-2 animate-slideUp"
+            style={{ animationDelay: '300ms' }}
+          >
+            {card.name}
+          </h3>
+          <p
+            className="text-xs sm:text-sm text-slate-400 text-center italic mb-3 sm:mb-4 animate-fadeIn"
+            style={{ animationDelay: '400ms' }}
+          >
+            Parody of {card.parody}
+          </p>
+
+          {/* Stats */}
+          {showDetails && (
+            <div className="space-y-2 border-t border-slate-700 pt-3 sm:pt-4 animate-slideUp">
+              <div className="flex justify-between text-xs sm:text-sm">
+                <span className="text-slate-400">Faction:</span>
+                <span
+                  className={`font-semibold ${
+                    card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+                  }`}
+                >
+                  {card.faction}
+                </span>
+              </div>
+              <div className="flex justify-between text-xs sm:text-sm">
+                <span className="text-slate-400">Soldiers:</span>
+                <span className="font-semibold text-slate-200">
+                  {card.soldiers.toLocaleString()} 🪖
+                </span>
+              </div>
+              {card.ability && (
+                <div className="flex justify-between text-xs sm:text-sm">
+                  <span className="text-slate-400">Ability:</span>
+                  <span className="font-semibold text-amber-400">{card.ability}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Next Button */}
+        <Button
+          onClick={onNext}
+          className="w-full bg-purple-600 hover:bg-purple-700 border-purple-500 animate-fadeIn"
+          style={{ animationDelay: '600ms' }}
+        >
+          {isLastCard ? 'Awesome! 🎉' : 'Next Card →'}
         </Button>
       </div>
     </div>

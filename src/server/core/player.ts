@@ -227,9 +227,7 @@ export async function getOrCreatePlayer(username: string): Promise<PlayerProfile
   let player = await getPlayer(username);
   if (!player) {
     player = await createPlayer(username);
-    // Grant initial cards to new players
-    const { grantInitialCards } = await import('./inventory');
-    await grantInitialCards(username);
+    // Note: Initial cards are now granted through the welcome screen
   } else {
     await updateLastActive(username);
   }
