@@ -118,7 +118,7 @@ This document tracks all final integration and polish items for the Card & Conqu
 ### Battle Resolution Flow
 
 - [x] Battle resolves when full (20 cards)
-- [x] Winner determined by surviving soldiers
+- [x] Winner determined by surviving devotees
 - [x] Rewards distributed correctly:
   - Winners: 75 coins + 50 XP
   - Losers: 25 coins + 25 XP

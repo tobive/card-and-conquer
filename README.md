@@ -1,81 +1,58 @@
-# Card & Conquer ⚔️
+# ⚔️ Card & Conquer
 
-**An Asynchronous Faction-Based Collectible Card Game for Reddit**
+**A mythological faction war game built natively for Reddit using Devvit**
 
-Card & Conquer is a strategic card battler where players collect cards featuring stylized parodies of famous historical figures and battle for faction supremacy. Built natively for Reddit using Devvit, the game transforms Reddit posts into interactive battlefields where every card placement triggers instant combat resolution.
-
-> **Play directly on Reddit** - No external websites, no downloads. Just click a post and start conquering.
+Card & Conquer is an immersive collectible card battle game where players choose between two mythological pantheons—East and West—and fight for supremacy in an epic global war. Built as a Reddit app using Devvit, the game combines strategic card collection, tactical combat, and community-driven faction warfare.
 
 ---
 
 ## 🎮 What is Card & Conquer?
 
-Card & Conquer is a **faction warfare game** where players join one of two factions—**White** or **Black**—and compete in asynchronous battles to help their faction conquer the land. Each battle takes place in a Reddit post with a 20-slot battlefield (10 slots per faction). Players place cards from their collection, triggering immediate 1v1 combat with random opponents. When both sides are full, the battle resolves, and the winning faction moves closer to total victory.
+Card & Conquer is a **faction-based card battle game** where every player's actions contribute to a global war between two mythological pantheons. Players collect cards representing legendary deities and heroes, deploy them in strategic battles, and earn rewards based on their faction loyalty and combat prowess.
 
 ### Core Gameplay Loop
 
-1. **Collect Cards**: Use the gacha system with free daily pulls or spend coins to expand your collection
-2. **Start or Join Battles**: Create new battles or join existing ones by placing your cards
-3. **Watch Combat**: Each card placement triggers instant turn-based combat with detailed results
-4. **Win Wars**: Help your faction reach +6 on the global slider to conquer the land
-5. **Earn Rewards**: Gain XP, coins, and faction points to unlock stronger cards and climb leaderboards
+1. **Collect Cards** - Pull cards from the gacha system featuring 200+ mythological figures
+2. **Choose Your Faction** - Align with East or West based on your card collection
+3. **Join Battles** - Deploy cards in 10v10 faction battles with turn-based combat
+4. **Earn Rewards** - Gain coins, XP, bonus pulls, and faction bonuses
+5. **Conquer the Land** - Push the war slider toward your faction's victory
 
 ---
 
-## ✨ What Makes This Game Innovative?
+## ✨ What Makes This Game Innovative
 
-### 1. **Reddit-Native Gameplay**
+### 1. **Community-Driven Global War**
+Unlike traditional card games where battles are isolated, Card & Conquer features a **persistent global war system** where every battle affects a shared war slider (-6 to +6). When one faction reaches ±6, they conquer the land, all players receive rewards, and the war resets.
 
-- Battles are actual Reddit posts that anyone can view and join
-- Combat logs appear as comments in real-time for full transparency
-- No external website needed—everything happens on Reddit
-- Seamless integration with Reddit's social features
-- Spectators can watch battles unfold without needing to play
+### 2. **Session-Based Faction Loyalty**
+The game tracks your **per-session faction points**, creating dynamic faction affiliation. Your "favored faction" emerges naturally from your gameplay, and winning with your favored faction awards **bonus coins** (+50), encouraging strategic faction loyalty.
 
-### 2. **Instant Asynchronous Combat**
+### 3. **Mythological Theme with East vs West**
+Instead of generic factions, the game pits **Eastern mythologies** (Japanese, Chinese, Hindu, etc.) against **Western mythologies** (Greek, Norse, Egyptian, etc.), creating rich thematic depth with 200 unique deity cards.
 
-- No waiting for turns or opponent responses
-- Every card placement triggers immediate turn-based combat resolution
-- Battles resolve automatically when full (10v10) or after 30 minutes
-- Combat uses randomized damage with ability modifiers for unpredictability
-- Turn-based mechanics with up to 100 rounds per combat
-- Detailed combat logs show every attack, ability trigger, and outcome
+### 4. **Card Variants System**
+Cards have multiple visual variants (Standard, Golden, Legendary) with different rarities, allowing collectors to pursue rare versions of their favorite deities while maintaining gameplay balance.
 
-### 3. **Shared Faction War System**
+### 5. **Triple Leaderboard System**
+- **East Champions** - Top players by East faction points
+- **West Champions** - Top players by West faction points  
+- **Combined Power** - Top players by total faction points
 
-- All players in a subreddit contribute to a single, persistent war effort
-- Global slider tracks faction progress from -6 (Black Victory) to +6 (White Victory)
-- War victories reset the slider and reward all winning faction members with +100 coins
-- Real-time war status visible on the main menu with animated visual slider
-- Faction affiliation determined by your battle history
-- Separate leaderboards for each faction showing top warriors
+This creates multiple paths to glory and encourages diverse playstyles.
 
-### 4. **Deep Strategic Card Abilities**
+### 6. **Tactical Abilities System**
+Seven unique abilities add strategic depth:
+- **FirstStrike** - Attack first (70% chance)
+- **Reinforcements** - Gain +100 devotees when defending
+- **Precision** - Minimum 50% damage guaranteed
+- **LastStand** - Deal 1 final damage when defeated
+- **TacticalRetreat** - 20% chance to survive with 1 devotee
+- **Spartan** - +200 devotees vs stronger opponents
+- **SiegeMaster** - +300 devotees in City/Fortress battles
 
-- 8 unique tactical abilities that interact with combat mechanics and map types
-- Abilities like FirstStrike, Spartan, and SiegeMaster create meaningful strategic choices
-- Map types (Plains, Forest, Mountains, Desert, City, Fortress, Swamp, Island) affect certain abilities
-- Ability interactions create emergent gameplay and counter-play opportunities
-- Pre-combat, during-combat, and post-combat ability phases
-- Abilities can stack and combine for powerful effects
-
-### 5. **Progressive Level-Gated System**
-
-- Player level determines which cards can be obtained from gacha
-- 5 card levels (1-5) with increasing power and rarity
-- Gacha system with weighted distribution favoring lower levels (6-level weight formula)
-- Encourages long-term progression and collection building
-- Free pulls every 22 hours plus paid pulls with coins
-- XP earned from every battle regardless of outcome
-
-### 6. **Stylized Historical Parodies**
-
-- 200 unique cards featuring creative parodies of famous historical figures
-- Each card has unique stats, abilities, and flavor text
-- Balanced distribution across both factions (100 White, 100 Black)
-- Cards range from 500 to 5000+ soldiers based on level
-- Collection screen shows all cards with owned/unowned status
-- Detailed card information with ability descriptions
+### 7. **Reddit Integration**
+Built natively for Reddit using Devvit, battles create Reddit posts with live updates, combat logs posted as comments, and war victories announced to the community.
 
 ---
 
@@ -84,447 +61,316 @@ Card & Conquer is a **faction warfare game** where players join one of two facti
 ### Getting Started
 
 1. **Launch the Game**
+   - Find a Card & Conquer post on Reddit
+   - Click "Launch App" to open the game in full screen
+   - You'll see a welcome screen if you're a first-time player
 
-   - Click on any Card & Conquer post in your subreddit
-   - Press the "Tap to Start" button on the splash screen
-   - Watch the loading screen with progress bar and animated messages
-   - The game opens in full-screen mode with smooth animations
+2. **First-Time Setup**
+   - New players receive **5 free cards** to start
+   - These cards determine your initial faction affiliation
+   - You start with **100 coins** and are at **Level 1**
 
-2. **First Time Setup (Welcome Screen)**
+### Main Menu Overview
 
-   - New players are greeted with a special **Welcome Screen**
-   - Receive a **free 5-card starter pack** as a one-time gift
-   - Click "🎁 Claim Your Cards!" to open your gift
-   - Cards are revealed one-by-one with celebration animations
-   - Each card shows:
-     - Full stats and abilities
-     - Faction affiliation
-     - Level and soldier count
-     - Animated reveal with progress indicator
-   - After viewing all 5 cards, you're taken to the main menu
-   - Players also start with:
-     - 100 starting coins
-     - Level 1 player status
-   - No manual registration required—uses your Reddit account
+The main menu displays:
+- **War Status** - Current faction war slider position and leader
+- **Session Stats** - Your current game session progress
+- **Quick Stats** - Total cards, win rate, and bonus pulls available
+- **Action Buttons** - Access all game features
 
-3. **Main Menu Overview**
-   - **War Status Card**:
-     - Animated faction slider showing current war position (-6 to +6)
-     - Visual representation with Black (purple) and White (amber) sides
-     - Current leader display with battles until victory
-     - Total wins for each faction
-     - Last war victory information
-   - **Start Battle**: Create a new battle with one of your cards
-   - **Join Battle**: Browse and join active battles
-   - **Gacha**: Pull new cards (free every 22 hours or 50 coins)
-   - **Collection**: View all 200 cards with filter options
-   - **Leaderboards**: See top 50 players for each faction
+### Collecting Cards
 
----
+#### Gacha System
+- **Free Pull**: Available every 22 hours
+- **Paid Pull**: Costs 50 coins per card
+- **Multi-Pull**: 5 cards for 170 coins (discounted)
+- **Bonus Pulls**: Earned by winning battles with your faction
 
-### Playing Your First Battle
+#### Card Levels
+Cards are gated by your player level:
+- **Level 1 Players**: Can pull Level 1 cards only
+- **Level 2 Players**: Can pull Level 1-2 cards
+- **Level 5 Players**: Can pull all cards (Level 1-5)
 
-#### Option A: Join an Existing Battle
+Higher level cards have more devotees (strength) but are rarer.
 
-1. **Browse Active Battles**
+#### Card Variants
+Each card can have multiple visual variants:
+- **Standard** (Common) - Base version
+- **Alternate** (Rare/Epic/Legendary) - Special artwork
 
-   - From the main menu, select **"Join Battle"**
-   - View list of active battles with their locations and status
-   - Each battle shows: Location name, map type, and slot counts
+Variants are cosmetic only and don't affect gameplay.
 
-2. **Select a Battle**
+### Understanding Factions
 
-   - Click on a battle to view details
-   - See which slots are filled and which cards are already placed
-   - Check the map type (affects SiegeMaster ability)
+#### East Faction (◆)
+Represents Eastern mythologies:
+- Japanese (Amaterasu, Susanoo, Tsukuyomi)
+- Chinese (Jade Emperor, Sun Wukong, Nezha)
+- Hindu (Shiva, Vishnu, Kali)
+- And more...
 
-3. **Choose Your Card**
-
-   - View your inventory filtered by faction
-   - Select a card that matches an available faction slot
-   - Consider: Soldier count, ability, and map type synergy
-   - Click "Join Battle" to place your card
-
-4. **Watch the Combat**
-
-   - Your card is placed in the next available slot
-   - If enemy cards are present, instant 1v1 combat triggers
-   - Combat log appears as a Reddit comment showing:
-     - Turn order determination
-     - Abilities activated (e.g., "FirstStrike: Attacks first!")
-     - Damage dealt each turn
-     - Final soldier counts and survival status
-
-5. **Battle Resolution**
-   - Battles end when both factions fill all 10 slots OR after 30 minutes of inactivity
-   - Winner determined by total surviving soldiers across all cards
-   - Resolution posted as a comment with rewards distributed:
-     - **Win**: 70 coins + 50 XP + 1 faction point
-     - **Loss**: 20 coins + 50 XP
-     - **Draw**: 35 coins + 50 XP
-   - War slider moves ±1 toward winning faction
-
-#### Option B: Start Your Own Battle
-
-1. **Access Battle Creation**
-
-   - From the main menu, select **"Start Battle"**
-   - View your entire card collection
-
-2. **Select Your Leader Card**
-
-   - Choose any card from your inventory
-   - Preview shows:
-     - Card stats and ability
-     - Randomly generated battle location
-     - Map type (Plains, Forest, Mountains, etc.)
-
-3. **Create the Battle**
-
-   - Click "Start Battle" to confirm
-   - A new Reddit post is created with:
-     - Title: "⚔️ Battle in [Location] led by [Card Name]"
-     - Your card placed in the first slot
-     - 19 empty slots waiting for other players
-
-4. **Share and Wait**
-   - Other players can now join your battle
-   - You'll receive notifications as combat occurs
-   - Battle resolves when full or after 30 minutes
-
----
-
-### Collecting New Cards
-
-#### Using the Gacha System
-
-1. **Access Gacha**
-
-   - Select **"Gacha"** from the main menu
-   - View your current coin balance displayed prominently at the top
-   - See both free and paid pull options
-
-2. **Free Pull (Recommended)**
-
-   - Available once every 22 hours
-   - Real-time countdown timer shows hours, minutes, and seconds remaining
-   - Green highlight when available
-   - Click "Pull Free Card" when ready
-   - No cost, same card pool as paid pulls
-
-3. **Paid Pull**
-
-   - Costs 50 coins per pull
-   - Available anytime you have enough coins
-   - Shows "Insufficient coins" warning if you can't afford it
-   - Click "Pull Card (50 🪙)" to spend coins
-   - Instant pull with no cooldown
-
-4. **Card Reveal Animation**
-
-   - Animated modal with bouncing entrance
-   - Celebration confetti effect (🎉)
-   - Displays: Name, parody reference, faction, level, soldiers, ability
-   - Faction-colored border (amber for White, purple for Black)
-   - Card automatically added to your collection
-   - Click "Awesome!" to close and continue pulling
-
-5. **Level Gating System**
-   - You can only pull cards up to your current player level
-   - Example: Level 3 player can pull Level 1, 2, and 3 cards
-   - Lower level cards are more common (weighted system: Level 1 = 5x weight, Level 5 = 1x weight)
-   - Level up by earning XP from battles (50 XP per battle)
-   - Info section explains the gacha mechanics
-
-#### Earning Coins
-
-- **Battle Participation**:
-  - Win: 70 coins
-  - Loss: 20 coins
-  - Draw: 35 coins
-- **War Victory**: +100 coins when your faction wins the war (all participants)
-- **Starting Bonus**: 100 coins for new players
-- **Gacha Pulls**: Spend 50 coins per paid pull
-
----
-
-### Understanding Combat Mechanics
-
-#### Turn-Based Combat System
-
-When your card is placed, it fights a random enemy card:
-
-1. **Pre-Combat Phase**
-
-   - SiegeMaster: +300 soldiers in City/Fortress battles
-   - Spartan: +200 soldiers when fighting stronger opponent
-   - Turn order determined (50/50 random or FirstStrike override)
-
-2. **Combat Phase**
-
-   - Cards alternate attacks until one reaches 0 soldiers
-   - Each attack deals random damage (0 to max soldiers)
-   - Precision: Ensures minimum 50% damage per attack
-   - Combat continues for up to 100 turns (safety limit)
-
-3. **Post-Combat Phase**
-   - TacticalRetreat: 20% chance to survive with 1 soldier
-   - LastStand: Deal 1 final damage when defeated
-   - Results logged and posted as comment
-
-#### Card Abilities Reference
-
-| Ability             | Trigger       | Effect                                                   |
-| ------------------- | ------------- | -------------------------------------------------------- |
-| **FirstStrike**     | Pre-Combat    | 70% chance to attack first, overriding random turn order |
-| **Reinforcements**  | Pre-Combat    | +100 max soldiers if NOT attacking first                 |
-| **SiegeMaster**     | Pre-Combat    | +300 max soldiers in City or Fortress battles            |
-| **Spartan**         | Pre-Combat    | +200 max soldiers when fighting stronger opponent        |
-| **Precision**       | During Combat | Minimum damage is 50% of max soldiers per attack         |
-| **TacticalRetreat** | Post-Combat   | 20% chance to survive defeat with 1 soldier              |
-| **LastStand**       | Post-Combat   | Deal 1 final damage when defeated                        |
-
-**Note**: Cards without abilities have higher base soldier counts to compensate.
-
----
-
-### The Faction War System
-
-#### Understanding the Global Slider
-
-- **Range**: -6 (Black Victory) to +6 (White Victory)
-- **Starting Position**: 0 (Neutral)
-- **Movement**: Each battle win moves slider ±1 toward winning faction
-- **Draw**: No slider movement
-- **Visual Display**: Main menu shows slider with faction colors
-
-#### War Victory Conditions
-
-When slider reaches ±6:
-
-1. **Victory Announcement**: Reddit post created celebrating the winning faction
-2. **Rewards Distributed**: All players who fought for winning faction receive +100 coins
-3. **Slider Reset**: Position returns to 0
-4. **New War Begins**: Competition continues immediately
-5. **History Recorded**: Last victory displayed on main menu
+#### West Faction (◆)
+Represents Western mythologies:
+- Greek (Zeus, Athena, Poseidon)
+- Norse (Odin, Thor, Loki)
+- Egyptian (Ra, Anubis, Isis)
+- And more...
 
 #### Faction Affiliation
+Your faction is determined by your **session points**:
+- More East points = East affiliation ⭐
+- More West points = West affiliation ⭐
+- Equal points = Neutral
 
-- **Determination**: Based on your faction point totals (White vs Black)
-- **Earning Points**: Win battles to earn 1 point for your faction
-- **Neutral Status**: Equal points or no battles fought
-- **Leaderboard Impact**: Separate leaderboards for each faction
-- **Profile Display**: Shows your current affiliation
+### Battle System
 
----
+#### Starting a Battle
+1. Click **"Start Battle"** from the main menu
+2. Select a card from your collection
+3. Choose the card's variant (if you own multiple)
+4. A Reddit post is created for your battle
+5. Other players can join by adding their cards
 
-### Progression and Leveling
+#### Battle Structure
+- **10v10 Format**: Each faction has 10 slots
+- **Automatic Combat**: When a card joins, it fights a random opponent
+- **Turn-Based**: Cards take turns attacking until one is defeated
+- **Battle Resolution**: When all 20 slots are filled, the battle ends
 
-#### Experience Points (XP)
+#### Combat Mechanics
 
-- **Earning XP**: 50 XP per battle (win, loss, or draw)
-- **Level Thresholds**:
-  - Level 1 → 2: 100 XP
-  - Level 2 → 3: 250 XP
-  - Level 3 → 4: 450 XP
-  - Level 4 → 5: 700 XP
-  - Level 5+: Progressive increases (+500 XP per level)
-- **Benefits**: Higher levels unlock stronger cards in gacha
-- **No Level Cap**: Continue leveling indefinitely
+**Devotees = HP and Damage**
+- Each card has a devotee count (e.g., 50,000)
+- Devotees serve as both health points and maximum damage
+- Damage is random: 0 to max devotees per attack
 
-#### Leaderboards
+**Turn Order**
+- Randomly determined (50/50 chance)
+- FirstStrike ability can override (70% chance)
 
-1. **Access**: Select "Leaderboards" from main menu
-2. **Faction Tabs**:
-   - Switch between White and Black faction leaderboards
-   - Shows player count for each faction
-   - Faction-colored styling (amber/purple)
-3. **Ranking Display**:
-   - Top 50 players per faction
-   - Medal icons for top 3 (🥇🥈🥉)
-   - Rank number for positions 4+
-   - Username with highlight for current player
-   - Victory count with singular/plural text
-   - Faction icon on each entry
-4. **Current Player Highlight**:
-   - Your entry has faction-colored border and glow
-   - "YOU" badge next to your name
-   - Stands out from other entries
-5. **Staggered Animations**:
-   - Entries fade in with 30ms delay between each
-   - Smooth hover effects with scale transform
-6. **Empty State**:
-   - Trophy icon (🏆) when no warriors yet
-   - Encouragement to be the first to win
-7. **Updates**: Real-time updates as battles resolve
+**Damage Calculation**
+- Base: Random damage from 0 to current devotees
+- Precision ability: Minimum 50% damage
+- Abilities can modify devotee counts before combat
 
----
+**Victory Conditions**
+- Card with devotees > 0 wins
+- Dead cards (0 devotees) are marked with ✕
+- Battle ends when all slots filled or 30 min timeout
 
-### Viewing Your Collection
+#### Map Types
+Battles occur on 8 different terrain types:
+- Plains, Forest, Mountains, Desert
+- City, Fortress, Swamp, Island
 
-1. **Access Collection**
+**SiegeMaster** ability grants +300 devotees in City/Fortress battles.
 
-   - Select **"Collection"** from the main menu
-   - View all 200 cards in the game with responsive grid layout
-   - Smooth fade-in animations as you scroll
+### Rewards System
 
-2. **Filter Options**
+#### Battle Rewards
+- **Victory**: 70 coins + 50 XP
+- **Defeat**: 20 coins + 50 XP
+- **Draw**: 35 coins + 50 XP
 
-   - **All**: Shows entire catalog (200 cards)
-   - **White**: Only White faction cards (100 cards)
-   - **Black**: Only Black faction cards (100 cards)
-   - Progress counter shows collected/total for each filter
-   - Faction-colored borders on active filter tabs
+#### Faction Bonus
+If you win with your **favored faction** (⭐):
+- **+50 bonus coins** awarded
+- Tracked in session stats
+- Encourages faction loyalty
 
-3. **Card Display**
+#### Bonus Gacha Pulls
+- Earn 1 bonus pull per battle victory
+- Separate pools for East and West factions
+- Bonus pulls guarantee cards from your winning faction
 
-   - **Owned Cards**:
-     - Full color with all details visible
-     - Level stars (★★★★★)
-     - Soldier count with icon
-     - Ability badge if applicable
-     - Faction icon (⚪ or ⚫)
-     - Hover effects with scale animation
-   - **Unowned Cards**:
-     - Greyed out silhouettes with 40% opacity
-     - "???" placeholder name
-     - Card back icon (🎴)
-     - Level stars still visible
-     - Hover to see it's locked
+#### Level Progression
+- Earn XP from battles
+- Level up to unlock higher-tier cards
+- Level thresholds: 100, 250, 450, 700, 1000+ XP
 
-4. **Card Details Modal**
-   - Tap any card to view full details in modal overlay
-   - **For Owned Cards**:
-     - Full name and parody reference
-     - Large faction icon
-     - Complete stats (faction, soldiers, ability)
-     - Ability description with detailed mechanics explanation
-     - Flavor text description
-   - **For Unowned Cards**:
-     - Shows "???" for description
-     - Lock icon (🔒) with "Card not yet collected" message
-     - Still shows level and basic structure
-   - Click outside or "Close" button to return to grid
+### Game Sessions
 
----
+#### What is a Session?
+A session tracks your progress during a single play period:
+- **Session Points**: East and West points earned this session
+- **Battles**: Number of battles fought
+- **Coins/XP**: Rewards earned this session
+- **Faction Bonuses**: Bonus coins from faction loyalty
 
-### Battle Viewing (Spectator Mode)
+#### Completing a Session
+- Click **"Complete Session"** in the Session Stats widget
+- View your session summary
+- Start a fresh session with reset points
+- All-time stats are preserved
 
-- **Public Access**: Anyone can view battle posts without logging in
-- **Battlefield Layout**: 20-slot grid (10 White top, 10 Black bottom)
-- **Card Status**: Active cards show full stats, defeated cards greyed out
-- **Combat History**: All combat logs visible as post comments
-- **Resolution**: Final results posted as comment when battle ends
-- **War Impact**: Shows how battle affected global slider
+### War System
+
+#### The War Slider
+- **Range**: -6 (East Victory) to +6 (West Victory)
+- **Movement**: Each battle win moves slider ±1
+- **Victory**: Reaching ±6 triggers war victory
+
+#### War Victory
+When a faction reaches ±6:
+1. **Announcement**: War victory posted to Reddit
+2. **Rewards**: All faction players receive +100 coins
+3. **Reset**: Slider returns to 0, new war begins
+4. **History**: Last victory recorded
+
+### Leaderboards & Hall of Fame
+
+#### Faction Leaderboards
+- **East Champions**: Ranked by East faction points
+- **West Champions**: Ranked by West faction points
+- **Combined Power**: Ranked by total points (East + West)
+
+#### Rankings
+- Top 100 players per leaderboard
+- Real-time updates after every battle
+- View your rank and surrounding players
+
+### Statistics
+
+Track your progress:
+- **Collection**: Total cards, unique cards, faction breakdown
+- **Battles**: Total, won, lost, win rate
+- **Gacha**: Total pulls, bonus pulls earned/used
+- **Progression**: Level, XP, coins
+- **Faction**: Current affiliation, East/West points
+
+### Tutorial System
+
+Access the **"How to Play"** tutorial from the main menu:
+- 13 comprehensive pages covering all mechanics
+- Topics: Cards, Combat, Abilities, Sessions, War, Rewards
+- Interactive navigation with Previous/Next buttons
+- Mobile-optimized with smooth page transitions
+- Close anytime and return to the main menu
 
 ---
 
 ## 🎯 Strategy Tips
 
-1. **Balance Your Collection**: Collect cards from both factions to maximize battle opportunities
-2. **Ability Synergy**: Cards with abilities have fewer soldiers but can turn the tide
-3. **Map Awareness**: SiegeMaster cards dominate in City/Fortress battles
-4. **Timing Matters**: Join battles early to maximize combat opportunities
-5. **Level Up**: Higher levels unlock stronger cards—prioritize XP gain
-6. **Faction Loyalty**: Consistent faction play improves leaderboard ranking
+### For New Players
+1. **Complete your free pull daily** (22-hour cooldown)
+2. **Join battles before starting them** (learn mechanics risk-free)
+3. **Focus on one faction early** to maximize bonus rewards
+4. **Save coins for multi-pulls** (better value than single pulls)
+
+### For Advanced Players
+1. **Track your session points** to identify your favored faction
+2. **Use SiegeMaster cards** in City/Fortress battles
+3. **Deploy FirstStrike cards** for combat advantage
+4. **Collect card variants** for prestige and collection completion
+5. **Compete in all three leaderboards** for maximum recognition
+
+### Faction Strategy
+- **Specialist**: Focus on one faction for consistent bonuses
+- **Balanced**: Play both factions to dominate Combined Power leaderboard
+- **Opportunist**: Switch factions based on war slider position
 
 ---
 
-## 🛠️ Technical Stack
+## 🛠️ Development
 
-- **[Devvit](https://developers.reddit.com/)**: Reddit's developer platform for native apps
-- **[React](https://react.dev/)**: Frontend UI framework
-- **[TypeScript](https://www.typescriptlang.org/)**: Type-safe development
-- **[Vite](https://vite.dev/)**: Build tool and dev server
-- **[Express](https://expressjs.com/)**: Backend API server
-- **[Tailwind CSS](https://tailwindcss.com/)**: Utility-first styling
-- **Redis**: Data persistence (via Devvit)
-
----
-
-## 🚀 Development Commands
+### Quick Start
 
 ```bash
-# Start development server with live Reddit integration
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-
-# Build for production
-npm run build
-
-# Deploy to Reddit
-npm run deploy
-
-# Publish for review
-npm run launch
-
-# Type check and lint
-npm run check
 ```
 
----
+Visit the playtest URL provided by Devvit to test the game.
 
-## 📦 Project Structure
+### Project Structure
 
 ```
 src/
-├── client/          # React frontend (game UI)
+├── client/          # React frontend
+│   ├── screens/     # Game screens (Menu, Battle, Gacha, etc.)
 │   ├── components/  # Reusable UI components
-│   ├── screens/     # Game screens (menu, battle, gacha, etc.)
-│   ├── contexts/    # React contexts (routing)
-│   └── hooks/       # Custom React hooks
-├── server/          # Express backend (game logic)
-│   └── core/        # Game systems (combat, gacha, war, etc.)
+│   ├── hooks/       # Custom React hooks
+│   └── contexts/    # React contexts (Router, Notifications)
+├── server/          # Express backend
+│   ├── core/        # Game logic modules
+│   └── index.ts     # API endpoints
 └── shared/          # Shared types and utilities
     ├── types/       # TypeScript interfaces
-    ├── data/        # Static card catalog (200 cards)
+    ├── data/        # Card catalog and variants
     └── utils/       # Shared utilities
+```
+
+### Tech Stack
+
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Backend**: Express, Node.js
+- **Database**: Redis (via Devvit)
+- **Platform**: Reddit Devvit
+- **Build**: Vite
+
+### Key Commands
+
+```bash
+npm run dev          # Development with hot reload
+npm run build        # Build for production
+npm run deploy       # Deploy to Reddit
+npm run launch       # Publish for review
+npm run check        # Run linting and type checks
 ```
 
 ---
 
-## 🎨 Game Features
+## 📚 Documentation
 
-### Implemented ✅
+- **[GAME_MECHANICS.md](GAME_MECHANICS.md)** - Complete game rules and systems
+- **[QUICK_START.md](QUICK_START.md)** - Development setup guide
+- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Technical overview
+- **[SESSION_REWARDS_TESTING_GUIDE.md](SESSION_REWARDS_TESTING_GUIDE.md)** - Testing guide
 
-- ✅ Complete card catalog (200 cards)
-- ✅ Player progression system (XP, levels, coins)
-- ✅ Inventory management
-- ✅ Gacha system with level gating
-- ✅ Battle creation and joining
-- ✅ Combat resolution engine (8 abilities)
-- ✅ Faction war system with global slider
-- ✅ Leaderboards (faction-specific)
-- ✅ Reddit post integration
-- ✅ Loading screen with asset preloading
-- ✅ Responsive layout system
-- ✅ Client-side routing
-- ✅ Welcome screen with free starter pack
-- ✅ First-time user detection and onboarding
+---
 
-### Completed Features ✅
+## 🎨 Features
 
-- ✅ Welcome screen with animated card reveals for new players
-- ✅ Main menu with live war status and faction slider
-- ✅ Card collection screen with filtering and detail modals
-- ✅ Gacha pull interface with free/paid options and card reveals
-- ✅ Battle creation flow with card selection and preview
-- ✅ Battle view screen with 20-slot grid visualization
-- ✅ Battle list screen with active battle browsing
-- ✅ Battle join flow with card selection modal
-- ✅ Real-time combat log display
-- ✅ Leaderboard display screens
-- ✅ Responsive UI with mobile-first design
-- ✅ Client-side routing system
-- ✅ Loading screen with progress tracking
-- ✅ First-time user detection and automatic onboarding
+### Implemented
+✅ 200+ unique mythological deity cards  
+✅ Gacha system with free/paid/multi pulls  
+✅ 10v10 faction battles with turn-based combat  
+✅ 7 tactical abilities with strategic depth  
+✅ Global war system with persistent slider  
+✅ Session-based faction loyalty bonuses  
+✅ Triple leaderboard system (East/West/Combined)  
+✅ Card variants with multiple rarities  
+✅ Comprehensive tutorial system (13 pages)  
+✅ Mobile-optimized responsive design  
+✅ Reddit integration with post creation  
+✅ Real-time battle updates via comments  
+✅ Lazy loading for optimal performance  
+✅ Asset preloading with retry logic  
+✅ Accessibility features (WCAG AA)  
+✅ Performance monitoring and optimization  
 
-### In Development 🚧
+### Planned
+🔄 Seasonal events and limited cards  
+🔄 Guild/clan system for team play  
+🔄 Tournament mode with brackets  
+🔄 Card trading between players  
+🔄 Achievement system with rewards  
 
-- 🚧 Enhanced animations and visual polish
-- 🚧 Player profile screen with detailed stats
-- 🚧 Battle history tracking
-- 🚧 Card trading/gifting system
-- 🚧 Tournament mode
+---
+
+## 🤝 Contributing
+
+This is a Reddit Devvit app. To contribute:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test using `npm run dev`
+5. Submit a pull request
 
 ---
 
@@ -534,13 +380,8 @@ See [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🤝 Contributing
+## 🎮 Play Now
 
-This is a Reddit Devvit application. For development setup:
+Find Card & Conquer posts on Reddit and click "Launch App" to start playing!
 
-1. Ensure Node.js 22+ is installed
-2. Run `npm install`
-3. Run `npm run dev` to start the development server
-4. Follow the Devvit playtest URL to test on Reddit
-
-For more information, visit the [Devvit Documentation](https://developers.reddit.com/).
+**Choose your faction. Conquer the land. Become a legend.**

@@ -1,13 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
 import { Card as CardComponent } from '../components/Card';
-import { Card, Faction, MapType } from '../../shared/types/game';
+import { VariantSelector } from '../components/VariantSelector';
+import { GameCard } from '../components/GameCard';
+import { Card, Faction, MapType, CardVariant, VariantType, VariantRarity } from '../../shared/types/game';
 import {
   PlayerInventoryResponse,
   BattleStartResponse,
   ErrorResponse,
+  OwnedVariantsResponse,
 } from '../../shared/types/api';
+import { createDefaultBaseVariant } from '../../shared/utils/variantUtils';
+import { useAssetPreloader } from '../hooks/useAssetPreloader';
 
 export const BattleCreateScreen = () => {
   const { navigate } = useRouter();
@@ -20,6 +25,24 @@ export const BattleCreateScreen = () => {
     mapType: MapType;
     locationName: string;
   } | null>(null);
+  
+  // Variant selection state
+  const [ownedVariants, setOwnedVariants] = useState<CardVariant[]>([]);
+  const [selectedVariant, setSelectedVariant] = useState<CardVariant | null>(null);
+  const [loadingVariants, setLoadingVariants] = useState(false);
+
+  // Preload card images from inventory
+  const inventoryCardIds = useMemo(() => inventory.map((card) => card.id), [inventory]);
+  
+  const { loaded: assetsLoaded } = useAssetPreloader({
+    screen: 'BattleCreateScreen',
+    assets: {
+      cards: {
+        ids: inventoryCardIds,
+        size: 'full',
+      },
+    },
+  });
 
   // Fetch player inventory on mount
   useEffect(() => {
@@ -46,10 +69,80 @@ export const BattleCreateScreen = () => {
     }
   };
 
-  const handleCardSelect = (card: Card) => {
+  const handleCardSelect = async (card: Card) => {
     setSelectedCard(card);
     // Generate preview location when card is selected
     generatePreviewLocation();
+    // Load owned variants for the selected card
+    await fetchOwnedVariants(card.id);
+  };
+
+  const fetchOwnedVariants = async (cardId: number) => {
+    try {
+      setLoadingVariants(true);
+      const response = await fetch(`/api/player/owned-variants/${cardId}`);
+
+      if (!response.ok) {
+        const errorData = (await response.json()) as ErrorResponse;
+        throw new Error(errorData.error || 'Failed to fetch variants');
+      }
+
+      const data = (await response.json()) as OwnedVariantsResponse;
+      
+      // Convert API response to CardVariant objects
+      const variants: CardVariant[] = data.variants.map((v) => ({
+        id: v.id,
+        baseCardId: cardId,
+        variantName: v.variantName,
+        variantType: v.variantType === 'base' ? VariantType.Base : VariantType.Alternate,
+        rarity: v.rarity === 'rare' ? VariantRarity.Rare : 
+                v.rarity === 'epic' ? VariantRarity.Epic :
+                v.rarity === 'legendary' ? VariantRarity.Legendary :
+                VariantRarity.Common,
+        imageAssets: v.imageAssets,
+      }));
+
+      // If no variants returned, create a default base variant
+      if (variants.length === 0) {
+        variants.push(createDefaultBaseVariant(cardId));
+      }
+
+      setOwnedVariants(variants);
+      
+      // Set the first variant (usually base) as selected by default
+      setSelectedVariant(variants[0] || null);
+    } catch (err) {
+      console.error('Error fetching variants:', err);
+      // Fallback to default base variant on error
+      const defaultVariant = createDefaultBaseVariant(cardId);
+      setOwnedVariants([defaultVariant]);
+      setSelectedVariant(defaultVariant);
+    } finally {
+      setLoadingVariants(false);
+    }
+  };
+
+  const handleVariantSelect = async (variant: CardVariant) => {
+    setSelectedVariant(variant);
+    
+    // Store variant preference for future battles
+    if (selectedCard) {
+      try {
+        await fetch('/api/player/variant-preference', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cardId: selectedCard.id,
+            variantId: variant.id,
+          }),
+        });
+      } catch (err) {
+        console.error('Error saving variant preference:', err);
+        // Non-critical error, don't show to user
+      }
+    }
   };
 
   const generatePreviewLocation = () => {
@@ -82,9 +175,26 @@ export const BattleCreateScreen = () => {
       return;
     }
 
+    if (!selectedVariant) {
+      setError('Please wait for variant to load.');
+      return;
+    }
+
     try {
       setCreating(true);
       setError(null);
+
+      // Save variant preference before creating battle
+      await fetch('/api/player/variant-preference', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cardId: selectedCard.id,
+          variantId: selectedVariant.id,
+        }),
+      });
 
       const response = await fetch('/api/battle/start', {
         method: 'POST',
@@ -131,12 +241,14 @@ export const BattleCreateScreen = () => {
     }
   };
 
-  if (loading) {
+  if (loading || !assetsLoaded) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
-          <p className="mt-4 text-slate-400">Loading your cards...</p>
+          <p className="mt-4 text-slate-400">
+            {!assetsLoaded ? 'Loading card images...' : 'Loading your cards...'}
+          </p>
         </div>
       </div>
     );
@@ -214,7 +326,7 @@ export const BattleCreateScreen = () => {
                   onClick={() => handleCardSelect(card)}
                   className={`cursor-pointer rounded-lg border-2 p-3 transition-all duration-200 hover:scale-105 ${
                     selectedCard?.id === card.id
-                      ? card.faction === Faction.White
+                      ? card.faction === Faction.West
                         ? 'border-amber-500 bg-amber-500/10 shadow-lg shadow-amber-500/30 scale-105'
                         : 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/30 scale-105'
                       : 'border-slate-700 hover:border-slate-600 bg-slate-800/50'
@@ -223,7 +335,7 @@ export const BattleCreateScreen = () => {
                   <div className="text-center">
                     <div
                       className={`text-xs font-bold mb-1 ${
-                        card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+                        card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
                       }`}
                     >
                       {card.faction}
@@ -234,7 +346,7 @@ export const BattleCreateScreen = () => {
                     <div className="text-xs text-slate-400 mb-2">Lvl {card.level}</div>
                     <div className="flex items-center justify-center gap-1 text-xs">
                       <span className="text-slate-300">⚔️</span>
-                      <span className="text-white font-semibold">{card.soldiers}</span>
+                      <span className="text-white font-semibold">{card.devotees}</span>
                     </div>
                     {card.ability && (
                       <div className="mt-1 text-xs text-amber-400">{card.ability}</div>
@@ -253,40 +365,36 @@ export const BattleCreateScreen = () => {
 
             {selectedCard ? (
               <div className="space-y-4">
-                {/* Selected Card Details */}
-                <div
-                  className={`p-4 rounded-lg border-2 ${
-                    selectedCard.faction === Faction.White
-                      ? 'border-amber-500 bg-amber-500/10'
-                      : 'border-purple-500 bg-purple-500/10'
-                  }`}
-                >
-                  <div className="text-center">
-                    <div
-                      className={`text-sm font-bold mb-2 ${
-                        selectedCard.faction === Faction.White
-                          ? 'text-amber-400'
-                          : 'text-purple-400'
-                      }`}
-                    >
-                      {selectedCard.faction} Faction
+                {/* Selected Card with Variant Display */}
+                <div className="flex justify-center">
+                  {selectedVariant && !loadingVariants ? (
+                    <div style={{ width: '200px' }}>
+                      <GameCard
+                        card={selectedCard}
+                        variant={selectedVariant}
+                        size="full"
+                        interactive={false}
+                        showStats={true}
+                      />
                     </div>
-                    <div className="text-lg font-bold text-white mb-1">{selectedCard.name}</div>
-                    <div className="text-sm text-slate-400 mb-2">{selectedCard.parody}</div>
-                    <div className="flex items-center justify-center gap-3 text-sm">
-                      <span className="text-slate-300">Level {selectedCard.level}</span>
-                      <span className="text-slate-500">•</span>
-                      <span className="text-white font-semibold">
-                        ⚔️ {selectedCard.soldiers} soldiers
-                      </span>
+                  ) : (
+                    <div className="flex items-center justify-center h-64 w-48 bg-slate-800/50 rounded-lg border border-slate-700">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
                     </div>
-                    {selectedCard.ability && (
-                      <div className="mt-2 text-xs text-amber-400 font-semibold">
-                        {selectedCard.ability}
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
+
+                {/* Variant Selector */}
+                {selectedCard && ownedVariants.length > 0 && selectedVariant && !loadingVariants && (
+                  <div className="border-t border-slate-700 pt-4">
+                    <VariantSelector
+                      card={selectedCard}
+                      ownedVariants={ownedVariants}
+                      selectedVariant={selectedVariant}
+                      onSelect={handleVariantSelect}
+                    />
+                  </div>
+                )}
 
                 {/* Location Preview */}
                 {previewLocation && (
@@ -314,7 +422,7 @@ export const BattleCreateScreen = () => {
                   <Button
                     onClick={handleCreateBattle}
                     disabled={creating}
-                    variant={selectedCard.faction === Faction.White ? 'white' : 'black'}
+                    variant={selectedCard.faction === Faction.West ? 'white' : 'black'}
                     fullWidth
                     size="lg"
                   >

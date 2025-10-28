@@ -118,21 +118,21 @@ export async function createBattle(
   }
 
   // Initialize empty slots (10 per faction)
-  const whiteSlots: (BattleCard | null)[] = Array(10).fill(null);
-  const blackSlots: (BattleCard | null)[] = Array(10).fill(null);
+  const westSlots: (BattleCard | null)[] = Array(10).fill(null);
+  const eastSlots: (BattleCard | null)[] = Array(10).fill(null);
 
   // Place initial card in appropriate faction slot
   const initialBattleCard: BattleCard = {
     cardId: initialCardId,
     playerId,
-    currentSoldiers: card.soldiers,
+    currentDevotees: card.devotees,
     isAlive: true,
   };
 
-  if (card.faction === Faction.White) {
-    whiteSlots[0] = initialBattleCard;
+  if (card.faction === Faction.West) {
+    westSlots[0] = initialBattleCard;
   } else {
-    blackSlots[0] = initialBattleCard;
+    eastSlots[0] = initialBattleCard;
   }
 
   const battle: Battle = {
@@ -141,8 +141,8 @@ export async function createBattle(
     mapType: battleLocation.mapType,
     locationName: battleLocation.locationName,
     status: BattleStatus.Active,
-    whiteSlots,
-    blackSlots,
+    westSlots,
+    eastSlots,
     createdAt: now,
     lastActivity: now,
     winnerId: playerId,
@@ -165,8 +165,8 @@ export async function saveBattle(battle: Battle): Promise<void> {
   const key = getBattleKey(battle.id);
 
   // Serialize slots
-  const whiteSlotsSerialized = serializeSlots(battle.whiteSlots);
-  const blackSlotsSerialized = serializeSlots(battle.blackSlots);
+  const westSlotsSerialized = serializeSlots(battle.westSlots);
+  const eastSlotsSerialized = serializeSlots(battle.eastSlots);
 
   // Store as hash
   const data: Record<string, string> = {
@@ -180,13 +180,13 @@ export async function saveBattle(battle: Battle): Promise<void> {
     winnerId: battle.winnerId || '',
   };
 
-  // Store slots as separate fields (slot_white_0, slot_white_1, etc.)
-  whiteSlotsSerialized.forEach((slot, index) => {
-    data[`slot_white_${index}`] = slot;
+  // Store slots as separate fields (slot_west_0, slot_west_1, etc.)
+  westSlotsSerialized.forEach((slot, index) => {
+    data[`slot_west_${index}`] = slot;
   });
 
-  blackSlotsSerialized.forEach((slot, index) => {
-    data[`slot_black_${index}`] = slot;
+  eastSlotsSerialized.forEach((slot, index) => {
+    data[`slot_east_${index}`] = slot;
   });
 
   await redis.hSet(key, data);
@@ -202,15 +202,16 @@ export async function getBattle(battleId: string): Promise<Battle | null> {
   }
 
   // Deserialize slots
-  const whiteSlots: (BattleCard | null)[] = [];
-  const blackSlots: (BattleCard | null)[] = [];
+  const westSlots: (BattleCard | null)[] = [];
+  const eastSlots: (BattleCard | null)[] = [];
 
   for (let i = 0; i < 10; i++) {
-    const whiteSlotData = data[`slot_white_${i}`];
-    const blackSlotData = data[`slot_black_${i}`];
+    // Support backward compatibility: try new field names first, fall back to old ones
+    const westSlotData = data[`slot_west_${i}`] || data[`slot_white_${i}`];
+    const eastSlotData = data[`slot_east_${i}`] || data[`slot_black_${i}`];
 
-    whiteSlots.push(deserializeBattleCard(whiteSlotData || ''));
-    blackSlots.push(deserializeBattleCard(blackSlotData || ''));
+    westSlots.push(deserializeBattleCard(westSlotData || ''));
+    eastSlots.push(deserializeBattleCard(eastSlotData || ''));
   }
 
   const battle: Battle = {
@@ -219,8 +220,8 @@ export async function getBattle(battleId: string): Promise<Battle | null> {
     mapType: (data.mapType as MapType) || MapType.Plains,
     locationName: data.locationName || '',
     status: (data.status as BattleStatus) || BattleStatus.Active,
-    whiteSlots,
-    blackSlots,
+    westSlots,
+    eastSlots,
     createdAt: parseInt(data.createdAt || '0'),
     lastActivity: parseInt(data.lastActivity || '0'),
   };
@@ -260,7 +261,7 @@ export async function addCardToBattle(
   }
 
   // Determine which faction slots to use
-  const slots = card.faction === Faction.White ? battle.whiteSlots : battle.blackSlots;
+  const slots = card.faction === Faction.West ? battle.westSlots : battle.eastSlots;
 
   // Find first empty slot
   const slotIndex = slots.findIndex((slot) => slot === null);
@@ -272,7 +273,7 @@ export async function addCardToBattle(
   const battleCard: BattleCard = {
     cardId,
     playerId,
-    currentSoldiers: card.soldiers,
+    currentDevotees: card.devotees,
     isAlive: true,
   };
 
@@ -318,14 +319,14 @@ export async function getActiveBattles(limit: number = 10): Promise<Battle[]> {
 
 // Check if battle is full
 export function isBattleFull(battle: Battle): boolean {
-  const whiteFull = battle.whiteSlots.every((slot) => slot !== null);
-  const blackFull = battle.blackSlots.every((slot) => slot !== null);
-  return whiteFull && blackFull;
+  const westFull = battle.westSlots.every((slot) => slot !== null);
+  const eastFull = battle.eastSlots.every((slot) => slot !== null);
+  return westFull && eastFull;
 }
 
 // Get count of active cards per faction
 export function getActiveCardCount(battle: Battle, faction: Faction): number {
-  const slots = faction === Faction.White ? battle.whiteSlots : battle.blackSlots;
+  const slots = faction === Faction.West ? battle.westSlots : battle.eastSlots;
   return slots.filter((slot) => slot !== null && slot.isAlive).length;
 }
 

@@ -1,17 +1,48 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
+import { SessionStats } from '../components/SessionStats';
+import { useSession } from '../hooks';
 import { Faction } from '../../shared/types/game';
 import type { WarStatusResponse } from '../../shared/types/api';
+import { useAssetPreloader } from '../hooks/useAssetPreloader';
+import { filterCardsByLevel } from '../../shared/utils/cardCatalog';
+
+interface QuickStats {
+  totalCards: number;
+  winRate: number;
+  bonusPulls: { east: number; west: number };
+}
 
 export const MenuScreen = () => {
   const { navigate } = useRouter();
+  const { completeSession } = useSession();
   const [warStatus, setWarStatus] = useState<WarStatusResponse | null>(null);
+  const [quickStats, setQuickStats] = useState<QuickStats>({
+    totalCards: 0,
+    winRate: 0,
+    bonusPulls: { east: 0, west: 0 },
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Preload commonly used card thumbnails (level 1 and 2 cards)
+  const commonCards = [...filterCardsByLevel(1), ...filterCardsByLevel(2)];
+  const commonCardIds = commonCards.map((card) => card.id);
+  
+  const { loaded: assetsLoaded } = useAssetPreloader({
+    screen: 'MenuScreen',
+    assets: {
+      cards: {
+        ids: commonCardIds,
+        size: 'thumbnail',
+      },
+    },
+  });
+
   useEffect(() => {
     void fetchWarStatus();
+    void fetchQuickStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -51,11 +82,44 @@ export const MenuScreen = () => {
     }
   };
 
-  if (loading) {
+  const fetchQuickStats = async () => {
+    try {
+      // Fetch user statistics
+      const statsResponse = await fetch('/api/user/statistics');
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json();
+        setQuickStats({
+          totalCards: statsData.totalCards || 0,
+          winRate: statsData.winRate || 0,
+          bonusPulls: { east: 0, west: 0 },
+        });
+      }
+
+      // Fetch bonus gacha status
+      const bonusResponse = await fetch('/api/bonus-gacha/status');
+      if (bonusResponse.ok) {
+        const bonusData = await bonusResponse.json();
+        setQuickStats((prev) => ({
+          ...prev,
+          bonusPulls: {
+            east: bonusData.eastPulls || 0,
+            west: bonusData.westPulls || 0,
+          },
+        }));
+      }
+    } catch (err) {
+      console.error('Error fetching quick stats:', err);
+      // Don't show error for quick stats, just use defaults
+    }
+  };
+
+  if (loading || !assetsLoaded) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
-          <div className="animate-pulse text-amber-400 text-xl">Loading war status...</div>
+          <div className="animate-pulse text-amber-400 text-xl">
+            {!assetsLoaded ? 'Loading assets...' : 'Loading war status...'}
+          </div>
         </div>
       </div>
     );
@@ -89,6 +153,36 @@ export const MenuScreen = () => {
           <p className="text-slate-400 text-xs sm:text-sm md:text-base">
             Choose your faction. Conquer the land.
           </p>
+        </div>
+
+        {/* Session Stats */}
+        <SessionStats 
+          compact 
+          onCompleteSession={async () => {
+            const result = await completeSession();
+            if (result) {
+              console.log('Session completed:', result.summary);
+            }
+          }} 
+        />
+
+        {/* Quick Stats Bar */}
+        <div className="card p-3 sm:p-4">
+          <div className="flex justify-around items-center gap-2 sm:gap-4">
+            <QuickStat icon="📚" label="Cards" value={quickStats.totalCards} />
+            <div className="h-8 w-px bg-slate-700" />
+            <QuickStat
+              icon="⚔️"
+              label="Win Rate"
+              value={quickStats.winRate > 0 ? `${quickStats.winRate}%` : 'N/A'}
+            />
+            <div className="h-8 w-px bg-slate-700" />
+            <QuickStat
+              icon="🎁"
+              label="Bonus"
+              value={quickStats.bonusPulls.east + quickStats.bonusPulls.west}
+            />
+          </div>
         </div>
 
         {/* War Status Card */}
@@ -139,16 +233,56 @@ export const MenuScreen = () => {
             delay={300}
           />
           <ActionButton
+            onClick={() => navigate('user-stats')}
+            title="Statistics"
+            description="View your progress"
+            icon="📊"
+            variant="secondary"
+            delay={400}
+          />
+          <ActionButton
             onClick={() => navigate('leaderboard')}
             title="Leaderboards"
             description="Top warriors"
             icon="🏆"
             variant="secondary"
-            className="md:col-span-2"
-            delay={400}
+            delay={500}
+          />
+          <ActionButton
+            onClick={() => navigate('hall-of-fame')}
+            title="Hall of Fame"
+            description="Faction champions"
+            icon="🏛️"
+            variant="secondary"
+            delay={600}
+          />
+          <ActionButton
+            onClick={() => navigate('tutorial')}
+            title="How to Play"
+            description="Learn game mechanics"
+            icon="📖"
+            variant="secondary"
+            delay={700}
           />
         </div>
       </div>
+    </div>
+  );
+};
+
+// Quick Stat Component
+interface QuickStatProps {
+  icon: string;
+  label: string;
+  value: string | number;
+}
+
+const QuickStat = ({ icon, label, value }: QuickStatProps) => {
+  return (
+    <div className="flex flex-col items-center gap-1 flex-1">
+      <div className="text-xl sm:text-2xl">{icon}</div>
+      <div className="text-xs text-slate-400">{label}</div>
+      <div className="text-sm sm:text-base font-bold text-amber-400">{value}</div>
     </div>
   );
 };
@@ -166,9 +300,9 @@ const FactionSlider = ({ position }: FactionSliderProps) => {
     <div className="space-y-2">
       {/* Faction Labels */}
       <div className="flex justify-between text-sm font-semibold">
-        <span className="faction-black transition-all duration-300">◆ Black</span>
+        <span className="faction-black transition-all duration-300">◆ East</span>
         <span className="text-slate-500">Neutral</span>
-        <span className="faction-white transition-all duration-300">◆ White</span>
+        <span className="faction-white transition-all duration-300">◆ West</span>
       </div>
 
       {/* Slider Track */}
@@ -229,8 +363,8 @@ const WarInfo = ({ warStatus }: WarInfoProps) => {
   };
 
   const getLeaderColor = () => {
-    if (currentLeader === Faction.White) return 'text-amber-400';
-    if (currentLeader === Faction.Black) return 'text-purple-400';
+    if (currentLeader === Faction.West) return 'text-amber-400';
+    if (currentLeader === Faction.East) return 'text-purple-400';
     return 'text-slate-400';
   };
 
@@ -251,10 +385,10 @@ const WarInfo = ({ warStatus }: WarInfoProps) => {
 
       <div className="flex justify-center gap-6 text-xs text-slate-400">
         <div>
-          <span className="faction-white">White:</span> {war.whiteBattleWins} wins
+          <span className="faction-white">West:</span> {war.westBattleWins} wins
         </div>
         <div>
-          <span className="faction-black">Black:</span> {war.blackBattleWins} wins
+          <span className="faction-black">East:</span> {war.eastBattleWins} wins
         </div>
       </div>
 

@@ -3,7 +3,7 @@
  *
  * Manages the global faction war state across the subreddit.
  *
- * Slider Range: -6 (Black Victory) to +6 (White Victory)
+ * Slider Range: -6 (East Victory) to +6 (West Victory)
  * - Starts at 0
  * - Each battle win moves slider ±1 toward winning faction
  * - Reaching ±6 triggers war victory and reset
@@ -21,8 +21,8 @@ import { addCoins } from './player';
 // Redis keys
 const WAR_SLIDER_KEY = 'war:slider';
 const WAR_BATTLES_KEY = 'war:battles';
-const WAR_WHITE_WINS_KEY = 'war:white_wins';
-const WAR_BLACK_WINS_KEY = 'war:black_wins';
+const WAR_WEST_WINS_KEY = 'war:west_wins';
+const WAR_EAST_WINS_KEY = 'war:east_wins';
 const WAR_LAST_VICTORY_KEY = 'war:last_victory';
 
 // Constants
@@ -39,8 +39,8 @@ export async function initializeWar(): Promise<void> {
   if (!exists) {
     await redis.set(WAR_SLIDER_KEY, '0');
     await redis.set(WAR_BATTLES_KEY, '0');
-    await redis.set(WAR_WHITE_WINS_KEY, '0');
-    await redis.set(WAR_BLACK_WINS_KEY, '0');
+    await redis.set(WAR_WEST_WINS_KEY, '0');
+    await redis.set(WAR_EAST_WINS_KEY, '0');
   }
 }
 
@@ -53,20 +53,20 @@ export async function getWarState(): Promise<War> {
 
   const sliderStr = await redis.get(WAR_SLIDER_KEY);
   const battlesStr = await redis.get(WAR_BATTLES_KEY);
-  const whiteWinsStr = await redis.get(WAR_WHITE_WINS_KEY);
-  const blackWinsStr = await redis.get(WAR_BLACK_WINS_KEY);
+  const westWinsStr = await redis.get(WAR_WEST_WINS_KEY);
+  const eastWinsStr = await redis.get(WAR_EAST_WINS_KEY);
   const lastVictoryStr = await redis.get(WAR_LAST_VICTORY_KEY);
 
   const sliderPosition = parseInt(sliderStr || '0');
   const totalBattles = parseInt(battlesStr || '0');
-  const whiteBattleWins = parseInt(whiteWinsStr || '0');
-  const blackBattleWins = parseInt(blackWinsStr || '0');
+  const westBattleWins = parseInt(westWinsStr || '0');
+  const eastBattleWins = parseInt(eastWinsStr || '0');
 
   const war: War = {
     sliderPosition,
     totalBattles,
-    whiteBattleWins,
-    blackBattleWins,
+    westBattleWins,
+    eastBattleWins,
   };
 
   if (lastVictoryStr) {
@@ -105,14 +105,14 @@ export async function moveSlider(winner: Faction | 'Draw'): Promise<{
   }
 
   // Increment faction win counter
-  if (winner === Faction.White) {
-    await redis.incrBy(WAR_WHITE_WINS_KEY, 1);
+  if (winner === Faction.West) {
+    await redis.incrBy(WAR_WEST_WINS_KEY, 1);
   } else {
-    await redis.incrBy(WAR_BLACK_WINS_KEY, 1);
+    await redis.incrBy(WAR_EAST_WINS_KEY, 1);
   }
 
   // Calculate slider movement
-  const movement = winner === Faction.White ? 1 : -1;
+  const movement = winner === Faction.West ? 1 : -1;
   const currentPosition = parseInt((await redis.get(WAR_SLIDER_KEY)) || '0');
   let newPosition = currentPosition + movement;
 
@@ -299,7 +299,7 @@ export function formatSliderVisual(position: number): string {
   }
   visual += ']';
 
-  return `Black ${visual} White`;
+  return `East ${visual} West`;
 }
 
 /**
@@ -317,18 +317,18 @@ export async function getWarStatusMessage(): Promise<string> {
 
   if (war.sliderPosition > 0) {
     const remaining = SLIDER_MAX - war.sliderPosition;
-    lines.push(`White needs ${remaining} more ${remaining === 1 ? 'win' : 'wins'} to conquer!`);
+    lines.push(`West needs ${remaining} more ${remaining === 1 ? 'win' : 'wins'} to conquer!`);
   } else if (war.sliderPosition < 0) {
     const remaining = Math.abs(SLIDER_MIN - war.sliderPosition);
-    lines.push(`Black needs ${remaining} more ${remaining === 1 ? 'win' : 'wins'} to conquer!`);
+    lines.push(`East needs ${remaining} more ${remaining === 1 ? 'win' : 'wins'} to conquer!`);
   } else {
     lines.push('The war is balanced. Next victory will tip the scales!');
   }
 
   lines.push('');
   lines.push(`**Total Battles**: ${war.totalBattles}`);
-  lines.push(`**White Wins**: ${war.whiteBattleWins}`);
-  lines.push(`**Black Wins**: ${war.blackBattleWins}`);
+  lines.push(`**West Wins**: ${war.westBattleWins}`);
+  lines.push(`**East Wins**: ${war.eastBattleWins}`);
 
   if (war.lastWarVictory) {
     const date = new Date(war.lastWarVictory.timestamp);

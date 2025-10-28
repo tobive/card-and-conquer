@@ -13,36 +13,34 @@ Each card in the catalog has the following structure:
 ```json
 {
   "id": 101,
-  "name": "General Ivanka",
-  "parody": "Donald Trump",
-  "faction": "White",
+  "name": "Amaterasu",
+  "faction": "East",
   "level": 5,
-  "soldiers": 4800,
+  "devotees": 436800,
   "ability": "FirstStrike",
-  "description": "She doesn't start wars—she wins them before breakfast."
+  "description": "From her celestial throne in Takamagahara, she unleashes the dawn's first light, a blinding radiance that scours all darkness from the battlefield."
 }
 ```
 
 ### Fields
 
 - **id** (number): Unique identifier for the card (101-300)
-- **name** (string): Display name of the card
-- **parody** (string): The historical figure being parodied
-- **faction** (string): Either "White" or "Black"
+- **name** (string): Display name of the card (mythological deity or figure)
+- **faction** (string): Either "East" or "West"
 - **level** (number): Card level from 1 to 5
-- **soldiers** (number): Base strength (HP and max damage)
-- **ability** (string | null): One of 8 tactical abilities or null
+- **devotees** (number): Base strength (HP and max damage)
+- **ability** (string | null): One of 7 tactical abilities or null
 - **description** (string): Flavor text for the card
 
 ### Valid Abilities
 
 1. `FirstStrike` - 70% chance to attack first
-2. `Reinforcements` - Gain +100 soldiers if not attacking first
-3. `Precision` - Minimum damage is 50% of soldiers
+2. `Reinforcements` - Gain +100 devotees if not attacking first
+3. `Precision` - Minimum damage is 50% of devotees
 4. `LastStand` - Deals 1 final damage when defeated
 5. `TacticalRetreat` - 20% chance to survive defeat
-6. `Spartan` - +200 soldiers when fighting stronger opponent
-7. `SiegeMaster` - +300 soldiers in City/Fortress battles
+6. `Spartan` - +200 devotees when fighting stronger opponent
+7. `SiegeMaster` - +300 devotees in City/Fortress battles
 8. `null` - No special ability
 
 ## Card Distribution
@@ -55,8 +53,8 @@ Each card in the catalog has the following structure:
   - Level 4: 40 cards
   - Level 5: 30 cards
 - **By Faction**:
-  - White: 100 cards
-  - Black: 100 cards
+  - East: 100 cards (Eastern mythological pantheons)
+  - West: 100 cards (Western mythological pantheons)
 
 ## Usage
 

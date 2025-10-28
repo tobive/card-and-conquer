@@ -54,16 +54,16 @@ This implementation plan breaks down the Card And Conquer game into discrete, ma
 
 - [x] 7. Build combat resolution engine
 
-  - Implement 1v1 combat calculation with soldier damage
-  - Create ability effect handlers for all 8 abilities
+  - Implement 1v1 combat calculation with devotee damage
+  - Create ability effect handlers for all 7 abilities
   - Build random opponent selection logic
-  - Implement card death and soldier reduction tracking
+  - Implement card death and devotee reduction tracking
   - _Requirements: 2.4, 3.2, 3.3, 10.2_
 
 - [x] 8. Implement battle resolution and winner determination
 
   - Create battle end trigger logic (full slots or timeout)
-  - Build faction winner calculation (total surviving soldiers)
+  - Build faction winner calculation (total surviving devotees)
   - Implement coin reward distribution (win/loss/draw)
   - Create XP award system
   - _Requirements: 3.3, 6.1, 10.1_
@@ -161,7 +161,7 @@ This implementation plan breaks down the Card And Conquer game into discrete, ma
 
 - [x] 18. Implement battle view screen
 
-  - Create 20-slot battlefield grid (10 White top, 10 Black bottom)
+  - Create 20-slot battlefield grid (10 West top, 10 East bottom)
   - Build card slot component with alive/dead states
   - Implement join battle card selection modal
   - Add real-time combat log display

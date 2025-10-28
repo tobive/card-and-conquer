@@ -163,12 +163,12 @@ const CardRevealAnimation = ({
   });
 
   const getFactionColor = () => {
-    if (card.faction === Faction.White) return 'border-amber-400';
+    if (card.faction === Faction.West) return 'border-amber-400';
     return 'border-purple-400';
   };
 
   const getFactionGlow = () => {
-    if (card.faction === Faction.White) return 'shadow-amber-400/50';
+    if (card.faction === Faction.West) return 'shadow-amber-400/50';
     return 'shadow-purple-400/50';
   };
 
@@ -217,7 +217,7 @@ const CardRevealAnimation = ({
           {/* Level Stars */}
           <div
             className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
-              card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+              card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
             }`}
             style={{ animationDelay: '200ms' }}
           >
@@ -227,7 +227,7 @@ const CardRevealAnimation = ({
           {/* Card Icon */}
           <div className="flex justify-center mb-3 sm:mb-4">
             <div className="text-6xl sm:text-8xl animate-scaleIn">
-              {card.faction === Faction.White ? '⚪' : '⚫'}
+              {card.faction === Faction.West ? '⚪' : '⚫'}
             </div>
           </div>
 
@@ -252,14 +252,14 @@ const CardRevealAnimation = ({
                 <span className="text-slate-400">Faction:</span>
                 <span
                   className={`font-semibold ${
-                    card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+                    card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
                   }`}
                 >
                   {card.faction}
                 </span>
               </div>
               <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Soldiers:</span>
+                <span className="text-slate-400">Devotees:</span>
                 <span className="font-semibold text-slate-200">
                   {card.soldiers.toLocaleString()} 🪖
                 </span>

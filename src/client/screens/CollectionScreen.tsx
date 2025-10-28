@@ -1,11 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
-import { Card, Faction, Ability } from '../../shared/types/game';
+import { CollectionViewToggle, CollectionViewMode } from '../components/CollectionViewToggle';
+import { CardThumbnail } from '../components/CardThumbnail';
+import { CardLoadingSpinner } from '../components/CardLoadingSpinner';
+import { GameCard } from '../components/GameCard';
+import { useLazyCardImages } from '../hooks/useLazyCardImages';
+import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
+import {
+  Card,
+  Faction,
+  Ability,
+  CardVariant,
+  VariantType,
+  VariantRarity,
+} from '../../shared/types/game';
 import { loadCards } from '../../shared/utils/cardCatalog';
+import {
+  getVariantsByBaseCard,
+  hasAlternateVariants,
+  getVariantCount,
+} from '../../shared/utils/variantUtils';
 import type { PlayerInventoryResponse } from '../../shared/types/api';
 
-type FilterTab = 'all' | Faction.White | Faction.Black;
+type FilterTab = 'all' | Faction.West | Faction.East;
+
+interface VariantCardEntry {
+  card: Card;
+  variant: CardVariant;
+  owned: boolean;
+}
 
 export const CollectionScreen = () => {
   const { navigate } = useRouter();
@@ -15,6 +39,33 @@ export const CollectionScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
+  const [viewMode, setViewMode] = useState<CollectionViewMode>({
+    mode: 'base',
+    showUnowned: true,
+  });
+  const scrollPositionRef = useRef<number>(0);
+  const [modalScrollPosition, setModalScrollPosition] = useState<number>(0);
+
+  // Handler to open card modal and capture scroll position
+  const handleCardClick = (card: Card) => {
+    // The Layout component has a scrolling <main> element, not window
+    // Find the scrolling container (the main element with overflow-y-auto)
+    const scrollContainer = document.querySelector('main.overflow-y-auto');
+    const scrollTop = scrollContainer ? scrollContainer.scrollTop : (window.scrollY || document.documentElement.scrollTop);
+    console.log('[Card Click] Capturing scroll position:', scrollTop, 'from container:', !!scrollContainer);
+    setModalScrollPosition(scrollTop);
+    setSelectedCard(card);
+  };
+
+  // Performance monitoring with memory cleanup
+  usePerformanceMonitor({
+    screenName: 'CollectionScreen',
+    monitorMemory: true,
+    onHighMemory: () => {
+      console.warn('[CollectionScreen] High memory usage detected');
+      // Could implement pagination or reduce visible cards here if needed
+    },
+  });
 
   useEffect(() => {
     // Load all cards from catalog
@@ -70,16 +121,100 @@ export const CollectionScreen = () => {
     return inventory?.cards.some((c) => c.id === cardId) ?? false;
   };
 
+  const isVariantOwned = (variantId: string): boolean => {
+    return inventory?.cards.some((c) => c.variantId === variantId) ?? false;
+  };
+
   const getFilteredCards = (): Card[] => {
+    if (!allCards || allCards.length === 0) return [];
     if (activeFilter === 'all') return allCards;
     return allCards.filter((card) => card.faction === activeFilter);
   };
 
   const getOwnedCount = (filter: FilterTab): number => {
+    if (!allCards || allCards.length === 0) return 0;
     const cards = filter === 'all' ? allCards : allCards.filter((c) => c.faction === filter);
     return cards.filter((c) => isCardOwned(c.id)).length;
   };
 
+  // Get variant entries for variants view mode
+  const getVariantEntries = (): VariantCardEntry[] => {
+    const entries: VariantCardEntry[] = [];
+    const filteredCards = getFilteredCards();
+
+    if (!filteredCards || filteredCards.length === 0) return [];
+
+    for (const card of filteredCards) {
+      const variants = getVariantsByBaseCard(card.id);
+
+      if (variants.length > 0) {
+        // Add all variants for this card
+        for (const variant of variants) {
+          const owned = isVariantOwned(variant.id);
+          if (viewMode.showUnowned || owned) {
+            entries.push({ card, variant, owned });
+          }
+        }
+      } else {
+        // No variants defined, show as owned if base card is owned
+        const owned = isCardOwned(card.id);
+        if (viewMode.showUnowned || owned) {
+          entries.push({
+            card,
+            variant: {
+              id: `${card.id}-base`,
+              baseCardId: card.id,
+              variantName: 'Standard',
+              variantType: VariantType.Base,
+              rarity: VariantRarity.Common,
+              imageAssets: {
+                full: `/cards/full/base/${card.id}.jpg`,
+                thumbnail: `/cards/thumbnails/base/${card.id}.jpg`,
+              },
+            },
+            owned,
+          });
+        }
+      }
+    }
+
+    return entries;
+  };
+
+  // Handle view mode change with scroll position preservation
+  const handleViewModeChange = (newMode: CollectionViewMode) => {
+    // Save current scroll position
+    scrollPositionRef.current = window.scrollY;
+    setViewMode(newMode);
+
+    // Restore scroll position after render
+    setTimeout(() => {
+      window.scrollTo(0, scrollPositionRef.current);
+    }, 0);
+  };
+
+  // IMPORTANT: Calculate these BEFORE conditional returns to avoid hook order issues
+  const filteredCards = getFilteredCards();
+  const variantEntries = viewMode.mode === 'variants' ? getVariantEntries() : [];
+
+  // Set up lazy loading for card images - MUST be called before any conditional returns
+  const baseCardIds = filteredCards
+    .filter((card) => viewMode.showUnowned || isCardOwned(card.id))
+    .map((card) => card.id);
+
+  const variantCardIds = variantEntries.map((entry) => entry.card.id);
+
+  const cardIdsToLoad = viewMode.mode === 'base' ? baseCardIds : variantCardIds;
+
+  const { loadedCardIds, registerCard, isLoading, hasError, markAsLoaded, markAsError } =
+    useLazyCardImages({
+      cardIds: cardIdsToLoad,
+      threshold: 0.1,
+      rootMargin: '100px',
+      eager: false,
+    });
+
+  // NOW we can do conditional returns after all hooks are called
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-full">
@@ -110,8 +245,6 @@ export const CollectionScreen = () => {
     );
   }
 
-  const filteredCards = getFilteredCards();
-
   return (
     <div className="animate-fadeIn">
       {/* Header */}
@@ -120,12 +253,19 @@ export const CollectionScreen = () => {
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-amber-400">Card Collection</h1>
             <p className="text-sm text-slate-400 mt-1">
-              {getOwnedCount(activeFilter)} / {filteredCards.length} collected
+              {viewMode.mode === 'base'
+                ? `${getOwnedCount(activeFilter)} / ${filteredCards.length} collected`
+                : `${variantEntries.filter((e) => e.owned).length} / ${variantEntries.length} variants owned`}
             </p>
           </div>
           <Button onClick={() => navigate('menu')} variant="secondary">
             Back
           </Button>
+        </div>
+
+        {/* View Mode Toggle */}
+        <div className="mb-4">
+          <CollectionViewToggle mode={viewMode} onChange={handleViewModeChange} />
         </div>
 
         {/* Filter Tabs */}
@@ -138,42 +278,82 @@ export const CollectionScreen = () => {
             total={allCards.length}
           />
           <FilterButton
-            active={activeFilter === Faction.White}
-            onClick={() => setActiveFilter(Faction.White)}
-            label="White"
-            count={getOwnedCount(Faction.White)}
-            total={allCards.filter((c) => c.faction === Faction.White).length}
-            faction={Faction.White}
+            active={activeFilter === Faction.West}
+            onClick={() => setActiveFilter(Faction.West)}
+            label="West"
+            count={getOwnedCount(Faction.West)}
+            total={allCards.filter((c) => c.faction === Faction.West).length}
+            faction={Faction.West}
           />
           <FilterButton
-            active={activeFilter === Faction.Black}
-            onClick={() => setActiveFilter(Faction.Black)}
-            label="Black"
-            count={getOwnedCount(Faction.Black)}
-            total={allCards.filter((c) => c.faction === Faction.Black).length}
-            faction={Faction.Black}
+            active={activeFilter === Faction.East}
+            onClick={() => setActiveFilter(Faction.East)}
+            label="East"
+            count={getOwnedCount(Faction.East)}
+            total={allCards.filter((c) => c.faction === Faction.East).length}
+            faction={Faction.East}
           />
         </div>
       </div>
 
-      {/* Card Grid */}
-      <div className="pb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
-          {filteredCards.map((card, index) => (
-            <div
-              key={card.id}
-              className="animate-scaleIn"
-              style={{ animationDelay: `${(index % 12) * 30}ms` }}
-            >
-              <CollectionCard
-                card={card}
-                owned={isCardOwned(card.id)}
-                onClick={() => setSelectedCard(card)}
-              />
-            </div>
-          ))}
+      {/* Card Grid - Base View */}
+      {viewMode.mode === 'base' && (
+        <div className="pb-6 px-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 justify-items-center">
+            {filteredCards
+              .filter((card) => viewMode.showUnowned || isCardOwned(card.id))
+              .map((card, index) => (
+                <div
+                  key={card.id}
+                  className="animate-scaleIn"
+                  style={{ animationDelay: `${(index % 12) * 30}ms` }}
+                >
+                  <CollectionCard
+                    card={card}
+                    owned={isCardOwned(card.id)}
+                    onClick={() => handleCardClick(card)}
+                    hasVariants={hasAlternateVariants(card.id)}
+                    variantCount={getVariantCount(card.id)}
+                    shouldLoad={loadedCardIds.has(card.id)}
+                    onRegister={(el) => registerCard(card.id, el)}
+                    isLoading={isLoading(card.id)}
+                    hasError={hasError(card.id)}
+                    onImageLoad={() => markAsLoaded(card.id)}
+                    onImageError={() => markAsError(card.id)}
+                  />
+                </div>
+              ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Card Grid - Variants View */}
+      {viewMode.mode === 'variants' && (
+        <div className="pb-6 px-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 justify-items-center">
+            {variantEntries.map((entry, index) => (
+              <div
+                key={entry.variant.id}
+                className="animate-scaleIn"
+                style={{ animationDelay: `${(index % 12) * 30}ms` }}
+              >
+                <VariantCard
+                  card={entry.card}
+                  variant={entry.variant}
+                  owned={entry.owned}
+                  onClick={() => handleCardClick(entry.card)}
+                  shouldLoad={loadedCardIds.has(entry.card.id)}
+                  onRegister={(el) => registerCard(entry.card.id, el)}
+                  isLoading={isLoading(entry.card.id)}
+                  hasError={hasError(entry.card.id)}
+                  onImageLoad={() => markAsLoaded(entry.card.id)}
+                  onImageError={() => markAsError(entry.card.id)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Card Detail Modal */}
       {selectedCard && (
@@ -181,6 +361,8 @@ export const CollectionScreen = () => {
           card={selectedCard}
           owned={isCardOwned(selectedCard.id)}
           onClose={() => setSelectedCard(null)}
+          inventory={inventory}
+          scrollPosition={modalScrollPosition}
         />
       )}
     </div>
@@ -200,7 +382,7 @@ interface FilterButtonProps {
 const FilterButton = ({ active, onClick, label, count, total, faction }: FilterButtonProps) => {
   const getFactionColor = () => {
     if (!faction) return 'border-slate-600 text-slate-300';
-    if (faction === Faction.White) return 'border-amber-400/50 text-amber-400';
+    if (faction === Faction.West) return 'border-amber-400/50 text-amber-400';
     return 'border-purple-400/50 text-purple-400';
   };
 
@@ -221,75 +403,250 @@ const FilterButton = ({ active, onClick, label, count, total, faction }: FilterB
   );
 };
 
-// Collection Card Component
+// Collection Card Component (Base View)
 interface CollectionCardProps {
   card: Card;
   owned: boolean;
   onClick: () => void;
+  hasVariants?: boolean;
+  variantCount?: number;
+  shouldLoad?: boolean;
+  onRegister?: (element: HTMLElement | null) => void;
+  isLoading?: boolean;
+  hasError?: boolean;
+  onImageLoad?: () => void;
+  onImageError?: () => void;
 }
 
-const CollectionCard = ({ card, owned, onClick }: CollectionCardProps) => {
-  const getFactionColor = () => {
-    if (card.faction === Faction.White) return 'border-amber-400/30';
-    return 'border-purple-400/30';
-  };
-
-  const getLevelStars = () => {
-    return '★'.repeat(card.level);
-  };
-
+const CollectionCard = ({
+  card,
+  owned,
+  onClick,
+  hasVariants = false,
+  variantCount = 0,
+  shouldLoad = true,
+  onRegister,
+  isLoading = false,
+  hasError = false,
+  onImageLoad,
+  onImageError,
+}: CollectionCardProps) => {
   if (!owned) {
     return (
-      <button
-        onClick={onClick}
-        className="card p-2 sm:p-3 aspect-[3/4] flex flex-col items-center justify-center opacity-40 hover:opacity-60 transition-opacity duration-300 cursor-pointer min-h-[120px] touch-manipulation"
+      <div
+        ref={onRegister}
+        className="relative flex items-center justify-center"
+        style={{ width: '120px', height: '160px' }}
       >
-        <div className="text-4xl sm:text-6xl mb-1 sm:mb-2 opacity-30">🎴</div>
-        <div className="text-[10px] sm:text-xs text-slate-500 text-center">???</div>
-        <div className="text-[10px] sm:text-xs text-slate-600 mt-1">{getLevelStars()}</div>
-      </button>
+        <button
+          onClick={onClick}
+          className="card p-2 sm:p-3 w-full h-full flex flex-col items-center justify-center opacity-40 hover:opacity-60 transition-opacity duration-300 cursor-pointer touch-manipulation relative"
+        >
+          <div className="text-4xl sm:text-6xl mb-1 sm:mb-2 opacity-30">🎴</div>
+          <div className="text-[10px] sm:text-xs text-slate-500 text-center">???</div>
+          <div className="text-[10px] sm:text-xs text-slate-600 mt-1">
+            {'★'.repeat(card.level)}
+          </div>
+
+          {/* Variant Badge for unowned cards */}
+          {hasVariants && (
+            <div className="absolute top-1 right-1 bg-slate-800/80 rounded px-1.5 py-0.5 text-[9px] text-slate-500">
+              ✨ {variantCount}
+            </div>
+          )}
+        </button>
+      </div>
     );
   }
 
   return (
-    <button
-      onClick={onClick}
-      className={`
-        card p-2 sm:p-3 aspect-[3/4] flex flex-col cursor-pointer
-        hover:scale-105 transition-all duration-300
-        ${getFactionColor()}
-        min-h-[120px] touch-manipulation
-      `}
+    <div
+      ref={onRegister}
+      className="relative"
+      style={{ width: '120px', height: '160px' }}
     >
-      {/* Level Stars */}
-      <div
-        className={`text-[10px] sm:text-xs font-bold mb-1 sm:mb-2 ${card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'}`}
-      >
-        {getLevelStars()}
-      </div>
+      {shouldLoad ? (
+        <div className="relative">
+          {/* Loading Spinner */}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-800/50 rounded-lg z-20">
+              <CardLoadingSpinner size="small" />
+            </div>
+          )}
 
-      {/* Card Icon */}
-      <div className="flex-1 flex items-center justify-center text-3xl sm:text-4xl mb-1 sm:mb-2">
-        {card.faction === Faction.White ? '⚪' : '⚫'}
-      </div>
+          {/* Error State */}
+          {hasError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-800/50 rounded-lg z-20">
+              <div className="text-center p-2">
+                <div className="text-2xl mb-1">⚠️</div>
+                <div className="text-[9px] text-red-400">Failed to load</div>
+              </div>
+            </div>
+          )}
 
-      {/* Card Name */}
-      <div className="text-[10px] sm:text-xs font-semibold text-center text-slate-200 line-clamp-2 mb-1 leading-tight">
-        {card.name}
-      </div>
+          <CardThumbnail
+            card={card}
+            interactive
+            onClick={onClick}
+            {...(onImageLoad && { onImageLoad })}
+            {...(onImageError && { onImageError })}
+          />
 
-      {/* Soldiers */}
-      <div className="text-[9px] sm:text-xs text-slate-400 text-center leading-tight">
-        {card.soldiers.toLocaleString()} 🪖
-      </div>
-
-      {/* Ability Badge */}
-      {card.ability && (
-        <div className="mt-1 sm:mt-2 px-1.5 sm:px-2 py-0.5 bg-slate-800 rounded text-[9px] sm:text-xs text-amber-400 text-center truncate">
-          {card.ability}
+          {/* Variant Badge Overlay */}
+          {hasVariants && (
+            <div className="absolute top-1 right-1 bg-purple-500/90 rounded px-1.5 py-0.5 text-[9px] text-white font-semibold shadow-lg z-10">
+              ✨ {variantCount}
+            </div>
+          )}
         </div>
+      ) : (
+        <div className="w-full h-full bg-slate-800/50 rounded-lg animate-pulse" />
       )}
-    </button>
+    </div>
+  );
+};
+
+// Variant Card Component (Variants View)
+interface VariantCardProps {
+  card: Card;
+  variant: CardVariant;
+  owned: boolean;
+  onClick: () => void;
+  shouldLoad?: boolean;
+  onRegister?: (element: HTMLElement | null) => void;
+  isLoading?: boolean;
+  hasError?: boolean;
+  onImageLoad?: () => void;
+  onImageError?: () => void;
+}
+
+const VariantCard = ({
+  card,
+  variant,
+  owned,
+  onClick,
+  shouldLoad = true,
+  onRegister,
+  isLoading = false,
+  hasError = false,
+  onImageLoad,
+  onImageError,
+}: VariantCardProps) => {
+  const getRarityColor = () => {
+    switch (variant.rarity) {
+      case 'legendary':
+        return 'text-orange-400';
+      case 'epic':
+        return 'text-purple-400';
+      case 'rare':
+        return 'text-blue-400';
+      default:
+        return 'text-slate-400';
+    }
+  };
+
+  const getRarityBadgeColor = () => {
+    switch (variant.rarity) {
+      case 'legendary':
+        return 'bg-orange-500/90';
+      case 'epic':
+        return 'bg-purple-500/90';
+      case 'rare':
+        return 'bg-blue-500/90';
+      default:
+        return 'bg-slate-600/90';
+    }
+  };
+
+  if (!owned) {
+    return (
+      <div
+        ref={onRegister}
+        className="relative flex items-center justify-center"
+        style={{ width: '120px', height: '160px' }}
+      >
+        <button
+          onClick={onClick}
+          className="card p-2 sm:p-3 w-full h-full flex flex-col items-center justify-center opacity-40 hover:opacity-60 transition-opacity duration-300 cursor-pointer touch-manipulation relative"
+        >
+          {/* Variant Type Badge */}
+          {variant.variantType === 'alternate' && (
+            <div
+              className={`absolute top-1 right-1 ${getRarityBadgeColor()} rounded px-1.5 py-0.5 text-[9px] text-white font-semibold`}
+            >
+              ✨
+            </div>
+          )}
+
+          <div className="text-4xl sm:text-6xl mb-1 sm:mb-2 opacity-30">
+            {variant.variantType === 'alternate' ? '🔒' : '🎴'}
+          </div>
+          <div className="text-[10px] sm:text-xs text-slate-500 text-center">???</div>
+          <div className="text-[10px] sm:text-xs text-slate-600 mt-1">
+            {'★'.repeat(card.level)}
+          </div>
+          <div className={`text-[9px] mt-1 ${getRarityColor()}`}>{variant.variantName}</div>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      ref={onRegister}
+      className="relative"
+      style={{ width: '120px', height: '160px' }}
+    >
+      {shouldLoad ? (
+        <div className="relative">
+          {/* Loading Spinner */}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-800/50 rounded-lg z-20">
+              <CardLoadingSpinner size="small" />
+            </div>
+          )}
+
+          {/* Error State */}
+          {hasError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-800/50 rounded-lg z-20">
+              <div className="text-center p-2">
+                <div className="text-2xl mb-1">⚠️</div>
+                <div className="text-[9px] text-red-400">Failed to load</div>
+              </div>
+            </div>
+          )}
+
+          <CardThumbnail
+            card={card}
+            variant={variant}
+            interactive
+            onClick={onClick}
+            {...(onImageLoad && { onImageLoad })}
+            {...(onImageError && { onImageError })}
+          />
+
+          {/* Variant Type Badge Overlay */}
+          {variant.variantType === 'alternate' && (
+            <div
+              className={`absolute top-1 right-1 ${getRarityBadgeColor()} rounded px-1.5 py-0.5 text-[9px] text-white font-semibold shadow-lg z-10`}
+            >
+              ✨
+            </div>
+          )}
+          {/* Variant Name Overlay */}
+          <div
+            className="absolute bottom-1 left-1 right-1 text-center bg-black/60 rounded px-1 py-0.5"
+            style={{ zIndex: 10 }}
+          >
+            <div className={`text-[9px] ${getRarityColor()} truncate`}>
+              {variant.variantName}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="w-full h-full bg-slate-800/50 rounded-lg animate-pulse" />
+      )}
+    </div>
   );
 };
 
@@ -298,16 +655,53 @@ interface CardDetailModalProps {
   card: Card;
   owned: boolean;
   onClose: () => void;
+  inventory?: PlayerInventoryResponse | null;
+  scrollPosition: number;
 }
 
-const CardDetailModal = ({ card, owned, onClose }: CardDetailModalProps) => {
+const CardDetailModal = ({ card, owned, onClose, inventory, scrollPosition }: CardDetailModalProps) => {
+  const [selectedVariant, setSelectedVariant] = useState<CardVariant | undefined>(undefined);
+  const [modalTopOffset, setModalTopOffset] = useState<number>(0);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
+
+  // Calculate modal position based on captured scroll position
+  useEffect(() => {
+    // Use the scroll position that was captured when the card was clicked
+    const scrollTop = scrollPosition;
+    const viewportHeight = window.innerHeight;
+    
+    // Calculate offset to center modal in current viewport
+    // The modal container is fixed and covers the viewport, so we need to add
+    // the scroll position as margin to position the modal where the user is looking
+    const estimatedModalHeight = 600; // Approximate modal height
+    const centerOffset = (viewportHeight - estimatedModalHeight) / 2;
+    const offset = scrollTop + Math.max(0, centerOffset);
+    
+    console.log('[Modal Debug] scrollTop:', scrollTop, 'viewportHeight:', viewportHeight, 'centerOffset:', centerOffset, 'final offset:', offset);
+    setModalTopOffset(offset);
+    
+    // Prevent scroll in the main container when modal is open
+    const scrollContainer = document.querySelector('main.overflow-y-auto');
+    if (scrollContainer) {
+      (scrollContainer as HTMLElement).style.overflow = 'hidden';
+    }
+    
+    return () => {
+      // Restore scroll
+      if (scrollContainer) {
+        (scrollContainer as HTMLElement).style.overflow = 'auto';
+      }
+    };
+  }, [scrollPosition]);
+
   const getFactionColor = () => {
-    if (card.faction === Faction.White) return 'border-amber-400';
+    if (card.faction === Faction.West) return 'border-amber-400';
     return 'border-purple-400';
   };
 
   const getFactionTextColor = () => {
-    if (card.faction === Faction.White) return 'text-amber-400';
+    if (card.faction === Faction.West) return 'text-amber-400';
     return 'text-purple-400';
   };
 
@@ -321,28 +715,42 @@ const CardDetailModal = ({ card, owned, onClose }: CardDetailModalProps) => {
     const descriptions: Record<Ability, string> = {
       [Ability.FirstStrike]:
         'Attacks first in combat, dealing damage before the opponent can respond',
-      [Ability.Reinforcements]: 'Gains additional soldiers when entering battle',
+      [Ability.Reinforcements]: 'Gains additional devotees when entering battle',
       [Ability.Precision]: 'Deals increased damage with accurate strikes',
-      [Ability.LastStand]: 'Becomes stronger when at low soldier count',
+      [Ability.LastStand]: 'Becomes stronger when at low devotee count',
       [Ability.TacticalRetreat]: 'Can avoid some damage by retreating strategically',
-      [Ability.Spartan]: 'Fights with fewer soldiers but greater efficiency',
+      [Ability.Spartan]: 'Fights with fewer devotees but greater efficiency',
       [Ability.SiegeMaster]: 'Excels at breaking through enemy defenses',
     };
 
     return descriptions[ability] || '';
   };
 
+  // Get owned variants for this card
+  const ownedVariants = owned
+    ? getVariantsByBaseCard(card.id).filter((v) =>
+        inventory?.cards.some((c) => c.variantId === v.id)
+      )
+    : [];
+
+  // Get all variants for display
+  const allVariants = getVariantsByBaseCard(card.id);
+  const hasVariants = allVariants.length > 0;
+
   return (
     <div
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn"
+      ref={modalContainerRef}
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-start p-3 sm:p-4 z-50 animate-fadeIn overflow-y-auto"
       onClick={onClose}
     >
       <div
+        ref={modalRef}
         className={`
-          card max-w-md w-full p-4 sm:p-6 border-2 ${getFactionColor()}
+          card max-w-2xl w-full p-4 sm:p-6 border-2 ${getFactionColor()}
           ${owned ? '' : 'opacity-60'}
-          animate-scaleIn max-h-[90vh] overflow-y-auto
+          animate-scaleIn
         `}
+        style={{ marginTop: `${modalTopOffset}px` }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -352,7 +760,6 @@ const CardDetailModal = ({ card, owned, onClose }: CardDetailModalProps) => {
               {getLevelStars()} Level {card.level}
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-100">{card.name}</h2>
-            <p className="text-xs sm:text-sm text-slate-400 italic mt-1">Parody of {card.parody}</p>
           </div>
           <button
             onClick={onClose}
@@ -362,17 +769,64 @@ const CardDetailModal = ({ card, owned, onClose }: CardDetailModalProps) => {
           </button>
         </div>
 
-        {/* Card Icon */}
+        {/* Card Display */}
         <div className="flex justify-center my-4 sm:my-6">
-          <div className="text-6xl sm:text-8xl">
-            {owned ? (card.faction === Faction.White ? '⚪' : '⚫') : '🎴'}
-          </div>
+          {owned ? (
+            selectedVariant ? (
+              <GameCard
+                card={card}
+                variant={selectedVariant}
+                size="full"
+                showStats={true}
+              />
+            ) : (
+              <GameCard
+                card={card}
+                size="full"
+                showStats={true}
+              />
+            )
+          ) : (
+            <div className="text-6xl sm:text-8xl">🎴</div>
+          )}
         </div>
+
+        {/* Variant Selector */}
+        {owned && hasVariants && ownedVariants.length > 0 && (
+          <div className="mb-4 sm:mb-6">
+            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-2">
+              Owned Variants ({ownedVariants.length})
+            </h3>
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {ownedVariants.map((variant) => (
+                <button
+                  key={variant.id}
+                  onClick={() =>
+                    setSelectedVariant(selectedVariant?.id === variant.id ? undefined : variant)
+                  }
+                  className={`
+                    flex-shrink-0 p-2 rounded-lg border-2 transition-all
+                    ${
+                      selectedVariant?.id === variant.id
+                        ? 'border-amber-400 bg-amber-400/10'
+                        : 'border-slate-600 hover:border-slate-500'
+                    }
+                  `}
+                >
+                  <CardThumbnail card={card} variant={variant} showStats={false} />
+                  <div className="text-[10px] text-center mt-1 text-slate-300">
+                    {variant.variantName}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Stats */}
         <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
           <StatRow label="Faction" value={card.faction} valueColor={getFactionTextColor()} />
-          <StatRow label="Soldiers" value={card.soldiers.toLocaleString() + ' 🪖'} />
+          <StatRow label="Devotees" value={card.devotees.toLocaleString() + ' 🙏'} />
           {card.ability && (
             <div>
               <StatRow label="Ability" value={card.ability} valueColor="text-amber-400" />
@@ -390,6 +844,18 @@ const CardDetailModal = ({ card, owned, onClose }: CardDetailModalProps) => {
             {owned ? card.description : '???'}
           </p>
         </div>
+
+        {/* Variant Info */}
+        {owned && hasVariants && (
+          <div className="border-t border-slate-700 pt-3 sm:pt-4 mt-3 sm:mt-4">
+            <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-2">
+              Variant Collection
+            </h3>
+            <p className="text-xs text-slate-400">
+              You own {ownedVariants.length} of {allVariants.length} variants for this card.
+            </p>
+          </div>
+        )}
 
         {/* Status Badge */}
         {!owned && (

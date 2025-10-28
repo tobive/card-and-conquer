@@ -6,8 +6,44 @@ import cardsData from '../data/cards.json';
  * with validation and filtering capabilities
  */
 
-// Type assertion for imported JSON data
-const cards = cardsData as Card[];
+// Interface for raw card data that may have old field names
+interface RawCardData {
+  id: number;
+  name: string;
+  faction: string;
+  level: number;
+  devotees?: number;
+  soldiers?: number; // Legacy field name
+  ability: string | null;
+  description: string;
+}
+
+/**
+ * Normalize card data to handle backward compatibility
+ * Maps old field names (soldiers, White/Black) to new ones (devotees, West/East)
+ */
+function normalizeCardData(rawCard: RawCardData): Card {
+  // Handle faction name mapping: White→West, Black→East
+  let faction = rawCard.faction;
+  if (faction === 'White') faction = 'West';
+  if (faction === 'Black') faction = 'East';
+
+  // Handle devotees/soldiers field - prefer devotees, fallback to soldiers
+  const devotees = rawCard.devotees ?? rawCard.soldiers ?? 0;
+
+  return {
+    id: rawCard.id,
+    name: rawCard.name,
+    faction: faction as Faction,
+    level: rawCard.level,
+    devotees,
+    ability: rawCard.ability as Ability | null,
+    description: rawCard.description,
+  };
+}
+
+// Type assertion and normalization for imported JSON data
+const cards = (cardsData as RawCardData[]).map(normalizeCardData);
 
 /**
  * Validates a single card against the schema
@@ -15,10 +51,9 @@ const cards = cardsData as Card[];
 function validateCard(card: Card): boolean {
   if (!card.id || typeof card.id !== 'number') return false;
   if (!card.name || typeof card.name !== 'string') return false;
-  if (!card.parody || typeof card.parody !== 'string') return false;
   if (!Object.values(Faction).includes(card.faction)) return false;
   if (!card.level || card.level < 1 || card.level > 5) return false;
-  if (!card.soldiers || card.soldiers < 0) return false;
+  if (!card.devotees || card.devotees < 0) return false;
   if (card.ability !== null && !Object.values(Ability).includes(card.ability)) return false;
   if (!card.description || typeof card.description !== 'string') return false;
 
@@ -163,8 +198,8 @@ export function getCardCountByLevel(): Record<number, number> {
  */
 export function getCardCountByFaction(): Record<Faction, number> {
   const counts: Record<Faction, number> = {
-    [Faction.White]: 0,
-    [Faction.Black]: 0,
+    [Faction.East]: 0,
+    [Faction.West]: 0,
   };
 
   cards.forEach((card) => {

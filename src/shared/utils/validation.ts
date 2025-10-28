@@ -1,4 +1,16 @@
-import { Card, Player, Battle, War, Faction, Ability, MapType, BattleStatus } from '../types/game';
+import {
+  Card,
+  Player,
+  Battle,
+  War,
+  Faction,
+  Ability,
+  MapType,
+  BattleStatus,
+  GameSession,
+  SessionSummary,
+  HallOfFameEntry,
+} from '../types/game';
 
 // ============================================================================
 // CARD VALIDATION
@@ -17,14 +29,12 @@ export function isValidCard(card: unknown): card is Card {
     c.id > 0 &&
     typeof c.name === 'string' &&
     c.name.length > 0 &&
-    typeof c.parody === 'string' &&
-    c.parody.length > 0 &&
     isValidFaction(c.faction) &&
     typeof c.level === 'number' &&
     c.level >= 1 &&
     c.level <= 5 &&
-    typeof c.soldiers === 'number' &&
-    c.soldiers > 0 &&
+    typeof c.devotees === 'number' &&
+    c.devotees > 0 &&
     (c.ability === null || isValidAbility(c.ability)) &&
     typeof c.description === 'string' &&
     c.description.length > 0
@@ -39,10 +49,10 @@ export function isValidCardLevel(level: number): boolean {
 }
 
 /**
- * Validates card soldiers count is positive
+ * Validates card devotees count is positive
  */
-export function isValidSoldierCount(soldiers: number): boolean {
-  return Number.isInteger(soldiers) && soldiers > 0;
+export function isValidDevoteeCount(devotees: number): boolean {
+  return Number.isInteger(devotees) && devotees > 0;
 }
 
 // ============================================================================
@@ -53,7 +63,7 @@ export function isValidSoldierCount(soldiers: number): boolean {
  * Validates a faction value
  */
 export function isValidFaction(faction: unknown): faction is Faction {
-  return faction === Faction.White || faction === Faction.Black;
+  return faction === Faction.West || faction === Faction.East;
 }
 
 /**
@@ -100,10 +110,10 @@ export function isValidPlayer(player: unknown): player is Player {
     p.coins >= 0 &&
     typeof p.factionPoints === 'object' &&
     p.factionPoints !== null &&
-    typeof p.factionPoints[Faction.White] === 'number' &&
-    p.factionPoints[Faction.White] >= 0 &&
-    typeof p.factionPoints[Faction.Black] === 'number' &&
-    p.factionPoints[Faction.Black] >= 0 &&
+    typeof p.factionPoints[Faction.West] === 'number' &&
+    p.factionPoints[Faction.West] >= 0 &&
+    typeof p.factionPoints[Faction.East] === 'number' &&
+    p.factionPoints[Faction.East] >= 0 &&
     Array.isArray(p.inventory) &&
     p.inventory.every((id) => typeof id === 'number' && id > 0) &&
     typeof p.lastFreePull === 'number' &&
@@ -153,10 +163,10 @@ export function isValidBattle(battle: unknown): battle is Battle {
     typeof b.locationName === 'string' &&
     b.locationName.length > 0 &&
     isValidBattleStatus(b.status) &&
-    Array.isArray(b.whiteSlots) &&
-    b.whiteSlots.length === 10 &&
-    Array.isArray(b.blackSlots) &&
-    b.blackSlots.length === 10 &&
+    Array.isArray(b.westSlots) &&
+    b.westSlots.length === 10 &&
+    Array.isArray(b.eastSlots) &&
+    b.eastSlots.length === 10 &&
     typeof b.createdAt === 'number' &&
     b.createdAt > 0 &&
     typeof b.lastActivity === 'number' &&
@@ -168,7 +178,7 @@ export function isValidBattle(battle: unknown): battle is Battle {
  * Validates battle has available slots for a given faction
  */
 export function hasAvailableSlot(battle: Battle, faction: Faction): boolean {
-  const slots = faction === Faction.White ? battle.whiteSlots : battle.blackSlots;
+  const slots = faction === Faction.West ? battle.westSlots : battle.eastSlots;
   return slots.some((slot) => slot === null);
 }
 
@@ -177,8 +187,8 @@ export function hasAvailableSlot(battle: Battle, faction: Faction): boolean {
  */
 export function isBattleFull(battle: Battle): boolean {
   return (
-    battle.whiteSlots.every((slot) => slot !== null) &&
-    battle.blackSlots.every((slot) => slot !== null)
+    battle.westSlots.every((slot) => slot !== null) &&
+    battle.eastSlots.every((slot) => slot !== null)
   );
 }
 
@@ -186,7 +196,7 @@ export function isBattleFull(battle: Battle): boolean {
  * Validates battle has at least one active opponent for a given faction
  */
 export function hasActiveOpponents(battle: Battle, faction: Faction): boolean {
-  const opponentSlots = faction === Faction.White ? battle.blackSlots : battle.whiteSlots;
+  const opponentSlots = faction === Faction.West ? battle.eastSlots : battle.westSlots;
   return opponentSlots.some((slot) => slot !== null && slot.isAlive);
 }
 
@@ -215,10 +225,10 @@ export function isValidWar(war: unknown): war is War {
     w.sliderPosition <= 6 &&
     typeof w.totalBattles === 'number' &&
     w.totalBattles >= 0 &&
-    typeof w.whiteBattleWins === 'number' &&
-    w.whiteBattleWins >= 0 &&
-    typeof w.blackBattleWins === 'number' &&
-    w.blackBattleWins >= 0
+    typeof w.westBattleWins === 'number' &&
+    w.westBattleWins >= 0 &&
+    typeof w.eastBattleWins === 'number' &&
+    w.eastBattleWins >= 0
   );
 }
 
@@ -240,9 +250,147 @@ export function hasWarVictory(war: War): boolean {
  * Gets the winning faction if war has reached victory condition
  */
 export function getWarWinner(war: War): Faction | null {
-  if (war.sliderPosition === 6) return Faction.White;
-  if (war.sliderPosition === -6) return Faction.Black;
+  if (war.sliderPosition === 6) return Faction.West;
+  if (war.sliderPosition === -6) return Faction.East;
   return null;
+}
+
+// ============================================================================
+// SESSION VALIDATION
+// ============================================================================
+
+/**
+ * Validates a game session object has all required properties and valid values
+ */
+export function isValidGameSession(session: unknown): session is GameSession {
+  if (!session || typeof session !== 'object') return false;
+
+  const s = session as Partial<GameSession>;
+
+  return (
+    typeof s.sessionId === 'string' &&
+    s.sessionId.length > 0 &&
+    typeof s.username === 'string' &&
+    s.username.length > 0 &&
+    typeof s.startedAt === 'number' &&
+    s.startedAt > 0 &&
+    (s.status === 'active' || s.status === 'completed') &&
+    typeof s.eastSessionPoints === 'number' &&
+    s.eastSessionPoints >= 0 &&
+    typeof s.westSessionPoints === 'number' &&
+    s.westSessionPoints >= 0 &&
+    typeof s.battlesThisSession === 'number' &&
+    s.battlesThisSession >= 0 &&
+    typeof s.coinsEarnedThisSession === 'number' &&
+    s.coinsEarnedThisSession >= 0 &&
+    typeof s.xpEarnedThisSession === 'number' &&
+    s.xpEarnedThisSession >= 0 &&
+    typeof s.factionBonusesEarned === 'number' &&
+    s.factionBonusesEarned >= 0
+  );
+}
+
+/**
+ * Validates session status is valid
+ */
+export function isValidSessionStatus(status: unknown): status is 'active' | 'completed' {
+  return status === 'active' || status === 'completed';
+}
+
+/**
+ * Validates session points are non-negative
+ */
+export function isValidSessionPoints(points: number): boolean {
+  return typeof points === 'number' && points >= 0;
+}
+
+/**
+ * Gets the favored faction from a session (faction with more points)
+ * Returns null if points are equal
+ */
+export function getFavoredFaction(session: GameSession): Faction | null {
+  if (session.eastSessionPoints > session.westSessionPoints) {
+    return Faction.East;
+  } else if (session.westSessionPoints > session.eastSessionPoints) {
+    return Faction.West;
+  }
+  return null;
+}
+
+/**
+ * Validates if a session is active
+ */
+export function isSessionActive(session: GameSession): boolean {
+  return session.status === 'active';
+}
+
+/**
+ * Validates a session summary object
+ */
+export function isValidSessionSummary(summary: unknown): summary is SessionSummary {
+  if (!summary || typeof summary !== 'object') return false;
+
+  const s = summary as Partial<SessionSummary>;
+
+  return (
+    typeof s.sessionId === 'string' &&
+    s.sessionId.length > 0 &&
+    typeof s.duration === 'number' &&
+    s.duration >= 0 &&
+    typeof s.totalBattles === 'number' &&
+    s.totalBattles >= 0 &&
+    typeof s.eastPoints === 'number' &&
+    s.eastPoints >= 0 &&
+    typeof s.westPoints === 'number' &&
+    s.westPoints >= 0 &&
+    (s.favoredFaction === null ||
+      s.favoredFaction === Faction.East ||
+      s.favoredFaction === Faction.West) &&
+    typeof s.totalCoins === 'number' &&
+    s.totalCoins >= 0 &&
+    typeof s.totalXP === 'number' &&
+    s.totalXP >= 0 &&
+    typeof s.factionBonuses === 'number' &&
+    s.factionBonuses >= 0
+  );
+}
+
+// ============================================================================
+// HALL OF FAME VALIDATION
+// ============================================================================
+
+/**
+ * Validates a hall of fame entry object
+ */
+export function isValidHallOfFameEntry(entry: unknown): entry is HallOfFameEntry {
+  if (!entry || typeof entry !== 'object') return false;
+
+  const e = entry as Partial<HallOfFameEntry>;
+
+  return (
+    typeof e.rank === 'number' &&
+    e.rank > 0 &&
+    typeof e.username === 'string' &&
+    e.username.length > 0 &&
+    typeof e.eastPoints === 'number' &&
+    e.eastPoints >= 0 &&
+    typeof e.westPoints === 'number' &&
+    e.westPoints >= 0 &&
+    typeof e.totalPoints === 'number' &&
+    e.totalPoints >= 0 &&
+    typeof e.level === 'number' &&
+    e.level >= 1 &&
+    (e.faction === Faction.East || e.faction === Faction.West || e.faction === 'Neutral')
+  );
+}
+
+/**
+ * Validates leaderboard type
+ */
+export function isValidLeaderboardType(
+  type: unknown
+): type is 'east' | 'west' | 'combined' {
+  return type === 'east' || type === 'west' || type === 'combined';
 }
 
 // ============================================================================

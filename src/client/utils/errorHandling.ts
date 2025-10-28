@@ -270,3 +270,93 @@ export function formatErrorForDisplay(error: unknown): string {
 
   return 'An unexpected error occurred. Please try again.';
 }
+
+/**
+ * Asset-specific error handling
+ */
+export class AssetLoadError extends Error {
+  constructor(
+    message: string,
+    public assetPath: string,
+    public assetType: 'card' | 'image' | 'other' = 'other'
+  ) {
+    super(message);
+    this.name = 'AssetLoadError';
+  }
+}
+
+/**
+ * Log asset loading errors for monitoring
+ */
+export function logAssetError(error: AssetLoadError): void {
+  const errorData = {
+    timestamp: new Date().toISOString(),
+    type: 'asset_load_error',
+    assetPath: error.assetPath,
+    assetType: error.assetType,
+    message: error.message,
+    userAgent: navigator.userAgent,
+  };
+
+  console.error('[Asset Error]', errorData);
+
+  // In production, this would send to a monitoring service
+  // For now, we'll store in sessionStorage for debugging
+  try {
+    const existingErrors = sessionStorage.getItem('asset_errors');
+    const errors = existingErrors ? JSON.parse(existingErrors) : [];
+    errors.push(errorData);
+    // Keep only last 50 errors
+    if (errors.length > 50) {
+      errors.shift();
+    }
+    sessionStorage.setItem('asset_errors', JSON.stringify(errors));
+  } catch (e) {
+    // Ignore storage errors
+  }
+}
+
+/**
+ * Get user-friendly message for asset errors
+ */
+export function getAssetErrorMessage(assetType: 'card' | 'image' | 'other'): string {
+  switch (assetType) {
+    case 'card':
+      return 'Some card images failed to load. Using placeholder images instead.';
+    case 'image':
+      return 'Some images failed to load. Please check your connection and try again.';
+    default:
+      return 'Some assets failed to load. The app may not work as expected.';
+  }
+}
+
+/**
+ * Check if there are recent asset errors
+ */
+export function hasRecentAssetErrors(): boolean {
+  try {
+    const existingErrors = sessionStorage.getItem('asset_errors');
+    if (!existingErrors) return false;
+
+    const errors = JSON.parse(existingErrors);
+    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+
+    return errors.some((error: { timestamp: string }) => {
+      const errorTime = new Date(error.timestamp).getTime();
+      return errorTime > fiveMinutesAgo;
+    });
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Clear asset error log
+ */
+export function clearAssetErrors(): void {
+  try {
+    sessionStorage.removeItem('asset_errors');
+  } catch {
+    // Ignore storage errors
+  }
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Layout } from './components/Layout';
 import { RouterProvider, useRouter } from './contexts/RouterContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import { MenuScreen } from './screens/MenuScreen';
 import { CollectionScreen } from './screens/CollectionScreen';
 import { GachaScreen } from './screens/GachaScreen';
@@ -10,6 +11,9 @@ import { BattleListScreen } from './screens/BattleListScreen';
 import { BattleViewScreen } from './screens/BattleViewScreen';
 import { BattleCreateScreen } from './screens/BattleCreateScreen';
 import { LeaderboardScreen } from './screens/LeaderboardScreen';
+import { UserStatsScreen } from './screens/UserStatsScreen';
+import { HallOfFameScreen } from './screens/HallOfFameScreen';
+import { TutorialScreen } from './screens/TutorialScreen';
 import type { PlayerInventoryResponse } from '../shared/types/api';
 
 const AppContent = () => {
@@ -65,6 +69,12 @@ const AppContent = () => {
         return <BattleCreateScreen />;
       case 'leaderboard':
         return <LeaderboardScreen />;
+      case 'user-stats':
+        return <UserStatsScreen />;
+      case 'hall-of-fame':
+        return <HallOfFameScreen />;
+      case 'tutorial':
+        return <TutorialScreen />;
       default:
         return <MenuScreen />;
     }
@@ -81,8 +91,10 @@ export const App = () => {
   }
 
   return (
-    <RouterProvider>
-      <AppContent />
-    </RouterProvider>
+    <NotificationProvider>
+      <RouterProvider>
+        <AppContent />
+      </RouterProvider>
+    </NotificationProvider>
   );
 };

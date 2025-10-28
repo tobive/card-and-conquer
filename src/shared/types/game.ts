@@ -3,11 +3,11 @@
 // ============================================================================
 
 /**
- * Faction enum - represents the two warring factions
+ * Faction enum - represents the two mythological pantheons
  */
 export enum Faction {
-  White = 'White',
-  Black = 'Black',
+  East = 'East',
+  West = 'West',
 }
 
 /**
@@ -56,13 +56,52 @@ export enum BattleStatus {
 export interface Card {
   id: number;
   name: string;
-  parody: string;
   faction: Faction;
   level: number;
-  soldiers: number;
+  devotees: number;
   ability: Ability | null;
   description: string;
 }
+
+/**
+ * VariantType enum - represents the type of card variant
+ */
+export enum VariantType {
+  Base = 'base',
+  Alternate = 'alternate',
+}
+
+/**
+ * VariantRarity enum - represents the rarity of a card variant
+ */
+export enum VariantRarity {
+  Common = 'common',
+  Rare = 'rare',
+  Epic = 'epic',
+  Legendary = 'legendary',
+}
+
+/**
+ * CardVariant interface - represents a visual variant of a card
+ */
+export interface CardVariant {
+  id: string; // e.g., "1-base" or "1-alt-1"
+  baseCardId: number; // Reference to base card
+  variantName: string; // e.g., "Standard" or "Golden Edition"
+  variantType: VariantType;
+  rarity: VariantRarity;
+  imageAssets: {
+    full: string; // Path to full-size image (3:4 ratio)
+    thumbnail: string; // Path to thumbnail image
+  };
+}
+
+/**
+ * VariantRegistry type - maps base card IDs to their variants
+ */
+export type VariantRegistry = {
+  [baseCardId: number]: CardVariant[];
+};
 
 // ============================================================================
 // PLAYER TYPES
@@ -77,8 +116,8 @@ export interface Player {
   xp: number;
   coins: number;
   factionPoints: {
-    [Faction.White]: number;
-    [Faction.Black]: number;
+    [Faction.East]: number;
+    [Faction.West]: number;
   };
   inventory: number[]; // Array of card IDs
   lastFreePull: number; // Timestamp of last free gacha pull
@@ -99,7 +138,7 @@ export type FactionAffiliation = Faction | 'Neutral';
 export interface BattleCard {
   cardId: number;
   playerId: string;
-  currentSoldiers: number;
+  currentDevotees: number;
   isAlive: boolean;
 }
 
@@ -112,8 +151,8 @@ export interface Battle {
   mapType: MapType;
   locationName: string;
   status: BattleStatus;
-  whiteSlots: (BattleCard | null)[]; // Array of 10 slots
-  blackSlots: (BattleCard | null)[]; // Array of 10 slots
+  westSlots: (BattleCard | null)[]; // Array of 10 slots
+  eastSlots: (BattleCard | null)[]; // Array of 10 slots
   createdAt: number;
   lastActivity: number;
   winnerId?: string; // Player ID who started the battle
@@ -128,8 +167,8 @@ export interface CombatResult {
     name: string;
     playerId: string;
     faction: Faction;
-    soldiersBefore: number;
-    soldiersAfter: number;
+    devoteesBefore: number;
+    devoteesAfter: number;
     isAlive: boolean;
   };
   defenderCard: {
@@ -137,8 +176,8 @@ export interface CombatResult {
     name: string;
     playerId: string;
     faction: Faction;
-    soldiersBefore: number;
-    soldiersAfter: number;
+    devoteesBefore: number;
+    devoteesAfter: number;
     isAlive: boolean;
   };
   damage: {
@@ -154,13 +193,14 @@ export interface CombatResult {
 export interface BattleResolution {
   battleId: string;
   winner: Faction | 'Draw';
-  whiteSurvivingSoldiers: number;
-  blackSurvivingSoldiers: number;
+  westSurvivingDevotees: number;
+  eastSurvivingDevotees: number;
   participants: {
     playerId: string;
     faction: Faction;
     coinsEarned: number;
     xpEarned: number;
+    factionBonus?: number; // Bonus coins awarded for faction loyalty
   }[];
 }
 
@@ -172,10 +212,10 @@ export interface BattleResolution {
  * War interface - represents the global faction war state
  */
 export interface War {
-  sliderPosition: number; // Range: -6 (Black Victory) to +6 (White Victory)
+  sliderPosition: number; // Range: -6 (East Victory) to +6 (West Victory)
   totalBattles: number;
-  whiteBattleWins: number;
-  blackBattleWins: number;
+  westBattleWins: number;
+  eastBattleWins: number;
   lastWarVictory?: {
     faction: Faction;
     timestamp: number;
@@ -202,4 +242,79 @@ export interface Leaderboard {
   faction: Faction;
   entries: LeaderboardEntry[];
   lastUpdated: number;
+}
+
+// ============================================================================
+// GAME SESSION TYPES
+// ============================================================================
+
+/**
+ * GameSession interface - represents a player's current game session
+ * Sessions track per-game faction points and reset when a new game starts
+ */
+export interface GameSession {
+  sessionId: string;
+  username: string;
+  startedAt: number;
+  status: 'active' | 'completed';
+  eastSessionPoints: number;
+  westSessionPoints: number;
+  battlesThisSession: number;
+  coinsEarnedThisSession: number;
+  xpEarnedThisSession: number;
+  factionBonusesEarned: number;
+}
+
+/**
+ * SessionStats interface - represents calculated statistics for a session
+ */
+export interface SessionStats {
+  currentSession: GameSession;
+  favoredFaction: Faction | null;
+  sessionDuration: number; // milliseconds
+  averagePointsPerBattle: number;
+}
+
+/**
+ * SessionSummary interface - represents the summary of a completed session
+ */
+export interface SessionSummary {
+  sessionId: string;
+  duration: number;
+  totalBattles: number;
+  eastPoints: number;
+  westPoints: number;
+  favoredFaction: Faction | null;
+  totalCoins: number;
+  totalXP: number;
+  factionBonuses: number;
+}
+
+// ============================================================================
+// HALL OF FAME TYPES
+// ============================================================================
+
+/**
+ * HallOfFameEntry interface - represents a player's all-time faction achievements
+ */
+export interface HallOfFameEntry {
+  rank: number;
+  username: string;
+  eastPoints: number;
+  westPoints: number;
+  totalPoints: number;
+  level: number;
+  faction: Faction | 'Neutral';
+}
+
+/**
+ * PlayerHallOfFameStats interface - represents a player's hall of fame statistics
+ */
+export interface PlayerHallOfFameStats {
+  eastRank: number;
+  westRank: number;
+  combinedRank: number;
+  eastPoints: number;
+  westPoints: number;
+  totalPoints: number;
 }

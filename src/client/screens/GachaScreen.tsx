@@ -1,25 +1,60 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
-import { Card, Faction } from '../../shared/types/game';
+import { BonusPullButton } from '../components/BonusPullButton';
+import { Card, Faction, VariantType, VariantRarity } from '../../shared/types/game';
 import type {
   GachaPullResponse,
   GachaMultiPullResponse,
   GachaFreeStatusResponse,
   PlayerProfileResponse,
+  BonusGachaStatusResponse,
+  BonusGachaPullResponse,
 } from '../../shared/types/api';
+import { useAssetPreloader } from '../hooks/useAssetPreloader';
+import { getCardsUpToLevel } from '../../shared/utils/cardCatalog';
+
+// Variant info type for reveal modals
+interface VariantInfo {
+  id: string;
+  variantName: string;
+  variantType: string;
+  rarity: string;
+  imageAssets: {
+    full: string;
+    thumbnail: string;
+  };
+}
 
 export const GachaScreen = () => {
   const { navigate } = useRouter();
   const [player, setPlayer] = useState<PlayerProfileResponse | null>(null);
   const [freeStatus, setFreeStatus] = useState<GachaFreeStatusResponse | null>(null);
+  const [bonusStatus, setBonusStatus] = useState<BonusGachaStatusResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [pulling, setPulling] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [revealedCard, setRevealedCard] = useState<Card | null>(null);
-  const [multiPullCards, setMultiPullCards] = useState<Card[]>([]);
+  const [revealedVariant, setRevealedVariant] = useState<VariantInfo | null>(null);
+  const [multiPullCards, setMultiPullCards] = useState<Array<{ card: Card; variant: VariantInfo }>>([]);
   const [currentMultiCardIndex, setCurrentMultiCardIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
+  const [isNewVariant, setIsNewVariant] = useState(false);
+
+  // Preload full-size card images for gacha reveals
+  // Preload level 1-3 cards as they're most common in gacha
+  const gachaCards = getCardsUpToLevel(3);
+  const gachaCardIds = gachaCards.map((card) => card.id);
+  
+  const { loaded: assetsLoaded } = useAssetPreloader({
+    screen: 'GachaScreen',
+    assets: {
+      cards: {
+        ids: gachaCardIds,
+        size: 'full',
+      },
+    },
+  });
 
   useEffect(() => {
     void fetchData();
@@ -60,7 +95,7 @@ export const GachaScreen = () => {
     try {
       setLoading(true);
       setError(null);
-      await Promise.all([fetchPlayer(), fetchFreeStatus()]);
+      await Promise.all([fetchPlayer(), fetchFreeStatus(), fetchBonusStatus()]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
     } finally {
@@ -80,6 +115,13 @@ export const GachaScreen = () => {
     if (!response.ok) throw new Error('Failed to fetch free pull status');
     const data: GachaFreeStatusResponse = await response.json();
     setFreeStatus(data);
+  };
+
+  const fetchBonusStatus = async () => {
+    const response = await fetch('/api/bonus-gacha/status');
+    if (!response.ok) throw new Error('Failed to fetch bonus gacha status');
+    const data: BonusGachaStatusResponse = await response.json();
+    setBonusStatus(data);
   };
 
   const handlePull = async (useFree: boolean) => {
@@ -137,8 +179,13 @@ export const GachaScreen = () => {
         factionAffiliation: player?.factionAffiliation || 'Neutral',
       });
 
-      // Show card reveal animation
+      // Check if this is a new variant (alternate variant type)
+      const isAlternate = data.variant.variantType === VariantType.Alternate;
+      setIsNewVariant(isAlternate);
+
+      // Show card reveal animation with variant info
       setRevealedCard(data.card);
+      setRevealedVariant(data.variant);
 
       // Refresh free status
       await fetchFreeStatus();
@@ -203,7 +250,7 @@ export const GachaScreen = () => {
         factionAffiliation: player?.factionAffiliation || 'Neutral',
       });
 
-      // Start multi-card reveal animation
+      // Start multi-card reveal animation with variant info
       setMultiPullCards(data.cards);
       setCurrentMultiCardIndex(0);
 
@@ -226,8 +273,60 @@ export const GachaScreen = () => {
     }
   };
 
+  const handleBonusPull = async (faction: Faction) => {
+    try {
+      setError(null);
+
+      const response = await fetch('/api/bonus-gacha/pull', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ faction }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = errorData.error || 'Failed to use bonus pull';
+        setError(errorMessage);
+        return;
+      }
+
+      const data: BonusGachaPullResponse = await response.json();
+
+      // Update player state
+      setPlayer({
+        player: data.player,
+        factionAffiliation: player?.factionAffiliation || 'Neutral',
+      });
+
+      // Check if this is a new variant
+      const isAlternate = data.variant.variantType === VariantType.Alternate;
+      setIsNewVariant(isAlternate);
+
+      // Show card reveal animation with variant info
+      setRevealedCard(data.card);
+      setRevealedVariant(data.variant);
+
+      // Refresh bonus status
+      await fetchBonusStatus();
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setError(
+            'Network error: Unable to connect to the server. Please check your connection and try again.'
+          );
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    }
+  };
+
   const closeReveal = () => {
     setRevealedCard(null);
+    setRevealedVariant(null);
+    setIsNewVariant(false);
   };
 
   const handleNextMultiCard = () => {
@@ -240,11 +339,13 @@ export const GachaScreen = () => {
     }
   };
 
-  if (loading) {
+  if (loading || !assetsLoaded) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
-          <div className="animate-pulse text-amber-400 text-xl">Loading gacha...</div>
+          <div className="animate-pulse text-amber-400 text-xl">
+            {!assetsLoaded ? 'Loading card images...' : 'Loading gacha...'}
+          </div>
         </div>
       </div>
     );
@@ -404,6 +505,62 @@ export const GachaScreen = () => {
             </div>
           </div>
 
+          {/* Bonus Gacha Section */}
+          {bonusStatus && (bonusStatus.eastPulls > 0 || bonusStatus.westPulls > 0) && (
+            <div className="space-y-4">
+              {/* Section Header */}
+              <div className="text-center py-4">
+                <div className="inline-block px-4 py-2 bg-gradient-to-r from-amber-500/20 to-purple-500/20 border border-amber-400/50 rounded-full mb-2">
+                  <span className="text-sm font-bold text-amber-300">🎁 BONUS PULLS</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-200 mb-1">
+                  Battle Victory Rewards
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Earned from winning battles • Faction-specific cards
+                </p>
+              </div>
+
+              {/* Bonus Pull Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {bonusStatus.eastPulls > 0 && (
+                  <BonusPullButton
+                    faction={Faction.East}
+                    count={bonusStatus.eastPulls}
+                    onPull={() => handleBonusPull(Faction.East)}
+                    disabled={pulling}
+                  />
+                )}
+                {bonusStatus.westPulls > 0 && (
+                  <BonusPullButton
+                    faction={Faction.West}
+                    count={bonusStatus.westPulls}
+                    onPull={() => handleBonusPull(Faction.West)}
+                    disabled={pulling}
+                  />
+                )}
+              </div>
+
+              {/* Bonus Info */}
+              <div className="card p-3 sm:p-4 bg-gradient-to-br from-amber-900/20 to-purple-900/20 border border-amber-400/30">
+                <div className="flex items-start gap-3">
+                  <div className="text-xl">💡</div>
+                  <div className="flex-1">
+                    <h3 className="text-xs sm:text-sm font-semibold text-amber-300 mb-1">
+                      About Bonus Pulls
+                    </h3>
+                    <ul className="text-[10px] sm:text-xs text-slate-400 space-y-1">
+                      <li>• Win battles to earn faction-specific bonus pulls</li>
+                      <li>• Bonus pulls guarantee cards from that faction only</li>
+                      <li>• No coin cost - completely free!</li>
+                      <li>• Total earned: {bonusStatus.totalEarned}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Error Display */}
           {error && (
             <div className="card p-4 border-2 border-red-400/30 bg-red-900/20 animate-shake">
@@ -438,12 +595,20 @@ export const GachaScreen = () => {
       </div>
 
       {/* Card Reveal Modal */}
-      {revealedCard && <CardRevealModal card={revealedCard} onClose={closeReveal} />}
+      {revealedCard && revealedVariant && (
+        <CardRevealModal
+          card={revealedCard}
+          variant={revealedVariant}
+          isNewVariant={isNewVariant}
+          onClose={closeReveal}
+        />
+      )}
 
       {/* Multi-Card Reveal Modal */}
       {currentMultiCardIndex >= 0 && multiPullCards[currentMultiCardIndex] && (
         <MultiCardRevealModal
-          card={multiPullCards[currentMultiCardIndex]}
+          card={multiPullCards[currentMultiCardIndex].card}
+          variant={multiPullCards[currentMultiCardIndex].variant}
           cardNumber={currentMultiCardIndex + 1}
           totalCards={multiPullCards.length}
           onNext={handleNextMultiCard}
@@ -456,10 +621,12 @@ export const GachaScreen = () => {
 // Card Reveal Modal Component
 interface CardRevealModalProps {
   card: Card;
+  variant: VariantInfo;
+  isNewVariant: boolean;
   onClose: () => void;
 }
 
-const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
+const CardRevealModal = ({ card, variant, isNewVariant, onClose }: CardRevealModalProps) => {
   const [isAnimating, setIsAnimating] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -474,14 +641,42 @@ const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
     };
   }, []);
 
+  const isAlternateVariant = variant.variantType === VariantType.Alternate;
+
   const getFactionColor = () => {
-    if (card.faction === Faction.White) return 'border-amber-400';
+    if (card.faction === Faction.West) return 'border-amber-400';
     return 'border-purple-400';
   };
 
   const getFactionGlow = () => {
-    if (card.faction === Faction.White) return 'shadow-amber-400/50';
+    if (card.faction === Faction.West) return 'shadow-amber-400/50';
     return 'shadow-purple-400/50';
+  };
+
+  const getRarityColor = () => {
+    switch (variant.rarity) {
+      case VariantRarity.Legendary:
+        return 'text-orange-400';
+      case VariantRarity.Epic:
+        return 'text-purple-400';
+      case VariantRarity.Rare:
+        return 'text-blue-400';
+      default:
+        return 'text-slate-400';
+    }
+  };
+
+  const getRarityGlow = () => {
+    switch (variant.rarity) {
+      case VariantRarity.Legendary:
+        return 'shadow-orange-400/50';
+      case VariantRarity.Epic:
+        return 'shadow-purple-400/50';
+      case VariantRarity.Rare:
+        return 'shadow-blue-400/50';
+      default:
+        return '';
+    }
   };
 
   const getLevelStars = () => {
@@ -493,29 +688,84 @@ const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
       className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn"
       onClick={onClose}
     >
+      {/* Particle effects for alternate variants */}
+      {isAlternateVariant && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 rounded-full animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                background: `radial-gradient(circle, ${
+                  variant.rarity === VariantRarity.Legendary
+                    ? 'rgba(251, 146, 60, 0.8)'
+                    : variant.rarity === VariantRarity.Epic
+                    ? 'rgba(192, 132, 252, 0.8)'
+                    : 'rgba(96, 165, 250, 0.8)'
+                }, transparent)`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${3 + Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       <div
         className={`
-          card max-w-md w-full p-6 sm:p-8 border-4 ${getFactionColor()} shadow-2xl ${getFactionGlow()}
+          card max-w-md w-full p-6 sm:p-8 border-4 
+          ${isAlternateVariant ? `${getFactionColor()} ${getRarityGlow()}` : getFactionColor()} 
+          shadow-2xl ${getFactionGlow()}
           ${isAnimating ? 'animate-bounceIn' : ''}
           max-h-[90vh] overflow-y-auto
+          ${isAlternateVariant ? 'animate-pulse-glow' : ''}
         `}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* NEW VARIANT Badge */}
+        {isNewVariant && isAlternateVariant && (
+          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full border-2 border-yellow-400 shadow-lg animate-bounce">
+              <span className="text-sm font-bold text-white">✨ NEW VARIANT! ✨</span>
+            </div>
+          </div>
+        )}
+
         {/* Celebration Header */}
         <div className="text-center mb-4 sm:mb-6 animate-scaleIn">
-          <div className="text-3xl sm:text-4xl mb-2 animate-float">🎉</div>
-          <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-1 animate-glow">
-            New Card!
+          <div className="text-3xl sm:text-4xl mb-2 animate-float">
+            {isAlternateVariant ? '✨' : '🎉'}
+          </div>
+          <h2
+            className={`text-xl sm:text-2xl font-bold mb-1 animate-glow ${
+              isAlternateVariant ? getRarityColor() : 'text-amber-400'
+            }`}
+          >
+            {isAlternateVariant ? 'Alternate Variant!' : 'New Card!'}
           </h2>
           <div className="text-xs sm:text-sm text-slate-400">Added to your collection</div>
         </div>
 
         {/* Card Display */}
         <div className="bg-slate-900 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          {/* Variant Info */}
+          {isAlternateVariant && (
+            <div className="text-center mb-3 animate-fadeIn">
+              <div className={`text-sm font-bold ${getRarityColor()}`}>
+                {variant.variantName}
+              </div>
+              <div className="text-xs text-slate-500 uppercase tracking-wider">
+                {variant.rarity} Variant
+              </div>
+            </div>
+          )}
+
           {/* Level Stars */}
           <div
             className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
-              card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+              card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
             }`}
             style={{ animationDelay: '200ms' }}
           >
@@ -524,8 +774,12 @@ const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
 
           {/* Card Icon */}
           <div className="flex justify-center mb-3 sm:mb-4">
-            <div className={`text-6xl sm:text-8xl animate-scaleIn`}>
-              {card.faction === Faction.White ? '⚪' : '⚫'}
+            <div
+              className={`text-6xl sm:text-8xl animate-scaleIn ${
+                isAlternateVariant ? 'animate-pulse-glow' : ''
+              }`}
+            >
+              {card.faction === Faction.West ? '⚪' : '⚫'}
             </div>
           </div>
 
@@ -550,14 +804,14 @@ const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
                 <span className="text-slate-400">Faction:</span>
                 <span
                   className={`font-semibold ${
-                    card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+                    card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
                   }`}
                 >
                   {card.faction}
                 </span>
               </div>
               <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Soldiers:</span>
+                <span className="text-slate-400">Devotees:</span>
                 <span className="font-semibold text-slate-200">
                   {card.soldiers.toLocaleString()} 🪖
                 </span>
@@ -588,6 +842,7 @@ const CardRevealModal = ({ card, onClose }: CardRevealModalProps) => {
 // Multi-Card Reveal Modal Component
 interface MultiCardRevealModalProps {
   card: Card;
+  variant: VariantInfo;
   cardNumber: number;
   totalCards: number;
   onNext: () => void;
@@ -595,6 +850,7 @@ interface MultiCardRevealModalProps {
 
 const MultiCardRevealModal = ({
   card,
+  variant,
   cardNumber,
   totalCards,
   onNext,
@@ -613,14 +869,42 @@ const MultiCardRevealModal = ({
     };
   }, []);
 
+  const isAlternateVariant = variant.variantType === VariantType.Alternate;
+
   const getFactionColor = () => {
-    if (card.faction === Faction.White) return 'border-amber-400';
+    if (card.faction === Faction.West) return 'border-amber-400';
     return 'border-purple-400';
   };
 
   const getFactionGlow = () => {
-    if (card.faction === Faction.White) return 'shadow-amber-400/50';
+    if (card.faction === Faction.West) return 'shadow-amber-400/50';
     return 'shadow-purple-400/50';
+  };
+
+  const getRarityColor = () => {
+    switch (variant.rarity) {
+      case VariantRarity.Legendary:
+        return 'text-orange-400';
+      case VariantRarity.Epic:
+        return 'text-purple-400';
+      case VariantRarity.Rare:
+        return 'text-blue-400';
+      default:
+        return 'text-slate-400';
+    }
+  };
+
+  const getRarityGlow = () => {
+    switch (variant.rarity) {
+      case VariantRarity.Legendary:
+        return 'shadow-orange-400/50';
+      case VariantRarity.Epic:
+        return 'shadow-purple-400/50';
+      case VariantRarity.Rare:
+        return 'shadow-blue-400/50';
+      default:
+        return '';
+    }
   };
 
   const getLevelStars = () => {
@@ -631,13 +915,50 @@ const MultiCardRevealModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/95 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn">
+      {/* Particle effects for alternate variants */}
+      {isAlternateVariant && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {Array.from({ length: 15 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 rounded-full animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                background: `radial-gradient(circle, ${
+                  variant.rarity === VariantRarity.Legendary
+                    ? 'rgba(251, 146, 60, 0.8)'
+                    : variant.rarity === VariantRarity.Epic
+                    ? 'rgba(192, 132, 252, 0.8)'
+                    : 'rgba(96, 165, 250, 0.8)'
+                }, transparent)`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${3 + Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       <div
         className={`
-          card max-w-md w-full p-6 sm:p-8 border-4 ${getFactionColor()} shadow-2xl ${getFactionGlow()}
+          card max-w-md w-full p-6 sm:p-8 border-4 
+          ${isAlternateVariant ? `${getFactionColor()} ${getRarityGlow()}` : getFactionColor()} 
+          shadow-2xl ${getFactionGlow()}
           ${isAnimating ? 'animate-bounceIn' : ''}
           max-h-[90vh] overflow-y-auto
+          ${isAlternateVariant ? 'animate-pulse-glow' : ''}
         `}
       >
+        {/* ALTERNATE VARIANT Badge */}
+        {isAlternateVariant && (
+          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full border-2 border-yellow-400 shadow-lg">
+              <span className="text-sm font-bold text-white">✨ ALTERNATE VARIANT ✨</span>
+            </div>
+          </div>
+        )}
+
         {/* Progress Indicator */}
         <div className="text-center mb-4">
           <div className="text-sm text-slate-400 mb-2">
@@ -658,19 +979,35 @@ const MultiCardRevealModal = ({
         {/* Celebration Header */}
         <div className="text-center mb-4 sm:mb-6 animate-scaleIn">
           <div className="text-3xl sm:text-4xl mb-2 animate-float">
-            {isLastCard ? '🎊' : '✨'}
+            {isLastCard ? '🎊' : isAlternateVariant ? '✨' : '🎉'}
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-purple-400 mb-1 animate-glow">
-            {isLastCard ? 'Final Card!' : 'New Card!'}
+          <h2
+            className={`text-xl sm:text-2xl font-bold mb-1 animate-glow ${
+              isAlternateVariant ? getRarityColor() : 'text-purple-400'
+            }`}
+          >
+            {isLastCard ? 'Final Card!' : isAlternateVariant ? 'Alternate Variant!' : 'New Card!'}
           </h2>
         </div>
 
         {/* Card Display */}
         <div className="bg-slate-900 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          {/* Variant Info */}
+          {isAlternateVariant && (
+            <div className="text-center mb-3 animate-fadeIn">
+              <div className={`text-sm font-bold ${getRarityColor()}`}>
+                {variant.variantName}
+              </div>
+              <div className="text-xs text-slate-500 uppercase tracking-wider">
+                {variant.rarity} Variant
+              </div>
+            </div>
+          )}
+
           {/* Level Stars */}
           <div
             className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
-              card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+              card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
             }`}
             style={{ animationDelay: '200ms' }}
           >
@@ -679,8 +1016,12 @@ const MultiCardRevealModal = ({
 
           {/* Card Icon */}
           <div className="flex justify-center mb-3 sm:mb-4">
-            <div className="text-6xl sm:text-8xl animate-scaleIn">
-              {card.faction === Faction.White ? '⚪' : '⚫'}
+            <div
+              className={`text-6xl sm:text-8xl animate-scaleIn ${
+                isAlternateVariant ? 'animate-pulse-glow' : ''
+              }`}
+            >
+              {card.faction === Faction.West ? '⚪' : '⚫'}
             </div>
           </div>
 
@@ -705,14 +1046,14 @@ const MultiCardRevealModal = ({
                 <span className="text-slate-400">Faction:</span>
                 <span
                   className={`font-semibold ${
-                    card.faction === Faction.White ? 'text-amber-400' : 'text-purple-400'
+                    card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
                   }`}
                 >
                   {card.faction}
                 </span>
               </div>
               <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Soldiers:</span>
+                <span className="text-slate-400">Devotees:</span>
                 <span className="font-semibold text-slate-200">
                   {card.soldiers.toLocaleString()} 🪖
                 </span>
@@ -730,7 +1071,11 @@ const MultiCardRevealModal = ({
         {/* Next Button */}
         <Button
           onClick={onNext}
-          className="w-full bg-purple-600 hover:bg-purple-700 border-purple-500 animate-fadeIn"
+          className={`w-full animate-fadeIn ${
+            isAlternateVariant
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 border-purple-500'
+              : 'bg-purple-600 hover:bg-purple-700 border-purple-500'
+          }`}
           style={{ animationDelay: '600ms' }}
         >
           {isLastCard ? 'Awesome! 🎉' : 'Next Card →'}

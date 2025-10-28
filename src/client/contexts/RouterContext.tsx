@@ -8,7 +8,10 @@ export type Route =
   | 'battle-list'
   | 'battle-view'
   | 'battle-create'
-  | 'leaderboard';
+  | 'leaderboard'
+  | 'user-stats'
+  | 'hall-of-fame'
+  | 'tutorial';
 
 interface RouterContextType {
   currentRoute: Route;

@@ -1,2002 +1,1802 @@
 [
   {
     "id": 101,
-    "name": "General Ivanka",
-    "parody": "Donald Trump",
-    "faction": "White",
+    "name": "Amaterasu",
+    "faction": "East",
     "level": 5,
-    "soldiers": 4368,
+    "devotees": 436800,
     "ability": "FirstStrike",
-    "description": "She doesn't start wars—she wins them before breakfast. Her hair is armor, her smile is strategy."
+    "description": "From her celestial throne in Takamagahara, she unleashes the dawn's first light, a blinding radiance that scours all darkness from the battlefield."
   },
   {
     "id": 102,
-    "name": "Cleopatsy",
-    "parody": "Cleopatra",
-    "faction": "White",
+    "name": "Jade Emperor",
+    "faction": "East",
     "level": 5,
-    "soldiers": 4600,
+    "devotees": 460000,
     "ability": null,
-    "description": "Rules Egypt from a golden litter, commands an army of adoring cats, and never pays for snacks."
+    "description": "With a single, silent judgment from his heavenly palace, he commands the celestial bureaucracy, rewriting the fate of gods and mortals alike."
   },
   {
     "id": 103,
-    "name": "Moonwalk Madonna",
-    "parody": "Michael Jackson",
-    "faction": "White",
+    "name": "Anu",
+    "faction": "East",
     "level": 5,
-    "soldiers": 3760,
+    "devotees": 376000,
     "ability": "Precision",
-    "description": "Fights in sequins and a single glove. If you hear 'hee-hee,' it’s already too late."
+    "description": "Seated in the highest heaven, he is the silent sky father from whom all divine right flows. His decree is the unshakeable foundation of reality."
   },
   {
     "id": 104,
-    "name": "Empress Joséphine the Conqueror",
-    "parody": "Napoleon Bonaparte",
-    "faction": "White",
+    "name": "Indra",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5600,
+    "devotees": 560000,
     "ability": null,
-    "description": "Conquered Europe in heels. Her perfume alone caused three surrenders."
+    "description": "He rides the storm clouds, his thunderous laughter echoing as he hurls the Vajra. Where it strikes, mountains crumble and empires fall."
   },
   {
     "id": 105,
-    "name": "Madame Relativity",
-    "parody": "Albert Einstein",
-    "faction": "White",
+    "name": "Hwanin",
+    "faction": "East",
     "level": 5,
-    "soldiers": 4900,
+    "devotees": 490000,
     "ability": "Spartan",
-    "description": "Proved time is relative—but her coffee break is always exactly 10 minutes."
+    "description": "The Emperor of Heaven looks down from the highest sky, his gaze a silent law that binds the cosmos. All gods bow to his supreme, unquestionable will."
   },
   {
     "id": 106,
-    "name": "Lady Vinci",
-    "parody": "Leonardo da Vinci",
-    "faction": "White",
+    "name": "Pangu",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5200,
+    "devotees": 520000,
     "ability": null,
-    "description": "Paints, flies, invents, and wins wars—all before lunch."
+    "description": "Born from a cosmic egg, his awakening shattered the chaos. With his body he formed the mountains and rivers, forever the world's primordial architect."
   },
   {
     "id": 107,
-    "name": "Duchess Winstonette",
-    "parody": "Winston Churchill",
-    "faction": "White",
+    "name": "Izanagi",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5300,
+    "devotees": 530000,
     "ability": null,
-    "description": "Fights with cigars and speeches. Never surrenders—especially to bedtimes."
+    "description": "Wielding the jeweled spear Ame-no-nuboko, he churned the chaotic sea of creation, bringing forth the first islands with a single divine stir."
   },
   {
     "id": 108,
-    "name": "Queen Marie-Armored",
-    "parody": "Marie Antoinette",
-    "faction": "White",
+    "name": "Enlil",
+    "faction": "East",
     "level": 5,
-    "soldiers": 4500,
+    "devotees": 450000,
     "ability": "SiegeMaster",
-    "description": "‘Let them fight!’ she declared, tossing cake at the enemy lines."
+    "description": "His voice is the howling wind, his breath the raging storm. As the Lord of the Command, his word shapes and shatters the very earth."
   },
   {
     "id": 109,
-    "name": "Baroness Spark",
-    "parody": "Nikola Tesla",
-    "faction": "White",
+    "name": "Durga",
+    "faction": "East",
     "level": 5,
-    "soldiers": 4000,
+    "devotees": 400000,
     "ability": "Precision",
-    "description": "Her lightning strikes never miss. Also powers your base for free."
+    "description": "A ten-armed goddess of divine fury, she rides her lion into the heart of battle. The demon hordes scatter before her righteous, unyielding onslaught."
   },
   {
     "id": 110,
-    "name": "Caesara",
-    "parody": "Julius Caesar",
-    "faction": "White",
+    "name": "Susanoo-no-Mikoto",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5700,
+    "devotees": 570000,
     "ability": null,
-    "description": "Came, saw, conquered—and never checked the Ides of March."
+    "description": "Banished from the heavens, this tempestuous god of the sea and storms finds redemption by slaying the eight-headed serpent, his rage a force of nature."
   },
   {
     "id": 111,
-    "name": "General Liberty",
-    "parody": "George Washington",
-    "faction": "White",
+    "name": "Marduk",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5500,
+    "devotees": 550000,
     "ability": null,
-    "description": "Chops cherry trees by day, wins revolutions by night."
+    "description": "He slew the primordial dragon Tiamat, crafting the heavens and earth from her remains. Now, he holds the Tablet of Destinies, the arbiter of all fates."
   },
   {
     "id": 112,
-    "name": "Empress Vicky",
-    "parody": "Queen Victoria",
-    "faction": "White",
+    "name": "Enki",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5100,
+    "devotees": 430000,
     "ability": null,
-    "description": "Ruled an empire where the sun never set—or napped."
+    "description": "A cunning trickster and master of the watery abyss, he shapes the world with his profound wisdom and safeguards humanity with clever, divine intervention."
   },
   {
     "id": 113,
-    "name": "Tsarina Iron",
-    "parody": "Catherine the Great",
-    "faction": "White",
-    "level": 5,
-    "soldiers": 5400,
-    "ability": null,
-    "description": "Expanded her empire with brains, not just horses."
-  },
+    "name": "Ganesha",
+    "faction": "East",
+    "level": 4,
+    "devotees": 280000,
+    "ability": "Precision",
+    "description": "With a gentle smile, the elephant-headed god removes any obstacle in his path. He is the wise lord of new beginnings and prosperous ventures."
+  },  
   {
     "id": 114,
-    "name": "Virgin Empress",
-    "parody": "Elizabeth I",
-    "faction": "White",
+    "name": "Nuwa",
+    "faction": "East",
     "level": 5,
-    "soldiers": 5000,
+    "devotees": 500000,
     "ability": null,
-    "description": "Told her troops: ‘I have the heart of a king—and the hair of a goddess.’"
+    "description": "When the heavens collapsed, she mended the sky with five-colored stones. From the yellow earth, she sculpted the first humans, the mother of all."
   },
   {
     "id": 115,
-    "name": "Lady Volt",
-    "parody": "Thomas Edison",
-    "faction": "White",
+    "name": "Ashur",
+    "faction": "East",
     "level": 5,
-    "soldiers": 4800,
+    "devotees": 480000,
     "ability": "Reinforcements",
-    "description": "Lit up the battlefield—one patent at a time."
+    "description": "The winged sun of the Assyrian empire, he is the divine embodiment of conquest. His presence on the battlefield guarantees absolute victory."
   },
   {
     "id": 116,
-    "name": "Captain Frida",
-    "parody": "Frida Kahlo",
-    "faction": "White",
+    "name": "Tsukuyomi-no-Mikoto",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3600,
+    "devotees": 360000,
     "ability": "LastStand",
-    "description": "Paints with blood, fights with flowers. Her unibrow strikes fear into generals."
+    "description": "Ruler of the night, he governs the silent world beneath the moon's cold gaze. His authority over time and tide is absolute."
   },
   {
     "id": 117,
-    "name": "Sky Marshal Amelia",
-    "parody": "Amelia Earhart",
-    "faction": "White",
+    "name": "Sun Wukong",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3700,
+    "devotees": 370000,
     "ability": "TacticalRetreat",
-    "description": "Vanished once—but always comes back with better intel."
+    "description": "This irrepressible monkey king, born from a stone, wields a staff that can calm the oceans and leaps across continents in a single bound."
   },
   {
     "id": 118,
-    "name": "Commander Coco",
-    "parody": "Coco Chanel",
-    "faction": "White",
+    "name": "Erlang Shen",
+    "faction": "East",
     "level": 4,
-    "soldiers": 4200,
+    "devotees": 420000,
     "ability": null,
-    "description": "Declared war on bad fashion. Her troops wear only black—and win."
+    "description": "His third eye sees through all illusion and deception. With his celestial hound at his side, no evil can escape his righteous pursuit."
   },
   {
     "id": 119,
-    "name": "Alexandra the Grand",
-    "parody": "Alexander the Great",
-    "faction": "White",
+    "name": "Hachiman",
+    "faction": "East",
     "level": 4,
-    "soldiers": 4300,
+    "devotees": 510000,
     "ability": null,
-    "description": "Wept because there were no more worlds to conquer. Then found Reddit."
+    "description": "The divine spirit of the samurai, his presence inspires warriors to impossible feats of courage. He is the sacred protector of the path of the warrior."
   },
   {
     "id": 120,
-    "name": "Astronomist Galilea",
-    "parody": "Galileo Galilei",
-    "faction": "White",
-    "level": 4,
-    "soldiers": 2800,
-    "ability": "Precision",
-    "description": "‘And yet it moves!’—right into enemy lines."
+    "name": "Agni",
+    "faction": "East",
+    "level": 5,
+    "devotees": 540000,
+    "ability": null,
+    "description": "As the sacred fire, he is the messenger who carries mortal prayers to the heavens. His flames consume all offerings, bridging the gap between worlds."
   },
   {
     "id": 121,
-    "name": "Agent Elegance",
-    "parody": "Audrey Hepburn",
-    "faction": "White",
+    "name": "Ishtar",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3400,
+    "devotees": 340000,
     "ability": null,
-    "description": "Defeated armies with grace, pearls, and a croissant."
+    "description": "Goddess of love and war, she descends from the heavens in a chariot of lions. Her passion can create life or utterly destroy it."
   },
   {
     "id": 122,
-    "name": "Novelist Jane",
-    "parody": "Jane Austen",
-    "faction": "White",
+    "name": "Kali",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3200,
+    "devotees": 320000,
     "ability": "Spartan",
-    "description": "Her wit cuts deeper than any sword. Enemies surrender to avoid awkwardness."
+    "description": "She wears a necklace of skulls, her dark form a terrifying sight to the wicked. She dances on the battlefield, the embodiment of time and destruction."
   },
   {
     "id": 123,
-    "name": "Darwina the Naturalist",
-    "parody": "Charles Darwin",
-    "faction": "White",
+    "name": "Raijin",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3900,
+    "devotees": 390000,
     "ability": null,
-    "description": "Proved only the fittest survive—then joined the fittest faction."
+    "description": "He leaps between clouds, pounding on his drums to create the symphony of thunder. Each beat unleashes a torrent of devastating lightning upon the world below."
   },
   {
     "id": 124,
-    "name": "Maestra Thunder",
-    "parody": "Ludwig van Beethoven",
-    "faction": "White",
+    "name": "Fujin",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3003,
+    "devotees": 300300,
     "ability": "FirstStrike",
-    "description": "Deaf to fear, loud in battle. His symphonies shatter enemy morale."
+    "description": "From the bag he carries, he unleashes the four winds. A gentle breeze or a destructive hurricane, both are his to command."
   },
   {
     "id": 125,
-    "name": "General Cubist",
-    "parody": "Pablo Picasso",
-    "faction": "White",
+    "name": "Shamash",
+    "faction": "East",
     "level": 4,
-    "soldiers": 2480,
+    "devotees": 248000,
     "ability": "Precision",
-    "description": "Fights from five angles at once. You never see her coming."
+    "description": "The sun god who sees all. He illuminates the darkest secrets and brings inescapable justice to those who hide in the shadows."
   },
   {
     "id": 126,
-    "name": "Ambassador Eleanor",
-    "parody": "Eleanor Roosevelt",
-    "faction": "White",
+    "name": "Dragon King",
+    "faction": "East",
     "level": 4,
-    "soldiers": 4000,
+    "devotees": 400000,
     "ability": null,
-    "description": "Won hearts and treaties. Her pen is mightier than your entire army."
+    "description": "From his crystal palace at the bottom of the ocean, he commands the tides and summons the rain, holding the power of life-giving water in his claws."
   },
   {
     "id": 127,
-    "name": "Iron Duchess",
-    "parody": "Margaret Thatcher",
-    "faction": "White",
+    "name": "Surya",
+    "faction": "East",
     "level": 4,
-    "soldiers": 4100,
+    "devotees": 410000,
     "ability": null,
-    "description": "Not for turning—only for conquering."
+    "description": "He drives his golden chariot across the sky, a blazing beacon of light and life. His seven horses are the seven days of the week, an endless cycle of power."
   },
   {
     "id": 128,
-    "name": "Prime General Indira",
-    "parody": "Indira Gandhi",
-    "faction": "White",
+    "name": "Hwanung",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3800,
+    "devotees": 380000,
     "ability": null,
-    "description": "Led with steel resolve. Her emergency powers include winning."
+    "description": "Descending from the heavens with three divine seals, he brought law, agriculture, and medicine to the mortal world, establishing the first city of the gods."
   },
   {
     "id": 129,
-    "name": "Iron Golda",
-    "parody": "Golda Meir",
-    "faction": "White",
+    "name": "Kagutsuchi",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3700,
-    "ability": null,
-    "description": "Slept with a pistol under her pillow. Woke up owning the map."
+    "devotees": 330000,
+    "ability": "TacticalRetreat",
+    "description": "Born of fire, his very existence is a blazing inferno. The world trembles at his touch, for he is the untamable, destructive nature of flame itself."
   },
   {
     "id": 130,
-    "name": "Chancellor Angela",
-    "parody": "Angela Merkel",
-    "faction": "White",
+    "name": "Nezha",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3600,
+    "devotees": 360000,
     "ability": null,
-    "description": "Quietly took control while everyone argued. Classic Merkel move."
+    "description": "Riding his wind-fire wheels, this lotus-born warrior god challenges any authority. His rebellious spirit is as sharp as the spear he wields."
   },
   {
     "id": 131,
-    "name": "Admiral Debug",
-    "parody": "Grace Hopper",
-    "faction": "White",
+    "name": "Varuna",
+    "faction": "East",
     "level": 4,
-    "soldiers": 2800,
+    "devotees": 280000,
     "ability": "Precision",
-    "description": "Found the first bug—in enemy code. Now she patches their defeat."
+    "description": "The all-seeing guardian of cosmic order, he presides over the celestial ocean. No secret is hidden from him; no oath can be broken in his presence."
   },
   {
     "id": 132,
-    "name": "Mathematician Katherine",
-    "parody": "Katherine Johnson",
-    "faction": "White",
+    "name": "Ereshkigal",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3400,
+    "devotees": 340000,
     "ability": "Spartan",
-    "description": "Calculated trajectories that hit enemies from orbit."
+    "description": "From her throne in the land of no return, she rules the silent darkness of the underworld. Her grip on the souls of the dead is absolute and eternal."
   },
   {
     "id": 133,
-    "name": "Sergeant Dignity",
-    "parody": "Rosa Parks",
-    "faction": "White",
+    "name": "Saraswati",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3300,
+    "devotees": 330000,
     "ability": "TacticalRetreat",
-    "description": "Refused to move—so the enemy had to move around her. Still there."
+    "description": "She sits upon a white lotus, her veena playing the music of creation. From her flows all knowledge, art, and wisdom in the universe."
   },
   {
     "id": 134,
-    "name": "Conductor Harriet",
-    "parody": "Harriet Tubman",
-    "faction": "White",
+    "name": "Lakshmi",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3200,
+    "devotees": 320000,
     "ability": "LastStand",
-    "description": "Led raids behind enemy lines. Never lost a soldier."
+    "description": "Born from the churning of the cosmic ocean, she bestows fortune and prosperity with a simple glance. Golden coins flow from her hands, a river of endless wealth."
   },
   {
     "id": 135,
-    "name": "Orator Sojourner",
-    "parody": "Sojourner Truth",
-    "faction": "White",
+    "name": "Guanyin",
+    "faction": "East",
     "level": 4,
-    "soldiers": 3100,
+    "devotees": 310000,
     "ability": null,
-    "description": "‘Ain’t I a general?’ she thundered. The battlefield said yes."
+    "description": "The Bodhisattva of a Thousand Hands, she hears the cries of every soul in need. Her compassion is a boundless ocean, offering salvation to all."
   },
   {
     "id": 136,
-    "name": "Guide Sacra",
-    "parody": "Sacagawea",
-    "faction": "White",
+    "name": "Parvati",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2500,
+    "devotees": 250000,
     "ability": "TacticalRetreat",
-    "description": "Knows every shortcut. Loses battles, wins the war."
+    "description": "The gentle mother goddess, her devotion holds the power to tame even the wildest of gods. But when roused, her fury is a force that can shake the cosmos."
   },
   {
     "id": 137,
-    "name": "Queen Boudica",
-    "parody": "Boudicca",
-    "faction": "White",
+    "name": "Inari Okami",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2800,
+    "devotees": 280000,
     "ability": null,
-    "description": "Rode a chariot into battle screaming. Romans still have nightmares."
+    "description": "Patron of the rice fields and lord of the kitsune, Inari's favor brings bountiful harvests and clever fortune. His messengers are the swift white foxes."
   },
   {
     "id": 138,
-    "name": "Queen Isabella the Navigator",
-    "parody": "Isabella I of Castile",
-    "faction": "White",
+    "name": "Nabu",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2700,
+    "devotees": 270000,
     "ability": null,
-    "description": "Funded voyages that accidentally won her a continent."
+    "description": "The celestial scribe who records the fate of every living being on his sacred clay tablets. To know his script is to know the future itself."
   },
   {
     "id": 139,
-    "name": "Pharaoh Hatshep",
-    "parody": "Hatshepsut",
-    "faction": "White",
+    "name": "Zhu Rong",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "SiegeMaster",
-    "description": "Built monuments so tall, enemies surrendered out of respect."
+    "description": "The master of divine fire, he taught mortals its secrets. He rides a tiger through the southern skies, a harbinger of warmth and righteous fury."
   },
   {
     "id": 140,
-    "name": "Queen Nefertina",
-    "parody": "Nefertiti",
-    "faction": "White",
+    "name": "Skanda",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2300,
+    "devotees": 230000,
     "ability": null,
-    "description": "Her beauty was so legendary, armies laid down arms to stare."
+    "description": "Commander of the celestial armies, he rides his peacock into battle against demonic forces. His spear, the Vel, never misses its mark."
   },
   {
     "id": 141,
-    "name": "Suffragette Susan",
-    "parody": "Susan B. Anthony",
-    "faction": "White",
+    "name": "Dangun",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2200,
+    "devotees": 220000,
     "ability": "Spartan",
-    "description": "Voted early, voted often—and won every time."
+    "description": "Born of a bear-woman and a god's son, he founded the first Korean kingdom. His legacy is the spiritual foundation of a nation."
   },
   {
     "id": 142,
-    "name": "Countess Code",
-    "parody": "Ada Lovelace",
-    "faction": "White",
+    "name": "Hanuman",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2000,
+    "devotees": 200000,
     "ability": "Precision",
-    "description": "Wrote the first algorithm—to predict enemy movements."
+    "description": "This divine monkey can grow to the size of a mountain or shrink to the size of a gnat. His devotion to righteousness grants him unimaginable strength."
   },
   {
     "id": 143,
-    "name": "Painter Van Goghia",
-    "parody": "Vincent van Gogh",
-    "faction": "White",
+    "name": "Ninurta",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "LastStand",
-    "description": "Fought with passion, color, and one ear. Still louder than your army."
+    "description": "The divine warrior and farmer, he wields the magical mace Sharur. He defends creation from monstrous chaos and ensures the land remains fertile."
   },
   {
     "id": 144,
-    "name": "General Existence",
-    "parody": "Simone de Beauvoir",
-    "faction": "White",
+    "name": "Mazu",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2093,
+    "devotees": 209300,
     "ability": "FirstStrike",
-    "description": "Defined herself—and then defined your defeat."
+    "description": "A mortal girl who became a goddess, she calmly walks the stormy seas to guide sailors to safety. Her lantern is a beacon of hope in the darkest tempest."
   },
   {
     "id": 145,
-    "name": "Astronomer Wang",
-    "parody": "Wang Zhenyi",
-    "faction": "White",
+    "name": "Bishamonten",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Mapped the stars—and enemy weak points."
+    "description": "This armored warrior god stands guard in the north, a treasure pagoda in one hand and a spear in the other. He crushes evil and protects sacred treasures."
   },
   {
     "id": 146,
-    "name": "Admiral Artemisia",
-    "parody": "Artemisia I of Caria",
-    "faction": "White",
+    "name": "Caishen",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2500,
+    "devotees": 250000,
     "ability": null,
-    "description": "Commanded the Persian navy—and sank more ships than Poseidon."
+    "description": "He descends from the heavens riding a black tiger, bestowing unimaginable wealth and prosperity upon those he deems worthy. His touch turns stone to gold."
   },
   {
     "id": 147,
-    "name": "Samurai Tomoe",
-    "parody": "Tomoe Gozen",
-    "faction": "White",
+    "name": "Yama",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "TacticalRetreat",
-    "description": "Cut down enemies, then vanished like mist. Poets still write about her."
+    "description": "The first mortal to die, he now serves as the solemn judge of the underworld. His dharma is absolute, and no soul can escape his final verdict."
   },
   {
     "id": 148,
-    "name": "Queen Nzinga",
-    "parody": "Nzinga of Ndongo",
-    "faction": "White",
+    "name": "Haemosu",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2700,
+    "devotees": 270000,
     "ability": null,
-    "description": "Outmaneuvered empires with diplomacy and daggers."
+    "description": "The son of heaven, he descended in a five-dragon chariot. His mastery of archery was so great he could challenge the sun itself."
   },
   {
     "id": 149,
-    "name": "Rani Lakshmi",
-    "parody": "Lakshmi Bai",
-    "faction": "White",
+    "name": "Chang'e",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Fought with swords in both hands—and won India’s heart."
+    "description": "She stole the elixir of immortality and fled to the moon. Now she lives in a cold, lonely palace, a beautiful and distant lunar goddess."
   },
   {
     "id": 150,
-    "name": "Empress Wu",
-    "parody": "Wu Zetian",
-    "faction": "White",
+    "name": "Sin",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2800,
+    "devotees": 280000,
     "ability": null,
-    "description": "China’s only female emperor. Made patriarchy her footstool."
+    "description": "The lord of the crescent moon, he sails his glowing barge across the night sky. He governs the passing of months and the secrets of the darkness."
   },
   {
     "id": 151,
-    "name": "Empress Zenobia",
-    "parody": "Zenobia",
-    "faction": "White",
+    "name": "Ryujin",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2500,
+    "devotees": 250000,
     "ability": "SiegeMaster",
-    "description": "Defied Rome, built an empire, and wore better jewelry."
+    "description": "The dragon king of the sea, he controls the tides with the magical tide jewels. From his palace of coral, he commands a vast army of sea creatures."
   },
   {
     "id": 152,
-    "name": "General Amina",
-    "parody": "Amina of Zazzau",
-    "faction": "White",
+    "name": "Kamadeva",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "Spartan",
-    "description": "Expanded her kingdom with walls—and warriors."
+    "description": "He fires arrows of sugarcane tipped with flowers, striking gods and mortals alike with uncontrollable passion. His bow is the sweet whisper of desire."
   },
   {
     "id": 153,
-    "name": "Queen Yaa",
-    "parody": "Yaa Asantewaa",
-    "faction": "White",
+    "name": "Shennong",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2300,
+    "devotees": 230000,
     "ability": null,
-    "description": "‘If you won’t fight, I will!’ she said—and led the charge."
+    "description": "The Divine Farmer tasted hundreds of herbs to discover their medicinal properties. His legacy is the knowledge of healing and the bounty of the harvest."
   },
   {
     "id": 154,
-    "name": "General Trưng",
-    "parody": "Trưng Sisters",
-    "faction": "White",
+    "name": "Daikokuten",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2200,
+    "devotees": 220000,
     "ability": "LastStand",
-    "description": "Two sisters, one army. Freed Vietnam from invaders."
+    "description": "With his magical mallet and a bag full of treasures, this cheerful god brings wealth and prosperity to the household. He stands upon bales of rice, a symbol of plenty."
   },
   {
     "id": 155,
-    "name": "Pirate Grace",
-    "parody": "Grace O’Malley",
-    "faction": "White",
+    "name": "Nisaba",
+    "faction": "East",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Demanded to speak to the Queen—then stole her navy."
+    "description": "The goddess of scribes and accounts, she etched the first stories into clay. All knowledge, from sacred texts to simple harvests, is under her domain."
   },
   {
     "id": 156,
-    "name": "Queen Tomyris",
-    "parody": "Tomyris",
-    "faction": "White",
+    "name": "Ame-no-Uzume",
+    "faction": "East",
     "level": 2,
-    "soldiers": 2000,
+    "devotees": 200000,
     "ability": null,
-    "description": "Defeated Cyrus the Great—and mailed his head back in a wine skin."
+    "description": "Her scandalous, joyful dance was enough to lure the sun goddess out of a dark cave. Her laughter can banish even the deepest despair."
   },
   {
     "id": 157,
-    "name": "Wrestler Khutulun",
-    "parody": "Khutulun",
-    "faction": "White",
+    "name": "Samsin Halmoni",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": "TacticalRetreat",
-    "description": "Challenged suitors to wrestle. Lost none—and married none."
+    "description": "This grandmother goddess ties the fates of children before they are born, guiding them into the world and watching over their first years of life."
   },
   {
     "id": 158,
-    "name": "Warrior Lozen",
-    "parody": "Lozen",
-    "faction": "White",
+    "name": "Benzaiten",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1600,
+    "devotees": 160000,
     "ability": "Spartan",
-    "description": "Could sense enemy movements. Fought for her people till the end."
+    "description": "The goddess of all that flows, from the babbling brook to the eloquent speech of a poet. She carries a biwa, and her music can charm dragons."
   },
   {
     "id": 159,
-    "name": "Scout Jane",
-    "parody": "Calamity Jane",
-    "faction": "White",
+    "name": "Gonggong",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Rode, shot, and drank with the best. Legends exaggerate—she’s worse."
+    "description": "A furious water god, his rage once caused him to smash his head against a pillar of heaven, tilting the very sky and earth."
   },
   {
     "id": 160,
-    "name": "Empress Agrippina",
-    "parody": "Agrippina the Younger",
-    "faction": "White",
+    "name": "Chandra",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "Poisoned her way to power. Rome never saw it coming."
+    "description": "He rides his chariot across the night sky, pulled by ten white horses. As the moon, he governs the dew that nourishes all plant life."
   },
   {
     "id": 161,
-    "name": "Sultan Razia",
-    "parody": "Razia Sultana",
-    "faction": "White",
+    "name": "Adad",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": null,
-    "description": "India’s first female Muslim ruler. Broke barriers—and heads."
+    "description": "He holds the lightning and thunder in his hands. His storms can bring life-giving rain to the parched desert or flash floods that destroy everything in their path."
   },
   {
     "id": 162,
-    "name": "Sultana Shajar",
-    "parody": "Shajar al-Durr",
-    "faction": "White",
+    "name": "Yebisu",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1600,
+    "devotees": 160000,
     "ability": "LastStand",
-    "description": "Rose from slavery to sultan. Died defiant—never defeated."
+    "description": "The cheerful, deaf god of fishermen. Even if he cannot hear your prayers, his infectious good luck ensures a bountiful catch and prosperous trade."
   },
   {
     "id": 163,
-    "name": "Princess Tarhata",
-    "parody": "Tarhata Kiram",
-    "faction": "White",
+    "name": "Lei Gong",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": "TacticalRetreat",
-    "description": "Led a rebellion in pearls. The US didn’t know what hit them."
+    "description": "The Duke of Thunder, he uses a drum and mallet to create his storms, punishing hidden evil with bolts of heavenly lightning."
   },
   {
     "id": 164,
-    "name": "Chief Te Puea",
-    "parody": "Te Puea Hērangi",
-    "faction": "White",
+    "name": "Vayu",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Revived Māori culture—and outmaneuvered colonizers."
+    "description": "The swift and unseen god of the wind. He is the breath of the world, a powerful force that can be a gentle zephyr or a destructive gale."
   },
   {
     "id": 165,
-    "name": "Senator Benazir",
-    "parody": "Benazir Bhutto",
-    "faction": "White",
+    "name": "Tenjin",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "First woman to lead a Muslim nation. Paid with her life—but not her legacy."
+    "description": "Once a mortal scholar unjustly exiled, he became a god of learning and calligraphy. Students pray to him for success in their exams."
   },
   {
     "id": 166,
-    "name": "Writer Christine",
-    "parody": "Christine de Pizan",
-    "faction": "White",
+    "name": "Dagon",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1360,
+    "devotees": 136000,
     "ability": "Precision",
-    "description": "Wrote the first feminist text—and skewered male egos with ink."
+    "description": "The Lord of the Harvest, he taught humanity the art of the plow. His blessings ensure the grain grows tall and the fields are forever fertile."
   },
   {
     "id": 167,
-    "name": "Rebel Mary",
-    "parody": "Mary Wollstonecraft",
-    "faction": "White",
+    "name": "Wenchang Wang",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1456,
+    "devotees": 145600,
     "ability": "FirstStrike",
-    "description": "Started the revolution with a pen. Men are still recovering."
+    "description": "A constellation of stars forming a celestial deity, he guides the brush of scholars and poets, ensuring their success and literary fame."
   },
   {
     "id": 168,
-    "name": "Dr. Rosalind",
-    "parody": "Rosalind Franklin",
-    "faction": "White",
+    "name": "Ashnan",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Discovered DNA’s secret—then got erased. History corrected that."
+    "description": "The gentle goddess of grain, she represents the nourishing power of the harvest. Her presence is a promise that hunger will be kept at bay."
   },
   {
     "id": 169,
-    "name": "Captain Mae",
-    "parody": "Mae Jemison",
-    "faction": "White",
+    "name": "Kichijoten",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": "TacticalRetreat",
-    "description": "Flew to space, then came back to lead Earth’s armies."
+    "description": "Her beauty is so great that it brings happiness and good fortune to all who gaze upon her. She holds a wish-granting jewel in her hand."
   },
   {
     "id": 170,
-    "name": "Inventor Hedy",
-    "parody": "Hedy Lamarr",
-    "faction": "White",
+    "name": "Yue Lao",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "Invented Wi-Fi between movie takes. Now she hacks your comms."
+    "description": "The old man under the moon, he tirelessly ties the invisible red string of fate, binding together those destined to be lovers, regardless of time or distance."
   },
   {
     "id": 171,
-    "name": "Poet Maya",
-    "parody": "Maya Angelou",
-    "faction": "White",
+    "name": "Dhanvantari",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1600,
+    "devotees": 160000,
     "ability": null,
-    "description": "[Still I rise] — and so does her faction."
+    "description": "He emerged from the cosmic ocean holding a pot of the nectar of immortality. As the physician of the gods, he can cure any disease."
   },
   {
     "id": 172,
-    "name": "Novelist Toni",
-    "parody": "Toni Morrison",
-    "faction": "White",
+    "name": "Utu",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Wrote truth so sharp, it cut through lies like a blade."
+    "description": "The Sumerian sun god, he travels through the underworld at night to judge the dead, re-emerging at dawn to bring light and truth to the living."
   },
   {
     "id": 173,
-    "name": "Queen Aretha",
-    "parody": "Aretha Franklin",
-    "faction": "White",
+    "name": "Fukurokuju",
+    "faction": "East",
     "level": 2,
-    "soldiers": 2000,
+    "devotees": 200000,
     "ability": null,
-    "description": "Demanded R-E-S-P-E-C-T—and got victory too."
+    "description": "An old man with an impossibly long forehead, he is accompanied by a crane and a turtle. He holds the secrets to a long, happy, and wise life."
   },
   {
     "id": 174,
-    "name": "Songstress Billie",
-    "parody": "Billie Holiday",
-    "faction": "White",
+    "name": "Rati",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": "LastStand",
-    "description": "Sang through pain. Her voice still haunts enemy camps."
+    "description": "The beautiful goddess of passion, she is the consort of the love god Kamadeva. Her presence inspires desire and carnal pleasure."
   },
   {
     "id": 175,
-    "name": "Duchess Eleanor",
-    "parody": "Eleanor of Aquitaine",
-    "faction": "White",
+    "name": "Apsara",
+    "faction": "East",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "Queen of France, then England. Played the long game—and won."
+    "description": "These celestial dancers emerge from the clouds, their beauty and grace captivating even the most stoic gods. Their dance can sway the fate of battles."
   },
   {
     "id": 176,
-    "name": "Poet Sor Juana",
-    "parody": "Sor Juana Inés de la Cruz",
-    "faction": "White",
+    "name": "Jurojin",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Chose books over marriage. Then used them to outthink armies."
+    "description": "Accompanied by a black deer, this ancient god of longevity carries a staff from which hangs a scroll containing all the wisdom of the world."
   },
   {
     "id": 177,
-    "name": "Reporter Nellie",
-    "parody": "Nellie Bly",
-    "faction": "White",
+    "name": "Hotei",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": "Spartan",
-    "description": "Exposed corruption by going undercover. Now she exposes your flanks."
+    "description": "The fat, laughing monk with a cloth sack that never empties. He wanders the land spreading cheer and giving gifts to the needy."
   },
   {
     "id": 178,
-    "name": "Crusader Ida",
-    "parody": "Ida B. Wells",
-    "faction": "White",
+    "name": "Cangjie",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1200,
+    "devotees": 120000,
     "ability": null,
-    "description": "Fought lynching with facts. Her truth is your weapon."
+    "description": "He invented writing after observing the tracks of birds and beasts. His four eyes could pierce the secrets of creation."
   },
   {
     "id": 179,
-    "name": "Educator Maria",
-    "parody": "Maria Montessori",
-    "faction": "White",
+    "name": "Zao Jun",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Taught children to think—now they strategize better than you."
+    "description": "The Kitchen God quietly observes the deeds of every family. Once a year, he ascends to heaven to report their conduct to the Jade Emperor."
   },
   {
     "id": 180,
-    "name": "Biologist Rachel",
-    "parody": "Rachel Carson",
-    "faction": "White",
+    "name": "Lu Ban",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Silenced the chemical war—and started a green one."
+    "description": "The patron deity of carpenters, his skill was so legendary he was said to have created flying wooden birds. A true master of the craft."
   },
   {
     "id": 181,
-    "name": "Mathematician Dorothy",
-    "parody": "Dorothy Vaughan",
-    "faction": "White",
+    "name": "Ksitigarbha",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1040,
+    "devotees": 104000,
     "ability": "Precision",
-    "description": "Calculated orbits by hand. Now she calculates your defeat."
+    "description": "This patient bodhisattva has sworn not to achieve enlightenment until all hells are empty. He is a guide and protector to souls lost in the darkness."
   },
   {
     "id": 182,
-    "name": "Green General Wangari",
-    "parody": "Wangari Maathai",
-    "faction": "White",
+    "name": "Ushas",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1200,
+    "devotees": 120000,
     "ability": "TacticalRetreat",
-    "description": "Planted trees—and resistance. The forest fights for her."
+    "description": "The ever-youthful goddess of the dawn, she rides a golden chariot, gently waking the world and chasing away the oppressive darkness."
   },
   {
     "id": 183,
-    "name": "Voice Rigoberta",
-    "parody": "Rigoberta Menchú",
-    "faction": "White",
+    "name": "Nammu",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1100,
+    "devotees": 110000,
     "ability": null,
-    "description": "Spoke for the voiceless—and rallied armies with words."
+    "description": "The primordial goddess of the abyss, the vast and silent sea from which the first gods were born. She is the ultimate source of all creation."
   },
   {
     "id": 184,
-    "name": "Nurse General Clara",
-    "parody": "Clara Barton",
-    "faction": "White",
+    "name": "Ninkasi",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Founded the Red Cross—then turned it into a war machine."
+    "description": "She is the goddess of brewing, her song the hymn of fermentation. From her golden vats flows the divine beer that brings joy to gods and mortals."
   },
   {
     "id": 185,
-    "name": "Lady with the Lamp",
-    "parody": "Florence Nightingale",
-    "faction": "White",
+    "name": "Ji Gong",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Healed the wounded by night—by day, she planned your downfall."
+    "description": "A mad monk with divine powers, he broke all the rules but always helped the common people. His tattered fan could perform miracles."
   },
   {
     "id": 186,
-    "name": "Desert Diplomat",
-    "parody": "Gertrude Bell",
-    "faction": "White",
+    "name": "Jizo",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": "LastStand",
-    "description": "Mapped the Middle East—and drew your defeat in the sand."
+    "description": "A gentle monk who protects the souls of children and travelers. His statues line the roads, offering silent comfort and guidance."
   },
   {
     "id": 187,
-    "name": "Poet Sappho",
-    "parody": "Sappho",
-    "faction": "White",
+    "name": "Bixia",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1092,
+    "devotees": 109200,
     "ability": "FirstStrike",
-    "description": "Wrote love poems so fierce, they started wars."
+    "description": "The Princess of the Azure Clouds who watches over childbirth from her sacred mountain. She is a steadfast guardian of women and children."
   },
   {
     "id": 188,
-    "name": "Champion Serena",
-    "parody": "Serena Williams",
-    "faction": "White",
+    "name": "Menshen",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Serves aces and defeats. You’re not ready for her return."
+    "description": "Two fierce generals who were appointed as divine door guardians. They stand ever-vigilant, barring evil spirits from entering the home."
   },
   {
     "id": 189,
-    "name": "Voice Malala",
-    "parody": "Malala Yousafzai",
-    "faction": "White",
+    "name": "Apsu",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1100,
+    "devotees": 110000,
     "ability": "Spartan",
-    "description": "Fought for education with a book. Now she reads your obituary."
+    "description": "The personification of the sweet, fresh water that flows beneath the earth. From his silent, dark domain, all life-giving rivers are born."
   },
   {
     "id": 190,
-    "name": "Climate General Greta",
-    "parody": "Greta Thunberg",
-    "faction": "White",
+    "name": "Dhatri",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1000,
+    "devotees": 100000,
     "ability": "TacticalRetreat",
-    "description": "How dare you lose? The planet is counting on her."
+    "description": "A minor sun god who ensures the proper health and function of the body's limbs. He is a divine bringer of domestic peace and well-being."
   },
   {
     "id": 191,
-    "name": "Justice Ruth",
-    "parody": "Ruth Bader Ginsburg",
-    "faction": "White",
+    "name": "Garuda",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Dissented in style. Now she dissents your existence."
+    "description": "The king of birds, a sworn enemy of all serpents. His mighty wings can block out the sun, and his speed is faster than the wind."
   },
   {
     "id": 192,
-    "name": "Princess Diana the Compassionate",
-    "parody": "Diana, Princess of Wales",
-    "faction": "White",
+    "name": "Nandi",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": null,
-    "description": "Won hearts worldwide. Yours is next."
+    "description": "The loyal white bull who serves as the mount for greater gods. His patient gaze holds deep wisdom, and his bell rings with divine truth."
   },
   {
     "id": 193,
-    "name": "CEO Nova",
-    "parody": "Steve Jobs",
-    "faction": "White",
+    "name": "Toyotama-hime",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Designed the future—and your defeat."
+    "description": "The 'Luminous Pearl Princess,' a beautiful sea goddess who married a mortal man but was forced to return to her father's underwater kingdom."
   },
   {
     "id": 194,
-    "name": "Commander Mars",
-    "parody": "Elon Musk",
-    "faction": "White",
+    "name": "Ashvins",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1120,
+    "devotees": 112000,
     "ability": "Precision",
-    "description": "Colonized Mars. Earth is just practice."
+    "description": "Twin horsemen who gallop across the sky at dawn, bringing healing and good fortune. They are divine physicians who can restore youth and even life."
   },
   {
     "id": 195,
-    "name": "Saint Joan the Unburned",
-    "parody": "Joan of Arc",
-    "faction": "White",
+    "name": "Changxi",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1200,
+    "devotees": 120000,
     "ability": "LastStand",
-    "description": "Heard voices. They said: ‘Win.’ So she did."
+    "description": "The mother of the twelve moons, she bathes her children in a lake in the west, ensuring the lunar cycle continues in perfect harmony."
   },
   {
     "id": 196,
-    "name": "Philosopher Ludwigette",
-    "parody": "Ludwig Wittgenstein",
-    "faction": "White",
+    "name": "Kuraokami",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": null,
-    "description": "Solved philosophy. Now she solves your strategy."
+    "description": "A dragon deity born from the blood of the fire god Kagutsuchi. This powerful being has dominion over rain, snow, and ice."
   },
   {
     "id": 197,
-    "name": "Baroness Assembly",
-    "parody": "Henry Ford",
-    "faction": "White",
+    "name": "Lahmu",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Mass-produced victory. One Model T at a time."
+    "description": "A hairy, bestial deity born from the primordial silt. He serves as a guardian and gatekeeper to the celestial temple of Enki."
   },
   {
     "id": 198,
-    "name": "Radiance Marie",
-    "parody": "Marie Skłodowska-Curie",
-    "faction": "White",
+    "name": "Yuyutsu",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Discovered radium—and radiated your chances of winning."
+    "description": "The only Kaurava who chose righteousness over his family's evil. He stands as a quiet testament to the power of a just conscience."
   },
   {
     "id": 199,
-    "name": "Scholar Hypatia",
-    "parody": "Hypatia",
-    "faction": "White",
+    "name": "Iktomi",
+    "faction": "East",
     "level": 1,
-    "soldiers": 960,
+    "devotees": 96000,
     "ability": "Precision",
-    "description": "Taught math in Alexandria. Now she calculates your doom."
+    "description": "A spider-trickster who uses his cunning to fool the boastful and the foolish. Though not a god, his schemes can alter the plans of divine beings."
   },
   {
     "id": 200,
-    "name": "Dame Quill",
-    "parody": "William Shakespeare",
-    "faction": "White",
+    "name": "Yajata",
+    "faction": "East",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": null,
-    "description": "All the world’s a battlefield—and you’re just a player."
+    "description": "A host of benevolent spirits who aid the higher gods in their fight against darkness. They are the 'Venerable Ones,' worthy of praise."
   },
   {
     "id": 201,
-    "name": "Pharaoh Nefertari the Unbroken",
-    "parody": "Ramses II",
-    "faction": "Black",
+    "name": "Zeus",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5200,
+    "devotees": 520000,
     "ability": "SiegeMaster",
-    "description": "Built temples so massive, enemies surrendered out of awe."
+    "description": "From his throne on Olympus, he hurls bolts of pure lightning, his judgment shaking the foundations of the world. The sky itself bows to his will."
   },
   {
     "id": 202,
-    "name": "Khaness Temüjin",
-    "parody": "Genghis Khan",
-    "faction": "Black",
+    "name": "Odin",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5800,
+    "devotees": 580000,
     "ability": null,
-    "description": "Rode across continents before GPS existed. His horse has more frequent flyer miles than you."
+    "description": "The All-Father hangs from the world tree, sacrificing an eye for ultimate wisdom. His ravens, Thought and Memory, bring him news from all nine realms."
   },
   {
     "id": 203,
-    "name": "Countess Vladette",
-    "parody": "Vlad the Impaler",
-    "faction": "Black",
+    "name": "Ra",
+    "faction": "West",
     "level": 5,
-    "soldiers": 4900,
+    "devotees": 490000,
     "ability": "LastStand",
-    "description": "Invited enemies to dinner. They never left. (The stakes were too high.)"
+    "description": "Each day, he journeys across the sky in his solar barge, bringing light to the world. At night, he battles the serpent of chaos to ensure the dawn will rise again."
   },
   {
     "id": 204,
-    "name": "Warlord Attila",
-    "parody": "Attila the Hun",
-    "faction": "Black",
+    "name": "Jupiter",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5600,
+    "devotees": 560000,
     "ability": null,
-    "description": "Left no grass untrampled. Cities surrendered just to save their lawns."
+    "description": "The greatest of the Roman gods, his eagle is the symbol of the empire's might. He is the divine guardian of law, order, and absolute power."
   },
   {
     "id": 205,
-    "name": "Tsarina Ivanova",
-    "parody": "Ivan the Terrible",
-    "faction": "Black",
+    "name": "The Dagda",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5000,
+    "devotees": 500000,
     "ability": "Reinforcements",
-    "description": "Terrible to his enemies, worse to his friends. Nobody wins around him."
+    "description": "The 'Good God' of the Irish pantheon, his club can slay nine men with one blow or restore life with the other. His cauldron provides an endless feast."
   },
   {
     "id": 206,
-    "name": "Emperor Nerona",
-    "parody": "Nero",
-    "faction": "Black",
+    "name": "Poseidon",
+    "faction": "West",
     "level": 5,
-    "soldiers": 4368,
+    "devotees": 436800,
     "ability": "FirstStrike",
-    "description": "Fiddled while Rome burned—then blamed everyone else."
+    "description": "With a strike of his trident, he summons earthquakes and tidal waves. The untamed power of the ocean is his to command, a force of creation and destruction."
   },
   {
     "id": 207,
-    "name": "Empress Caligula",
-    "parody": "Caligula",
-    "faction": "Black",
+    "name": "Hades",
+    "faction": "West",
     "level": 5,
-    "soldiers": 3760,
+    "devotees": 376000,
     "ability": "Precision",
-    "description": "Made his horse a senator. Now the horse leads your defeat."
+    "description": "The silent king of the underworld, his helm of darkness grants him invisibility. He rules over the vast wealth of the earth and the countless souls of the dead."
   },
   {
     "id": 208,
-    "name": "Conquistadora Cortés",
-    "parody": "Hernán Cortés",
-    "faction": "Black",
+    "name": "Thor",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5300,
+    "devotees": 530000,
     "ability": null,
-    "description": "Burned his ships—then burned your capital."
+    "description": "The son of Odin, he defends both gods and mortals with his mighty hammer, Mj\u00f6lnir. The sound of its impact is the thunder in the storm."
   },
   {
     "id": 209,
-    "name": "Conquistadora Pizarro",
-    "parody": "Francisco Pizarro",
-    "faction": "Black",
+    "name": "Osiris",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5100,
+    "devotees": 510000,
     "ability": null,
-    "description": "Captured an emperor with 168 men. Math said no. He said yes."
+    "description": "Betrayed and resurrected, he is the eternal king of the afterlife. He weighs the hearts of the dead against a feather, delivering a just and final verdict."
   },
   {
     "id": 210,
-    "name": "Warlord Timur",
-    "parody": "Tamerlane",
-    "faction": "Black",
+    "name": "Lugh",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5400,
+    "devotees": 540000,
     "ability": null,
-    "description": "Built towers of skulls. Yours will be the next brick."
+    "description": "Master of all arts and skills, the 'Shining One' led his people to victory with an unstoppable magical spear. No task is beyond his capability."
   },
   {
     "id": 211,
-    "name": "General Shaka",
-    "parody": "Shaka Zulu",
-    "faction": "Black",
+    "name": "Hera",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5500,
+    "devotees": 550000,
     "ability": null,
-    "description": "Invented the short stabbing spear—and your worst nightmare."
+    "description": "Queen of Olympus, her divine authority over marriage is absolute. The peacock, with its thousand eyes, is her sacred animal, a symbol of her eternal vigilance."
   },
   {
     "id": 212,
-    "name": "Rebel Spartaca",
-    "parody": "Spartacus",
-    "faction": "Black",
+    "name": "Isis",
+    "faction": "West",
     "level": 5,
-    "soldiers": 4600,
+    "devotees": 460000,
     "ability": "Spartan",
-    "description": "Led a slave revolt that shook Rome. Now he shakes your faction."
+    "description": "Her magic is so powerful she brought her murdered husband back to life. A mother, a queen, and a sorceress, she is the throne of all Egypt."
   },
   {
     "id": 213,
-    "name": "Comrade Che",
-    "parody": "Che Guevara",
-    "faction": "Black",
+    "name": "The Morrigan",
+    "faction": "West",
     "level": 5,
-    "soldiers": 4500,
+    "devotees": 450000,
     "ability": null,
-    "description": "His face is on every t-shirt—and your defeat notice."
+    "description": "A phantom queen who circles the battlefield as a crow, weaving the fates of warriors. Her chilling shriek foretells doom and glorious death."
   },
   {
     "id": 214,
-    "name": "Commandante Fidel",
-    "parody": "Fidel Castro",
-    "faction": "Black",
+    "name": "Apollo",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5200,
+    "devotees": 520000,
     "ability": null,
-    "description": "Outlasted 11 US presidents. You won’t last one battle."
+    "description": "He drives the sun chariot across the sky, his arrows bringing either sudden plague or gentle healing. His lyre plays the music of the cosmos."
   },
   {
     "id": 215,
-    "name": "Commissar Lenin",
-    "parody": "Vladimir Lenin",
-    "faction": "Black",
+    "name": "Saturn",
+    "faction": "West",
     "level": 5,
-    "soldiers": 5000,
+    "devotees": 500000,
     "ability": null,
-    "description": "Seized a train, then a country. Now he’s coming for your subreddit."
+    "description": "The ancient god of time and harvest, he once presided over a Golden Age of prosperity. His sickle reaps what has been sown, both grain and destiny."
   },
   {
     "id": 216,
-    "name": "Boss Capone",
-    "parody": "Al Capone",
-    "faction": "Black",
+    "name": "Athena",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4000,
+    "devotees": 400000,
     "ability": null,
-    "description": "Made Chicago his kingdom. Now he taxes your victories."
+    "description": "Born fully armed from the head of Zeus, she is the goddess of brilliant strategy and righteous warfare. The wise owl is her constant companion."
   },
   {
     "id": 217,
-    "name": "Outlaw Jesse",
-    "parody": "Jesse James",
-    "faction": "Black",
+    "name": "Frigg",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3300,
+    "devotees": 330000,
     "ability": "TacticalRetreat",
-    "description": "Robbed trains, then vanished. You’ll never catch him."
+    "description": "Odin's queen, she weaves the clouds in the sky and knows the fate of all beings. Though she knows the future, she rarely speaks of it."
   },
   {
     "id": 218,
-    "name": "Captain Blackbeard",
-    "parody": "Blackbeard",
-    "faction": "Black",
+    "name": "Horus",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4100,
+    "devotees": 410000,
     "ability": null,
-    "description": "Lit fuses in his beard to scare enemies. It worked."
+    "description": "The falcon-headed god who defeated his uncle Set to avenge his father. His eye, lost and restored, is a powerful symbol of protection and healing."
   },
   {
     "id": 219,
-    "name": "General Villa",
-    "parody": "Pancho Villa",
-    "faction": "Black",
+    "name": "Ares",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3700,
+    "devotees": 370000,
     "ability": null,
-    "description": "Raided across borders. The US still can’t catch him."
+    "description": "The embodiment of bloodlust and the chaotic frenzy of battle. He delights in the clash of shields and the cries of the fallen, thriving in pure violence."
   },
   {
     "id": 220,
-    "name": "Rebel Zapata",
-    "parody": "Emiliano Zapata",
-    "faction": "Black",
+    "name": "Mars",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3600,
+    "devotees": 360000,
     "ability": "Spartan",
-    "description": "‘Land and liberty!’ he cried—and took both from you."
+    "description": "The protector of Rome, he is a disciplined and honorable god of war. He fights not for glory, but for the preservation and strength of his people."
   },
   {
     "id": 221,
-    "name": "Liberator Toussaint",
-    "parody": "Toussaint Louverture",
-    "faction": "Black",
+    "name": "Freya",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3800,
+    "devotees": 380000,
     "ability": null,
-    "description": "Freed Haiti from France. Now he’s freeing your cards from your inventory."
+    "description": "She rides a chariot pulled by cats and claims half of the warriors slain in battle for her hall. A goddess of love, beauty, and fierce independence."
   },
   {
     "id": 222,
-    "name": "Minister Malcolm",
-    "parody": "Malcolm X",
-    "faction": "Black",
+    "name": "Anubis",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3500,
+    "devotees": 350000,
     "ability": null,
-    "description": "By any means necessary—including winning this battle."
+    "description": "The jackal-headed guide of the dead, he presides over the embalming ritual. He holds the scales of justice, ensuring the heart is weighed with perfect fairness."
   },
   {
     "id": 223,
-    "name": "Emperor Qin",
-    "parody": "Qin Shi Huang",
-    "faction": "Black",
+    "name": "Hephaestus",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4200,
+    "devotees": 420000,
     "ability": null,
-    "description": "United China—and buried scholars alive. You’re next."
+    "description": "The master craftsman of the gods, cast from Olympus for his lameness. From his forge within a volcano, he creates divine weapons and wondrous automata."
   },
   {
     "id": 224,
-    "name": "General Hannibala",
-    "parody": "Hannibal Barca",
-    "faction": "Black",
+    "name": "Loki",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3400,
+    "devotees": 340000,
     "ability": "SiegeMaster",
-    "description": "Crossed the Alps with elephants. Your defenses won’t stop him."
+    "description": "The silver-tongued trickster and shapeshifter. His clever schemes and malicious pranks constantly sow chaos among the gods of Asgard."
   },
   {
     "id": 225,
-    "name": "Warlord Nobunaga",
-    "parody": "Oda Nobunaga",
-    "faction": "Black",
+    "name": "Thoth",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3900,
+    "devotees": 390000,
     "ability": null,
-    "description": "‘Rule the realm by force.’ He meant it."
+    "description": "The ibis-headed god of knowledge, he is the divine scribe who invented writing. His wisdom is so vast that he mediates disputes between the gods."
   },
   {
     "id": 226,
-    "name": "Strategist Sun",
-    "parody": "Sun Tzu",
-    "faction": "Black",
+    "name": "Hermes",
+    "faction": "West",
     "level": 4,
-    "soldiers": 2560,
+    "devotees": 256000,
     "ability": "Precision",
-    "description": "Wrote ‘The Art of War.’ Now he’s writing your obituary."
+    "description": "With winged sandals, he moves between the mortal and divine worlds with impossible speed. A trickster, a messenger, and a guide for souls on their final journey."
   },
   {
     "id": 227,
-    "name": "Swordmaster Musashi",
-    "parody": "Miyamoto Musashi",
-    "faction": "Black",
+    "name": "Demeter",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4300,
+    "devotees": 430000,
     "ability": null,
-    "description": "Dueled 60 men—and won. You’re #61."
+    "description": "When her daughter was stolen, her grief brought winter to the world. She is the goddess of the harvest, her mood dictating the cycle of the seasons."
   },
   {
     "id": 228,
-    "name": "Warrior Geronimo",
-    "parody": "Geronimo",
-    "faction": "Black",
+    "name": "Cernunnos",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3600,
+    "devotees": 360000,
     "ability": "TacticalRetreat",
-    "description": "Outran the US Army for 30 years. You won’t last 30 seconds."
+    "description": "The horned lord of the forest, he sits among the wild beasts as their protector and king. He is the raw, untamed spirit of nature."
   },
   {
     "id": 229,
-    "name": "Chief Sitting Bull",
-    "parody": "Sitting Bull",
-    "faction": "Black",
+    "name": "Heimdall",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3700,
+    "devotees": 370000,
     "ability": null,
-    "description": "Dreamed of victory at Little Bighorn. Now he dreams of yours."
+    "description": "The ever-watchful guardian of Asgard's Bifrost bridge. He can hear grass growing and see for a hundred leagues, and his horn will signal the start of Ragnar\u00f6k."
   },
   {
     "id": 230,
-    "name": "Warrior Crazy Horse",
-    "parody": "Crazy Horse",
-    "faction": "Black",
+    "name": "Set",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3500,
+    "devotees": 350000,
     "ability": "Spartan",
-    "description": "Never photographed, never captured. But he’ll capture your flag."
+    "description": "The god of the harsh desert, chaos, and foreign lands. He murdered his brother Osiris, embodying the violent and untamable forces of the world."
   },
   {
     "id": 231,
-    "name": "Liberator Simóna",
-    "parody": "Simón Bolívar",
-    "faction": "Black",
+    "name": "Artemis",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4000,
+    "devotees": 400000,
     "ability": null,
-    "description": "Freed half a continent. Now he’s freeing your coins."
+    "description": "The virgin goddess of the hunt, she roams the wilderness with her band of nymphs. Her silver arrows fly true, a protector of the wild and the young."
   },
   {
     "id": 232,
-    "name": "General San Martina",
-    "parody": "José de San Martín",
-    "faction": "Black",
+    "name": "Brigit",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3800,
+    "devotees": 380000,
     "ability": null,
-    "description": "Crossed the Andes to liberate nations. Your subreddit is next."
+    "description": "Her domain is the sacred flame of the forge, the spark of poetic inspiration, and the gentle touch of healing. She is the triple goddess of creation."
   },
   {
     "id": 233,
-    "name": "Evita the Iron",
-    "parody": "Eva Perón",
-    "faction": "Black",
+    "name": "Tyr",
+    "faction": "West",
     "level": 4,
-    "soldiers": 3900,
+    "devotees": 390000,
     "ability": null,
-    "description": "Stole hearts and budgets. Now she’s stealing your wins."
+    "description": "The one-handed god of justice and honor. He bravely sacrificed his hand to the monstrous wolf Fenrir, proving his courage and commitment to the law."
   },
   {
     "id": 234,
-    "name": "Sultan Suleimana",
-    "parody": "Suleiman the Magnificent",
-    "faction": "Black",
+    "name": "Hel",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4100,
+    "devotees": 410000,
     "ability": null,
-    "description": "Ruled an empire at its peak. Your faction is just a footnote."
+    "description": "The half-dead, half-living queen of the Norse underworld. She rules with a grim and impartial authority over those who die of sickness or old age."
   },
   {
     "id": 235,
-    "name": "Conqueror Mehmeda",
-    "parody": "Mehmed II",
-    "faction": "Black",
+    "name": "Neptune",
+    "faction": "West",
     "level": 4,
-    "soldiers": 4200,
+    "devotees": 420000,
     "ability": null,
-    "description": "Took Constantinople at 21. What’s your excuse?"
+    "description": "The Roman ruler of the deep, he commands legions of sea creatures. His power extends from the vast oceans to the smallest freshwater spring."
   },
   {
     "id": 236,
-    "name": "Sister Rasputina",
-    "parody": "Grigori Rasputin",
-    "faction": "Black",
+    "name": "Aphrodite",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2300,
+    "devotees": 230000,
     "ability": "TacticalRetreat",
-    "description": "Poisoned, shot, drowned—still won. You’re not that tough."
+    "description": "Born from the sea foam, her divine beauty can spark desire in the hearts of gods and mortals, often leading to both passion and chaos."
   },
   {
     "id": 237,
-    "name": "Gunslinger Billy",
-    "parody": "Billy the Kid",
-    "faction": "Black",
+    "name": "Freyr",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2000,
+    "devotees": 200000,
     "ability": "Precision",
-    "description": "Killed 21 men by 21. You’re #22."
+    "description": "The Norse god of sunshine and fair weather, he sails a magical ship that can be folded to fit in his pocket. His rule brings peace and prosperity to the land."
   },
   {
     "id": 238,
-    "name": "Outlaw Bonnie",
-    "parody": "Bonnie Parker",
-    "faction": "Black",
+    "name": "Dionysus",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "LastStand",
-    "description": "Wrote poems about crime. Now she’s writing your defeat."
+    "description": "The god of wine and revelry, his followers enter a state of ecstatic madness. He represents liberation from the ordinary and the wildness within."
   },
   {
     "id": 239,
-    "name": "Rebel Nat",
-    "parody": "Nat Turner",
-    "faction": "Black",
+    "name": "Bastet",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2200,
+    "devotees": 220000,
     "ability": "Spartan",
-    "description": "Led a rebellion that shook America. Now he shakes your faction."
+    "description": "Once a fierce lioness goddess, she was tamed into the cat-headed protector of the home. She brings joy and guards against evil spirits."
   },
   {
     "id": 240,
-    "name": "Abolitionist John",
-    "parody": "John Brown",
-    "faction": "Black",
+    "name": "Manannan mac Lir",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Fought slavery with fire. Now he fights you with fury."
+    "description": "The Irish sea god who rides a magical horse across the waves. He guards the misty gate to the Otherworld, a master of illusion and magic."
   },
   {
     "id": 241,
-    "name": "Chairman Fred",
-    "parody": "Fred Hampton",
-    "faction": "Black",
+    "name": "Juno",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2300,
+    "devotees": 230000,
     "ability": null,
-    "description": "United gangs into a movement. Now he unites cards against you."
+    "description": "The watchful and majestic queen of the Roman gods. She is a fierce protector of marriage and the state, often acting with a queen's righteous fury."
   },
   {
     "id": 242,
-    "name": "General Assata",
-    "parody": "Assata Shakur",
-    "faction": "Black",
+    "name": "Baldr",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2184,
+    "devotees": 218400,
     "ability": "FirstStrike",
-    "description": "Declared war on injustice. You’re collateral damage."
+    "description": "The most beloved of the Norse gods, he was so beautiful that he gave off light. He was immune to all harm, save for the humble mistletoe."
   },
   {
     "id": 243,
-    "name": "King Pyrrha",
-    "parody": "Pyrrhus of Epirus",
-    "faction": "Black",
+    "name": "Sekhmet",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2700,
+    "devotees": 270000,
     "ability": null,
-    "description": "Won battles so costly, they ruined him. You’ll lose cheaper."
+    "description": "The lion-headed goddess of destruction, her breath is the hot desert wind. She was created to punish humanity, her bloodlust nearly unquenchable."
   },
   {
     "id": 244,
-    "name": "King Alarica",
-    "parody": "Alaric the Goth",
-    "faction": "Black",
+    "name": "Nuada",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Sacked Rome. Now he sacks your inventory."
+    "description": "The king of the Tuatha D\u00e9 Danann who lost his arm in battle and had it replaced with one of silver. He is a symbol of just leadership and perseverance."
   },
   {
     "id": 245,
-    "name": "Shogun Hideyoshi",
-    "parody": "Toyotomi Hideyoshi",
-    "faction": "Black",
+    "name": "Minerva",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2800,
+    "devotees": 280000,
     "ability": null,
-    "description": "Rose from peasant to ruler. Your rank means nothing."
+    "description": "The Roman goddess of wisdom and strategic arts. Unlike Mars, she champions war only for a just cause, preferring the wisdom of peace."
   },
   {
     "id": 246,
-    "name": "Shogun Tokugawa",
-    "parody": "Tokugawa Ieyasu",
-    "faction": "Black",
+    "name": "Persephone",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2700,
+    "devotees": 270000,
     "ability": null,
-    "description": "Waited 70 years to win. You won’t last 7 minutes."
+    "description": "The queen of the underworld who was once a goddess of spring. Her annual return to the surface brings the world back to life after the cold of winter."
   },
   {
     "id": 247,
-    "name": "Chief Pontiac",
-    "parody": "Pontiac",
-    "faction": "Black",
+    "name": "Ptah",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2500,
+    "devotees": 250000,
     "ability": "Spartan",
-    "description": "United tribes to fight the British. Now he unites against you."
+    "description": "The creator god of Memphis, who brought the world into being simply by thinking of it and speaking its name. He is the patron of all craftsmen."
   },
   {
     "id": 248,
-    "name": "Warrior Tecumseh",
-    "parody": "Tecumseh",
-    "faction": "Black",
+    "name": "Vulcan",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Built a confederacy to stop settlers. You’re the next settler."
+    "description": "The Roman god of the forge, his hammer rings within the fiery heart of volcanoes. He crafts the thunderbolts for Jupiter and armor for heroes."
   },
   {
     "id": 249,
-    "name": "Chief Osceola",
-    "parody": "Osceola",
-    "faction": "Black",
+    "name": "Njord",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "TacticalRetreat",
-    "description": "Fought the US Army with guerrilla tactics. You’re out of your depth."
+    "description": "The god of the calm sea coast, he blesses sailors and fishermen with good fortune. His home is by the sea, where he enjoys the cry of the gulls."
   },
   {
     "id": 250,
-    "name": "Chief Black Hawk",
-    "parody": "Black Hawk",
-    "faction": "Black",
+    "name": "Hathor",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2300,
+    "devotees": 230000,
     "ability": "LastStand",
-    "description": "Fought to keep his homeland. Now he fights for victory."
+    "description": "The joyous cow goddess of love, music, and motherhood. Her festivals were filled with dance and drink, and she was beloved by all."
   },
   {
     "id": 251,
-    "name": "Chief Red Cloud",
-    "parody": "Red Cloud",
-    "faction": "Black",
+    "name": "Aengus Og",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2700,
+    "devotees": 270000,
     "ability": null,
-    "description": "Won Red Cloud’s War—the only Native American to defeat the US in war."
+    "description": "The Irish god of love, four swans circle his head as he walks. His words are so sweet that they can charm anyone who hears them."
   },
   {
     "id": 252,
-    "name": "Chief Cochise",
-    "parody": "Cochise",
-    "faction": "Black",
+    "name": "Mercury",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2600,
+    "devotees": 260000,
     "ability": null,
-    "description": "Outwitted the US Army for a decade. You’re not that smart."
+    "description": "The swift messenger of the Roman gods, he guides commerce and protects travelers. He is also a cunning trickster and a guide for souls to the afterlife."
   },
   {
     "id": 253,
-    "name": "Chief Quanah",
-    "parody": "Quanah Parker",
-    "faction": "Black",
+    "name": "Idun",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2500,
+    "devotees": 250000,
     "ability": null,
-    "description": "Last Comanche chief. Now he’s your first problem."
+    "description": "The cheerful goddess who tends the golden apples of immortality. Without her fruit, the Norse gods would age and wither like mortals."
   },
   {
     "id": 254,
-    "name": "Emperor Manco",
-    "parody": "Manco Inca",
-    "faction": "Black",
+    "name": "Sobek",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2800,
+    "devotees": 280000,
     "ability": null,
-    "description": "Fought the Spanish with Inca fury. You’re just another invader."
+    "description": "The fearsome crocodile god of the Nile, his power is as sudden and deadly as a reptile's attack. Yet he also represents the fertility the river brings."
   },
   {
     "id": 255,
-    "name": "Rebel Túpac",
-    "parody": "Túpac Amaru II",
-    "faction": "Black",
+    "name": "Dian Cecht",
+    "faction": "West",
     "level": 3,
-    "soldiers": 2400,
+    "devotees": 240000,
     "ability": "Spartan",
-    "description": "Led the largest Andean rebellion. Your faction is next."
+    "description": "The master physician of the Irish gods. His healing well could restore the mortally wounded to fight another day, making his army unstoppable."
   },
   {
     "id": 256,
-    "name": "Firestarter Guy",
-    "parody": "Guy Fawkes",
-    "faction": "Black",
+    "name": "Janus",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": "LastStand",
-    "description": "Tried to blow up Parliament. Now he blows up your plans."
+    "description": "The two-faced god who looks to the past and the future simultaneously. He is the keeper of all doorways, gates, and moments of transition."
   },
   {
     "id": 257,
-    "name": "Philosopher Marx",
-    "parody": "Karl Marx",
-    "faction": "Black",
+    "name": "Bragi",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "Wrote ‘Das Kapital.’ Now he capitalizes on your mistakes."
+    "description": "The skald of the gods, his tongue is carved with runes of poetry. His words can inspire armies and bring tears to the eyes of the most hardened warrior."
   },
   {
     "id": 258,
-    "name": "Anarchist Bakunina",
-    "parody": "Mikhail Bakunin",
-    "faction": "Black",
+    "name": "Epona",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1440,
+    "devotees": 144000,
     "ability": "Precision",
-    "description": "Wanted to destroy all states. Starting with yours."
+    "description": "The goddess of horses, she is always depicted with her noble steeds. She gallops across the land, a symbol of freedom, power, and fertility."
   },
   {
     "id": 259,
-    "name": "Outlaw Ned",
-    "parody": "Ned Kelly",
-    "faction": "Black",
+    "name": "Hestia",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1600,
+    "devotees": 160000,
     "ability": "TacticalRetreat",
-    "description": "Fought in homemade armor. Still lost—but took many with him."
+    "description": "The gentlest of the Olympians, she is the goddess of the sacred hearth fire. She represents the warmth, stability, and sanctity of the home."
   },
   {
     "id": 260,
-    "name": "Spy Mata",
-    "parody": "Mata Hari",
-    "faction": "Black",
+    "name": "Forseti",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1547,
+    "devotees": 154700,
     "ability": "FirstStrike",
-    "description": "Danced into enemy camps—and out with their secrets."
+    "description": "The god of justice who dwells in a shining hall of gold and silver. He can mediate any dispute, and all who leave his court do so in peace."
   },
   {
     "id": 261,
-    "name": "Shadow Jack",
-    "parody": "Jack the Ripper",
-    "faction": "Black",
+    "name": "Ceres",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": "Spartan",
-    "description": "Never caught. Never identified. But he’ll catch you."
+    "description": "The nurturing Roman mother of the harvest. Her love for her daughter is so strong that her emotions control the changing of the seasons."
   },
   {
     "id": 262,
-    "name": "King Ashurbanipal",
-    "parody": "Ashurbanipal",
-    "faction": "Black",
+    "name": "Ma'at",
+    "faction": "West",
     "level": 2,
-    "soldiers": 2000,
+    "devotees": 200000,
     "ability": null,
-    "description": "Built the first library—and the first empire of terror."
+    "description": "The goddess of cosmic order, truth, and justice. It is her white feather that is weighed against the hearts of the dead in the final judgment."
   },
   {
     "id": 263,
-    "name": "Emperor Sargon",
-    "parody": "Sargon of Akkad",
-    "faction": "Black",
+    "name": "Taranis",
+    "faction": "West",
     "level": 2,
-    "soldiers": 2100,
+    "devotees": 210000,
     "ability": null,
-    "description": "Founded the first empire. You’re just a province."
+    "description": "The Celtic wheel-god of the sky, his passing is the rumbling of thunder. He is often associated with storms and the power of the heavens."
   },
   {
     "id": 264,
-    "name": "King Nebuchadnezzara",
-    "parody": "Nebuchadnezzar II",
-    "faction": "Black",
+    "name": "Khonsu",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": "SiegeMaster",
-    "description": "Built the Hanging Gardens—and your doom."
+    "description": "The Egyptian god of the moon, he travels across the night sky. He is a protector of nighttime travelers and a powerful force against evil."
   },
   {
     "id": 265,
-    "name": "King Xerxa",
-    "parody": "Xerxes I",
-    "faction": "Black",
+    "name": "Vesta",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Led an army of millions. You’ve got 10 cards. Good luck."
+    "description": "The Roman guardian of the sacred flame that protected the city. She embodies the home, the family, and the enduring spirit of the Roman people."
   },
   {
     "id": 266,
-    "name": "King Daria",
-    "parody": "Darius I",
-    "faction": "Black",
+    "name": "Ullr",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": null,
-    "description": "Ruled from India to Ethiopia. Your subreddit is a speck."
+    "description": "The glorious god of the hunt, he glides through the winter landscape on his skis, his bow ever ready. He is the master of the winter hunt."
   },
   {
     "id": 267,
-    "name": "Emperor Cyra",
-    "parody": "Cyrus the Great",
-    "faction": "Black",
+    "name": "Bacchus",
+    "faction": "West",
     "level": 2,
-    "soldiers": 2000,
+    "devotees": 200000,
     "ability": null,
-    "description": "Freed the Jews from Babylon. Now he frees your coins."
+    "description": "The Roman god of wine, whose rites involve wild celebration and liberation from societal norms. He is the spirit of untamed joy and madness."
   },
   {
     "id": 268,
-    "name": "King Philipa",
-    "parody": "Philip II of Macedon",
-    "faction": "Black",
+    "name": "Arawn",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "Father of Alexander. Built the army that conquered the world."
+    "description": "The grim king of the Welsh underworld, he rides with his pack of spectral white hounds. To hear their baying is an omen of death."
   },
   {
     "id": 269,
-    "name": "General Seleuca",
-    "parody": "Seleucus I Nicator",
-    "faction": "Black",
+    "name": "Skadi",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1440,
+    "devotees": 144000,
     "ability": "Precision",
-    "description": "One of Alexander’s generals. Now he generalizes your defeat."
+    "description": "A giantess who became a goddess of winter and the hunt. She lives in the high mountains, preferring the howl of the wolf to the sounds of the sea."
   },
   {
     "id": 270,
-    "name": "Pharaoh Ptolema",
-    "parody": "Ptolemy I Soter",
-    "faction": "Black",
+    "name": "Sulis",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": "LastStand",
-    "description": "Founded a dynasty in Egypt. Yours ends today."
+    "description": "A Celtic goddess whose power resides in the hot springs of Bath. Her sacred waters were believed to have potent healing and curative properties."
   },
   {
     "id": 271,
-    "name": "General Antigona",
-    "parody": "Antigonus I Monophthalmus",
-    "faction": "Black",
+    "name": "Nemesis",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1600,
+    "devotees": 160000,
     "ability": "TacticalRetreat",
-    "description": "Fought for Alexander’s empire. Lost—but not before wrecking you."
+    "description": "The winged goddess of righteous indignation. She brings ruin to the arrogant and distributes fortune with an unerring sense of divine justice."
   },
   {
     "id": 272,
-    "name": "King Lysima",
-    "parody": "Lysimachus",
-    "faction": "Black",
+    "name": "Eir",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Bodyguard to Alexander, king in his own right. You’re just a pawn."
+    "description": "A valkyrie who is also the greatest of all healers. Her knowledge of herbs and charms can mend even the most grievous wounds sustained in battle."
   },
   {
     "id": 273,
-    "name": "General Cassa",
-    "parody": "Cassander",
-    "faction": "Black",
+    "name": "Concordia",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1700,
+    "devotees": 170000,
     "ability": "Spartan",
-    "description": "Killed Alexander’s family. Now he kills your hopes."
+    "description": "The Roman goddess who fosters harmony among citizens. Her presence ensures that agreements are kept and that peace prevails within the city."
   },
   {
     "id": 274,
-    "name": "King Mithrida",
-    "parody": "Mithridates VI",
-    "faction": "Black",
+    "name": "Goibniu",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1900,
+    "devotees": 190000,
     "ability": null,
-    "description": "Resisted Rome for decades. You’ll last minutes."
+    "description": "The master smith of the Irish gods, he forges weapons that always hit their mark and never break. He also brews the ale of immortality."
   },
   {
     "id": 275,
-    "name": "King Jugurtha",
-    "parody": "Jugurtha",
-    "faction": "Black",
+    "name": "Hebe",
+    "faction": "West",
     "level": 2,
-    "soldiers": 1800,
+    "devotees": 180000,
     "ability": null,
-    "description": "Outsmarted Rome for years. You’re not that clever."
+    "description": "The goddess of youth, she serves the nectar and ambrosia that keep the Olympians eternally young. Her presence is a refreshing spring."
   },
   {
     "id": 276,
-    "name": "Warrior Viriathus",
-    "parody": "Viriathus",
-    "faction": "Black",
+    "name": "Iris",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Fought Rome with guerrilla tactics. You’re outmatched."
+    "description": "She travels on the rainbow, a swift and gentle messenger for the gods. Her duty is to deliver divine commands, not with thunder, but with light."
   },
   {
     "id": 277,
-    "name": "Chieftain Arminia",
-    "parody": "Arminius",
-    "faction": "Black",
+    "name": "Sif",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": "Spartan",
-    "description": "Wiped out three Roman legions. You’ve got 10 cards. Run."
+    "description": "Thor's wife, her glorious golden hair was crafted by dwarves and is said to represent the fields of wheat, a symbol of a bountiful harvest."
   },
   {
     "id": 278,
-    "name": "Queen Cartimandua",
-    "parody": "Cartimandua",
-    "faction": "Black",
+    "name": "Fortuna",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1200,
+    "devotees": 120000,
     "ability": null,
-    "description": "Betrayed her husband to Rome. Now she betrays your trust."
+    "description": "The blind goddess of luck, she turns the wheel of fortune at random. Riches or ruin, triumph or despair\u2014all are subject to her whim."
   },
   {
     "id": 279,
-    "name": "Queen Brunhilda",
-    "parody": "Brunhilda",
-    "faction": "Black",
+    "name": "Pan",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Ruled for 40 years through war and intrigue. You’ll last one battle."
+    "description": "The wild god of the shepherds, his pipes echo through the lonely mountains. His sudden appearance could inspire a mindless, panicked terror in travelers."
   },
   {
     "id": 280,
-    "name": "Queen Fredegund",
-    "parody": "Fredegund",
-    "faction": "Black",
+    "name": "Geb",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": "LastStand",
-    "description": "Assassinated rivals with poison. Your cards are next."
+    "description": "The god of the earth, he is the ground upon which all life walks. Earthquakes are said to be his laughter, echoing up from below."
   },
   {
     "id": 281,
-    "name": "Lady of the Mercians",
-    "parody": "Æthelflæd",
-    "faction": "Black",
+    "name": "Boann",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": "TacticalRetreat",
-    "description": "Fortified towns and fought Vikings. You’re softer than a Saxon."
+    "description": "The goddess of the River Boyne, she created the river by defying a sacred well. The waters now carry her ancient, poetic knowledge."
   },
   {
     "id": 282,
-    "name": "Warlord Zhang",
-    "parody": "Zhang Xianzhong",
-    "faction": "Black",
+    "name": "Flora",
+    "faction": "West",
     "level": 1,
-    "soldiers": 960,
+    "devotees": 96000,
     "ability": "Precision",
-    "description": "Carved ‘Kill’ into mountains. Your name is next."
+    "description": "The whimsical goddess of all things that bloom. She wanders the fields in spring, and flowers blossom in her footsteps."
   },
   {
     "id": 283,
-    "name": "Admiral Koxinga",
-    "parody": "Koxinga",
-    "faction": "Black",
+    "name": "Khepri",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Drove the Dutch from Taiwan. You’re easier prey."
+    "description": "The scarab beetle god who tirelessly rolls the sun across the sky each morning. He is the symbol of rebirth and the promise of a new day."
   },
   {
     "id": 284,
-    "name": "Cossack Yermak",
-    "parody": "Yermak Timofeyevich",
-    "faction": "Black",
+    "name": "Asclepius",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Conquered Siberia with 800 men. You’ve got 10 cards. Do the math."
+    "description": "A mortal physician so skilled he could cheat death itself. For his hubris, he was struck down by Zeus but was honored with a place in the stars."
   },
   {
     "id": 285,
-    "name": "Knight El Cida",
-    "parody": "El Cid",
-    "faction": "Black",
+    "name": "Sol",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1183,
+    "devotees": 118300,
     "ability": "FirstStrike",
-    "description": "Fought Moors and Christians alike. You’re just another enemy."
+    "description": "The Norse goddess of the sun, she is forever chased across the sky by the wolf Sk\u00f6ll. Her daily flight is a race against the coming of darkness."
   },
   {
     "id": 286,
-    "name": "Emperor Basil the Bulgar-Slayer",
-    "parody": "Basil II",
-    "faction": "Black",
+    "name": "Pomona",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Blinded 15,000 prisoners. Your cards will wish for mercy."
+    "description": "A quiet nymph of the Roman woodlands, she cares for the fruit trees and orchards. She is the goddess of a bountiful, fruitful harvest."
   },
   {
     "id": 287,
-    "name": "General Wu",
-    "parody": "Wu Sangui",
-    "faction": "Black",
+    "name": "Nike",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1200,
+    "devotees": 120000,
     "ability": "Spartan",
-    "description": "Opened the gates to the Manchus. Now he opens your defeat."
+    "description": "The winged goddess of victory, she swoops down to the battlefield to reward the triumphant with a laurel wreath and everlasting glory."
   },
   {
     "id": 288,
-    "name": "Heavenly King Hong",
-    "parody": "Hong Xiuquan",
-    "faction": "Black",
+    "name": "Mani",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1100,
+    "devotees": 110000,
     "ability": null,
-    "description": "Started the Taiping Rebellion—20 million died. You’re one more."
+    "description": "The Norse god of the moon, he is forever pursued across the night sky by the wolf Hati. He guides the lonely travelers of the night."
   },
   {
     "id": 289,
-    "name": "Queen Ranavalona",
-    "parody": "Ranavalona I",
-    "faction": "Black",
+    "name": "Airmid",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Killed 3 million to keep Madagascar free. You’re a statistic."
+    "description": "The Irish goddess of healing herbs. After her brother was slain, all the healing herbs of the world grew from the tears she shed on his grave."
   },
   {
     "id": 290,
-    "name": "Queen Zenobia II",
-    "parody": "Zenobia of Armenia",
-    "faction": "Black",
+    "name": "Hapi",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": "SiegeMaster",
-    "description": "Defied empires from a mountain fortress. Your base is flat."
+    "description": "The androgynous god of the Nile's annual flood. He brings the fertile black silt that allows Egypt to flourish in the middle of the desert."
   },
   {
     "id": 291,
-    "name": "President Juárez",
-    "parody": "Benito Juárez",
-    "faction": "Black",
+    "name": "Creidne",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Defeated French invaders. You’re less scary than Napoleon III."
+    "description": "The skilled bronzesmith of the Irish gods. He worked with Goibniu and Luchta to craft the magical weapons for the Tuatha D\u00e9 Danann."
   },
   {
     "id": 292,
-    "name": "General Sandino",
-    "parody": "Augusto Sandino",
-    "faction": "Black",
+    "name": "Tyche",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Fought US Marines in Nicaragua. You’re just another gringo."
+    "description": "The Greek counterpart to Fortuna, she juggles a ball, representing the unpredictability of luck. She often carries a cornucopia, a horn of plenty."
   },
   {
     "id": 293,
-    "name": "President Allende",
-    "parody": "Salvador Allende",
-    "faction": "Black",
+    "name": "Luchta",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": null,
-    "description": "Died for socialism. His spirit fights on—in your defeat."
+    "description": "The divine carpenter of the Tuatha D\u00e9 Danann. He could fashion a thousand spear shafts in a single night, all of them perfectly balanced and ready for war."
   },
   {
     "id": 294,
-    "name": "Muralist Diego",
-    "parody": "Diego Rivera",
-    "faction": "Black",
+    "name": "Aurora",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Painted revolution on walls. Now he paints your loss."
+    "description": "The Roman goddess of the dawn. She flies across the sky each morning, her tears becoming the morning dew, as she heralds the arrival of the sun."
   },
   {
     "id": 295,
-    "name": "Poet Neruda",
-    "parody": "Pablo Neruda",
-    "faction": "Black",
+    "name": "Vidar",
+    "faction": "West",
     "level": 1,
-    "soldiers": 960,
+    "devotees": 96000,
     "ability": "Precision",
-    "description": "Wrote odes to common things. Now he writes elegies for your cards."
+    "description": "The silent god of vengeance. He is destined to survive Ragnar\u00f6k and will avenge his father Odin by slaying the great wolf Fenrir."
   },
   {
     "id": 296,
-    "name": "Magician Gabriel",
-    "parody": "Gabriel García Márquez",
-    "faction": "Black",
+    "name": "Bellona",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Made magic real. Now he makes your defeat magical."
+    "description": "The Roman goddess of war, she is not about strategy, but the brutal, bloody reality of the battlefield. She revels in the chaos of conflict."
   },
   {
     "id": 297,
-    "name": "King Alarica II",
-    "parody": "Alaric II",
-    "faction": "Black",
+    "name": "Nut",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1300,
+    "devotees": 130000,
     "ability": "LastStand",
-    "description": "Lost to Clovis—but took the Visigothic kingdom with him."
+    "description": "The goddess of the sky, her star-covered body arches over the earth, separating it from the chaos of the cosmos. She swallows the sun each evening to give birth to it at dawn."
   },
   {
     "id": 298,
-    "name": "Father Hidalga",
-    "parody": "Miguel Hidalgo",
-    "faction": "Black",
+    "name": "Gefjun",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1200,
+    "devotees": 120000,
     "ability": "TacticalRetreat",
-    "description": "Started Mexico’s independence war. You’re just another colonizer."
+    "description": "A Norse goddess of plowing and fertility. It is said she plowed the entire island of Zealand from the land of a Swedish king in a single night."
   },
   {
     "id": 299,
-    "name": "King Leopolda",
-    "parody": "Leopold II of Belgium",
-    "faction": "Black",
+    "name": "Morpheus",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1500,
+    "devotees": 150000,
     "ability": null,
-    "description": "Killed 10 million in Congo. Your faction is a rounding error."
+    "description": "The god of dreams, he can take on any human form to deliver messages to mortals as they sleep. He is the shaper of fantasies and nightmares."
   },
   {
     "id": 300,
-    "name": "Explorer Fridtjof",
-    "parody": "Fridtjof Nansen",
-    "faction": "Black",
+    "name": "Luna",
+    "faction": "West",
     "level": 1,
-    "soldiers": 1400,
+    "devotees": 140000,
     "ability": null,
-    "description": "Crossed Greenland on skis. Your battlefield is a walk in the park."
+    "description": "The Roman goddess of the moon, she drives her silver chariot across the night sky. She is a silent witness to the secrets of the darkness."
   }
 ]

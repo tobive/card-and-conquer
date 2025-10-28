@@ -88,45 +88,45 @@ export function resolveCombat(
 
   const abilitiesTriggered: string[] = [];
 
-  // Store initial soldier counts
-  const attackerSoldiersBefore = attacker.currentSoldiers;
-  const defenderSoldiersBefore = defender.currentSoldiers;
+  // Store initial devotee counts
+  const attackerDevoteesBefore = attacker.currentDevotees;
+  const defenderDevoteesBefore = defender.currentDevotees;
 
-  // Calculate max soldiers (current soldiers + ability bonuses)
-  let attackerMaxSoldiers = attacker.currentSoldiers;
-  let defenderMaxSoldiers = defender.currentSoldiers;
+  // Calculate max devotees (current devotees + ability bonuses)
+  let attackerMaxDevotees = attacker.currentDevotees;
+  let defenderMaxDevotees = defender.currentDevotees;
 
-  // SiegeMaster: +300 max soldiers in City or Fortress battles
+  // SiegeMaster: +300 max devotees in City or Fortress battles
   if (attackerCard.ability === Ability.SiegeMaster) {
     if (battle.mapType === MapType.City || battle.mapType === MapType.Fortress) {
-      attackerMaxSoldiers += 300;
+      attackerMaxDevotees += 300;
       abilitiesTriggered.push(
-        `${attackerCard.name} (SiegeMaster): +300 max soldiers in ${battle.mapType}`
+        `${attackerCard.name} (SiegeMaster): +300 max devotees in ${battle.mapType}`
       );
     }
   }
 
   if (defenderCard.ability === Ability.SiegeMaster) {
     if (battle.mapType === MapType.City || battle.mapType === MapType.Fortress) {
-      defenderMaxSoldiers += 300;
+      defenderMaxDevotees += 300;
       abilitiesTriggered.push(
-        `${defenderCard.name} (SiegeMaster): +300 max soldiers in ${battle.mapType}`
+        `${defenderCard.name} (SiegeMaster): +300 max devotees in ${battle.mapType}`
       );
     }
   }
 
-  // Spartan: +200 max soldiers when fighting a stronger opponent
-  if (attackerCard.ability === Ability.Spartan && defenderMaxSoldiers > attackerMaxSoldiers) {
-    attackerMaxSoldiers += 200;
+  // Spartan: +200 max devotees when fighting a stronger opponent
+  if (attackerCard.ability === Ability.Spartan && defenderMaxDevotees > attackerMaxDevotees) {
+    attackerMaxDevotees += 200;
     abilitiesTriggered.push(
-      `${attackerCard.name} (Spartan): +200 max soldiers vs stronger opponent`
+      `${attackerCard.name} (Spartan): +200 max devotees vs stronger opponent`
     );
   }
 
-  if (defenderCard.ability === Ability.Spartan && attackerMaxSoldiers > defenderMaxSoldiers) {
-    defenderMaxSoldiers += 200;
+  if (defenderCard.ability === Ability.Spartan && attackerMaxDevotees > defenderMaxDevotees) {
+    defenderMaxDevotees += 200;
     abilitiesTriggered.push(
-      `${defenderCard.name} (Spartan): +200 max soldiers vs stronger opponent`
+      `${defenderCard.name} (Spartan): +200 max devotees vs stronger opponent`
     );
   }
 
@@ -142,24 +142,24 @@ export function resolveCombat(
     abilitiesTriggered.push(`${defenderCard.name} (FirstStrike): Attacks first!`);
   }
 
-  // Reinforcements: +100 max soldiers if NOT attacking first
+  // Reinforcements: +100 max devotees if NOT attacking first
   if (!attackerGoesFirst && attackerCard.ability === Ability.Reinforcements) {
-    attackerMaxSoldiers += 100;
+    attackerMaxDevotees += 100;
     abilitiesTriggered.push(
-      `${attackerCard.name} (Reinforcements): +100 max soldiers for defending`
+      `${attackerCard.name} (Reinforcements): +100 max devotees for defending`
     );
   }
 
   if (attackerGoesFirst && defenderCard.ability === Ability.Reinforcements) {
-    defenderMaxSoldiers += 100;
+    defenderMaxDevotees += 100;
     abilitiesTriggered.push(
-      `${defenderCard.name} (Reinforcements): +100 max soldiers for defending`
+      `${defenderCard.name} (Reinforcements): +100 max devotees for defending`
     );
   }
 
   // Current HP during combat
-  let attackerHP = attackerMaxSoldiers;
-  let defenderHP = defenderMaxSoldiers;
+  let attackerHP = attackerMaxDevotees;
+  let defenderHP = defenderMaxDevotees;
 
   // Track total damage dealt by each card
   let totalAttackerDamage = 0;
@@ -175,11 +175,11 @@ export function resolveCombat(
 
     if (currentTurn === 'attacker') {
       // Attacker's turn
-      let damage = Math.floor(Math.random() * (attackerMaxSoldiers + 1)); // 0 to max
+      let damage = Math.floor(Math.random() * (attackerMaxDevotees + 1)); // 0 to max
 
       // Precision: Minimum 50% damage
       if (attackerCard.ability === Ability.Precision) {
-        const minDamage = Math.floor(attackerMaxSoldiers * 0.5);
+        const minDamage = Math.floor(attackerMaxDevotees * 0.5);
         damage = Math.max(damage, minDamage);
       }
 
@@ -188,11 +188,11 @@ export function resolveCombat(
       currentTurn = 'defender';
     } else {
       // Defender's turn
-      let damage = Math.floor(Math.random() * (defenderMaxSoldiers + 1)); // 0 to max
+      let damage = Math.floor(Math.random() * (defenderMaxDevotees + 1)); // 0 to max
 
       // Precision: Minimum 50% damage
       if (defenderCard.ability === Ability.Precision) {
-        const minDamage = Math.floor(defenderMaxSoldiers * 0.5);
+        const minDamage = Math.floor(defenderMaxDevotees * 0.5);
         damage = Math.max(damage, minDamage);
       }
 
@@ -203,50 +203,50 @@ export function resolveCombat(
   }
 
   // Determine final HP
-  let attackerSoldiersAfter = Math.max(0, attackerHP);
-  let defenderSoldiersAfter = Math.max(0, defenderHP);
+  let attackerDevoteesAfter = Math.max(0, attackerHP);
+  let defenderDevoteesAfter = Math.max(0, defenderHP);
 
   // Check for deaths
-  let attackerAlive = attackerSoldiersAfter > 0;
-  let defenderAlive = defenderSoldiersAfter > 0;
+  let attackerAlive = attackerDevoteesAfter > 0;
+  let defenderAlive = defenderDevoteesAfter > 0;
 
-  // TacticalRetreat: 20% chance to survive with 1 soldier
+  // TacticalRetreat: 20% chance to survive with 1 devotee
   if (!attackerAlive && attackerCard.ability === Ability.TacticalRetreat && Math.random() < 0.2) {
-    attackerSoldiersAfter = 1;
+    attackerDevoteesAfter = 1;
     attackerAlive = true;
-    abilitiesTriggered.push(`${attackerCard.name} (TacticalRetreat): Survived with 1 soldier!`);
+    abilitiesTriggered.push(`${attackerCard.name} (TacticalRetreat): Survived with 1 devotee!`);
   }
 
   if (!defenderAlive && defenderCard.ability === Ability.TacticalRetreat && Math.random() < 0.2) {
-    defenderSoldiersAfter = 1;
+    defenderDevoteesAfter = 1;
     defenderAlive = true;
-    abilitiesTriggered.push(`${defenderCard.name} (TacticalRetreat): Survived with 1 soldier!`);
+    abilitiesTriggered.push(`${defenderCard.name} (TacticalRetreat): Survived with 1 devotee!`);
   }
 
   // LastStand: Deal 1 final damage when defeated
   if (!attackerAlive && attackerCard.ability === Ability.LastStand) {
-    defenderSoldiersAfter = Math.max(0, defenderSoldiersAfter - 1);
+    defenderDevoteesAfter = Math.max(0, defenderDevoteesAfter - 1);
     totalAttackerDamage += 1;
     abilitiesTriggered.push(`${attackerCard.name} (LastStand): Dealt 1 final damage!`);
-    if (defenderSoldiersAfter <= 0) {
+    if (defenderDevoteesAfter <= 0) {
       defenderAlive = false;
     }
   }
 
   if (!defenderAlive && defenderCard.ability === Ability.LastStand) {
-    attackerSoldiersAfter = Math.max(0, attackerSoldiersAfter - 1);
+    attackerDevoteesAfter = Math.max(0, attackerDevoteesAfter - 1);
     totalDefenderDamage += 1;
     abilitiesTriggered.push(`${defenderCard.name} (LastStand): Dealt 1 final damage!`);
-    if (attackerSoldiersAfter <= 0) {
+    if (attackerDevoteesAfter <= 0) {
       attackerAlive = false;
     }
   }
 
   // Update battle cards
-  attacker.currentSoldiers = attackerSoldiersAfter;
+  attacker.currentDevotees = attackerDevoteesAfter;
   attacker.isAlive = attackerAlive;
 
-  defender.currentSoldiers = defenderSoldiersAfter;
+  defender.currentDevotees = defenderDevoteesAfter;
   defender.isAlive = defenderAlive;
 
   // Create combat result
@@ -256,8 +256,8 @@ export function resolveCombat(
       name: attackerCard.name,
       playerId: attacker.playerId,
       faction: attackerCard.faction,
-      soldiersBefore: attackerSoldiersBefore,
-      soldiersAfter: attackerSoldiersAfter,
+      devoteesBefore: attackerDevoteesBefore,
+      devoteesAfter: attackerDevoteesAfter,
       isAlive: attackerAlive,
     },
     defenderCard: {
@@ -265,8 +265,8 @@ export function resolveCombat(
       name: defenderCard.name,
       playerId: defender.playerId,
       faction: defenderCard.faction,
-      soldiersBefore: defenderSoldiersBefore,
-      soldiersAfter: defenderSoldiersAfter,
+      devoteesBefore: defenderDevoteesBefore,
+      devoteesAfter: defenderDevoteesAfter,
       isAlive: defenderAlive,
     },
     damage: {

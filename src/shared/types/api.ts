@@ -7,6 +7,11 @@ import {
   CombatResult,
   BattleResolution,
   Faction,
+  GameSession,
+  SessionStats,
+  SessionSummary,
+  HallOfFameEntry,
+  PlayerHallOfFameStats,
 } from './game';
 
 // ============================================================================
@@ -42,7 +47,7 @@ export type PlayerProfileResponse = {
 };
 
 export type PlayerInventoryResponse = {
-  cards: Card[];
+  cards: Array<Card & { variantId: string; quantity: number }>;
   totalCards: number;
 };
 
@@ -53,6 +58,38 @@ export type PlayerInitRequest = {
 export type PlayerInitResponse = {
   player: Player;
   initialCards: Card[];
+};
+
+// Variant-related API types
+export type OwnedVariantsRequest = {
+  cardId: number;
+};
+
+export type OwnedVariantsResponse = {
+  cardId: number;
+  variants: Array<{
+    id: string;
+    variantName: string;
+    variantType: string;
+    rarity: string;
+    imageAssets: {
+      full: string;
+      thumbnail: string;
+    };
+  }>;
+};
+
+export type SetVariantPreferenceRequest = {
+  cardId: number;
+  variantId: string;
+};
+
+export type SetVariantPreferenceResponse = {
+  success: boolean;
+};
+
+export type GetVariantPreferencesResponse = {
+  preferences: Record<number, string>;
 };
 
 // ============================================================================
@@ -66,16 +103,50 @@ export type GachaPullRequest = {
 
 export type GachaPullResponse = {
   card: Card;
+  variant: {
+    id: string;
+    variantName: string;
+    variantType: string;
+    rarity: string;
+    imageAssets: {
+      full: string;
+      thumbnail: string;
+    };
+  };
   player: Player;
 };
 
 export type GachaMultiPullResponse = {
-  cards: Card[];
+  cards: Array<{
+    card: Card;
+    variant: {
+      id: string;
+      variantName: string;
+      variantType: string;
+      rarity: string;
+      imageAssets: {
+        full: string;
+        thumbnail: string;
+      };
+    };
+  }>;
   player: Player;
 };
 
 export type GachaWelcomePullResponse = {
-  cards: Card[];
+  cards: Array<{
+    card: Card;
+    variant: {
+      id: string;
+      variantName: string;
+      variantType: string;
+      rarity: string;
+      imageAssets: {
+        full: string;
+        thumbnail: string;
+      };
+    };
+  }>;
   player: Player;
 };
 
@@ -85,6 +156,37 @@ export type GachaFreeStatusResponse = {
   hoursRemaining?: number;
   multiPullCost?: number;
   multiPullCount?: number;
+};
+
+// ============================================================================
+// BONUS GACHA API TYPES
+// ============================================================================
+
+export type BonusGachaStatusResponse = {
+  eastPulls: number;
+  westPulls: number;
+  totalEarned: number;
+  lastUpdated: number;
+};
+
+export type BonusGachaPullRequest = {
+  faction: Faction;
+};
+
+export type BonusGachaPullResponse = {
+  card: Card;
+  variant: {
+    id: string;
+    variantName: string;
+    variantType: string;
+    rarity: string;
+    imageAssets: {
+      full: string;
+      thumbnail: string;
+    };
+  };
+  remainingPulls: number;
+  player: Player;
 };
 
 // ============================================================================
@@ -116,6 +218,11 @@ export type BattleStateResponse = {
   cards: {
     [cardId: number]: Card;
   };
+  variantPreferences: {
+    [playerId: string]: {
+      [cardId: number]: string; // Maps cardId to variantId
+    };
+  };
 };
 
 export type BattleListResponse = {
@@ -144,6 +251,70 @@ export type LeaderboardRequest = {
 
 export type LeaderboardResponse = {
   leaderboard: Leaderboard;
+};
+
+// ============================================================================
+// STATISTICS API TYPES
+// ============================================================================
+
+export type UserStatisticsResponse = {
+  // Collection stats
+  totalCards: number;
+  uniqueCards: number;
+  eastCards: number;
+  westCards: number;
+
+  // Battle stats
+  totalBattles: number;
+  battlesWon: number;
+  battlesLost: number;
+  winRate: number;
+
+  // Gacha stats
+  totalGachaPulls: number;
+  bonusPullsEarned: number;
+  bonusPullsUsed: number;
+
+  // Progression
+  level: number;
+  xp: number;
+  xpToNextLevel: number;
+  coins: number;
+
+  // Faction affiliation
+  faction: Faction | 'Neutral';
+  eastPoints: number;
+  westPoints: number;
+};
+
+// ============================================================================
+// SESSION API TYPES
+// ============================================================================
+
+export type SessionResponse = {
+  session: GameSession;
+  stats: SessionStats;
+};
+
+export type SessionCompleteResponse = {
+  summary: SessionSummary;
+  newSession: GameSession;
+};
+
+// ============================================================================
+// HALL OF FAME API TYPES
+// ============================================================================
+
+export type HallOfFameRequest = {
+  leaderboard?: 'east' | 'west' | 'combined';
+  limit?: number;
+};
+
+export type HallOfFameResponse = {
+  leaderboard: 'east' | 'west' | 'combined';
+  entries: HallOfFameEntry[];
+  playerStats: PlayerHallOfFameStats;
+  lastUpdated: number;
 };
 
 // ============================================================================

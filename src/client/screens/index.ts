@@ -5,3 +5,5 @@ export { BattleListScreen } from './BattleListScreen';
 export { BattleViewScreen } from './BattleViewScreen';
 export { BattleCreateScreen } from './BattleCreateScreen';
 export { LeaderboardScreen } from './LeaderboardScreen';
+export { UserStatsScreen } from './UserStatsScreen';
+export { TutorialScreen } from './TutorialScreen';

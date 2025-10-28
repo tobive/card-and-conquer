@@ -6,14 +6,26 @@ export interface PlayerProfile {
   level: number;
   xp: number;
   coins: number;
-  whitePoints: number;
-  blackPoints: number;
+  eastPoints: number;
+  westPoints: number;
   faction: Faction | null;
   createdAt: number;
   lastActive: number;
 }
 
 const PLAYER_KEY_PREFIX = 'player:';
+
+/**
+ * Normalize faction name for backward compatibility
+ * Maps old faction names (White/Black) to new ones (West/East)
+ */
+export function normalizeFactionName(faction: string | null): Faction | null {
+  if (!faction) return null;
+  if (faction === 'White') return Faction.West;
+  if (faction === 'Black') return Faction.East;
+  if (faction === 'West' || faction === 'East') return faction as Faction;
+  return null;
+}
 
 // XP thresholds for each level (cumulative)
 // Level 1: 0 XP, Level 2: 100 XP, Level 3: 250 XP, Level 4: 450 XP, Level 5: 700 XP, etc.
@@ -71,10 +83,10 @@ export function getXPThreshold(level: number): number {
 }
 
 // Determine faction affiliation based on points
-export function calculateFaction(whitePoints: number, blackPoints: number): Faction | null {
-  const diff = whitePoints - blackPoints;
-  if (diff > 0) return Faction.White;
-  if (diff < 0) return Faction.Black;
+export function calculateFaction(westPoints: number, eastPoints: number): Faction | null {
+  const diff = westPoints - eastPoints;
+  if (diff > 0) return Faction.West;
+  if (diff < 0) return Faction.East;
   return null;
 }
 
@@ -86,8 +98,8 @@ export async function createPlayer(username: string): Promise<PlayerProfile> {
     level: 1,
     xp: 0,
     coins: 100, // Starting coins
-    whitePoints: 0,
-    blackPoints: 0,
+    eastPoints: 0,
+    westPoints: 0,
     faction: null,
     createdAt: now,
     lastActive: now,
@@ -99,8 +111,8 @@ export async function createPlayer(username: string): Promise<PlayerProfile> {
     level: profile.level.toString(),
     xp: profile.xp.toString(),
     coins: profile.coins.toString(),
-    whitePoints: profile.whitePoints.toString(),
-    blackPoints: profile.blackPoints.toString(),
+    eastPoints: profile.eastPoints.toString(),
+    westPoints: profile.westPoints.toString(),
     faction: profile.faction || '',
     createdAt: profile.createdAt.toString(),
     lastActive: profile.lastActive.toString(),
@@ -118,14 +130,22 @@ export async function getPlayer(username: string): Promise<PlayerProfile | null>
     return null;
   }
 
+  // Support backward compatibility: map old field names to new ones
+  const eastPoints = parseInt(data.eastPoints || data.blackPoints || '0');
+  const westPoints = parseInt(data.westPoints || data.whitePoints || '0');
+  
+  // Normalize faction name (handles White→West, Black→East mapping)
+  const rawFaction = data.faction && data.faction !== '' ? data.faction : null;
+  const faction = normalizeFactionName(rawFaction);
+
   return {
     username: data.username || username,
     level: parseInt(data.level || '1'),
     xp: parseInt(data.xp || '0'),
     coins: parseInt(data.coins || '0'),
-    whitePoints: parseInt(data.whitePoints || '0'),
-    blackPoints: parseInt(data.blackPoints || '0'),
-    faction: (data.faction && data.faction !== '' ? data.faction : null) as Faction | null,
+    eastPoints,
+    westPoints,
+    faction,
     createdAt: parseInt(data.createdAt || '0'),
     lastActive: parseInt(data.lastActive || '0'),
   };
@@ -191,13 +211,13 @@ export async function addFactionPoints(
   faction: Faction,
   amount: number
 ): Promise<void> {
-  const field = faction === Faction.White ? 'whitePoints' : 'blackPoints';
+  const field = faction === Faction.West ? 'westPoints' : 'eastPoints';
   await redis.hIncrBy(getPlayerKey(username), field, amount);
 
   // Update faction affiliation
   const player = await getPlayer(username);
   if (player) {
-    const newFaction = calculateFaction(player.whitePoints, player.blackPoints);
+    const newFaction = calculateFaction(player.westPoints, player.eastPoints);
     await redis.hSet(getPlayerKey(username), { faction: newFaction || '' });
   }
 }
@@ -212,8 +232,8 @@ export async function updatePlayer(
   if (updates.level !== undefined) redisUpdates.level = updates.level.toString();
   if (updates.xp !== undefined) redisUpdates.xp = updates.xp.toString();
   if (updates.coins !== undefined) redisUpdates.coins = updates.coins.toString();
-  if (updates.whitePoints !== undefined) redisUpdates.whitePoints = updates.whitePoints.toString();
-  if (updates.blackPoints !== undefined) redisUpdates.blackPoints = updates.blackPoints.toString();
+  if (updates.eastPoints !== undefined) redisUpdates.eastPoints = updates.eastPoints.toString();
+  if (updates.westPoints !== undefined) redisUpdates.westPoints = updates.westPoints.toString();
   if (updates.faction !== undefined) redisUpdates.faction = updates.faction || '';
   if (updates.lastActive !== undefined) redisUpdates.lastActive = updates.lastActive.toString();
 

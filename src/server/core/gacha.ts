@@ -1,8 +1,13 @@
 import { redis } from '@devvit/web/server';
-import { Card } from '../../shared/types/game';
+import { Card, CardVariant, VariantType } from '../../shared/types/game';
 import { loadCards } from '../../shared/utils/cardCatalog';
 import { getPlayer, subtractCoins } from './player';
 import { addCardToInventory } from './inventory';
+import {
+  getVariantsByBaseCard,
+  createDefaultBaseVariant,
+} from '../../shared/utils/variantUtils';
+import { recordGachaPull } from './statistics';
 
 const FREE_PULL_COOLDOWN = 22 * 60 * 60 * 1000; // 22 hours in milliseconds
 const PAID_PULL_COST = 50; // coins
@@ -11,6 +16,13 @@ const LAST_FREE_PULL_KEY_PREFIX = 'lastFreePull:';
 // Helper to get last free pull key
 function getLastFreePullKey(username: string): string {
   return `${LAST_FREE_PULL_KEY_PREFIX}${username}`;
+}
+
+// Interface for gacha pool items (base cards and variants)
+interface GachaPoolItem {
+  card: Card;
+  variant: CardVariant;
+  weight: number;
 }
 
 // Level-gated card distribution weights
@@ -22,6 +34,85 @@ function getCardPool(playerLevel: number): Card[] {
   return allCards.filter((card) => card.level <= playerLevel);
 }
 
+// Build extended gacha pool with both base cards and variants
+// Variants are 10x rarer than base cards
+function buildGachaPool(playerLevel: number): GachaPoolItem[] {
+  const baseCards = getCardPool(playerLevel);
+  const pool: GachaPoolItem[] = [];
+
+  for (const card of baseCards) {
+    // Base weight calculation: level 1 = 5x weight, level 2 = 4x, etc.
+    const baseWeight = Math.max(1, 6 - card.level);
+
+    // Get variants for this card
+    let variants = getVariantsByBaseCard(card.id);
+
+    // If no variants exist in registry, create a default base variant
+    if (variants.length === 0) {
+      variants = [createDefaultBaseVariant(card.id)];
+    }
+
+    // Add base variant with full weight
+    const baseVariant = variants.find((v) => v.variantType === VariantType.Base);
+    if (baseVariant) {
+      pool.push({
+        card,
+        variant: baseVariant,
+        weight: baseWeight,
+      });
+    }
+
+    // Add alternate variants with 10x lower weight (10x rarer)
+    const alternateVariants = variants.filter((v) => v.variantType === VariantType.Alternate);
+    for (const altVariant of alternateVariants) {
+      pool.push({
+        card,
+        variant: altVariant,
+        weight: baseWeight / 10, // 10x rarer than base
+      });
+    }
+  }
+
+  return pool;
+}
+
+// Weighted random selection from gacha pool
+// Returns both the card and the variant
+function selectRandomCardWithVariant(pool: GachaPoolItem[]): {
+  card: Card;
+  variant: CardVariant;
+} {
+  if (pool.length === 0) {
+    throw new Error('Gacha pool is empty');
+  }
+
+  // Calculate total weight
+  const totalWeight = pool.reduce((sum, item) => sum + item.weight, 0);
+
+  let random = Math.random() * totalWeight;
+
+  for (const item of pool) {
+    random -= item.weight;
+    if (random <= 0) {
+      return {
+        card: item.card,
+        variant: item.variant,
+      };
+    }
+  }
+
+  // Fallback to last item
+  const fallback = pool[pool.length - 1];
+  if (!fallback) {
+    throw new Error('Failed to select from gacha pool');
+  }
+  return {
+    card: fallback.card,
+    variant: fallback.variant,
+  };
+}
+
+// Legacy function for backward compatibility
 // Weighted random selection based on card level
 // Lower level cards are more common
 function selectRandomCard(cardPool: Card[]): Card {
@@ -88,7 +179,10 @@ export async function getTimeUntilFreePull(username: string): Promise<number> {
 }
 
 // Perform a free pull
-export async function performFreePull(username: string): Promise<Card> {
+export async function performFreePull(username: string): Promise<{
+  card: Card;
+  variant: CardVariant;
+}> {
   const canPull = await canUseFreePull(username);
   if (!canPull) {
     throw new Error('Free pull not available yet');
@@ -99,26 +193,32 @@ export async function performFreePull(username: string): Promise<Card> {
     throw new Error('Player not found');
   }
 
-  // Get card pool based on player level
-  const cardPool = getCardPool(player.level);
-  if (cardPool.length === 0) {
+  // Build gacha pool with variants based on player level
+  const gachaPool = buildGachaPool(player.level);
+  if (gachaPool.length === 0) {
     throw new Error('No cards available for your level');
   }
 
-  // Select random card
-  const card = selectRandomCard(cardPool);
+  // Select random card with variant
+  const { card, variant } = selectRandomCardWithVariant(gachaPool);
 
-  // Add to inventory
-  await addCardToInventory(username, card.id);
+  // Add to inventory with variant
+  await addCardToInventory(username, card.id, variant.id);
 
   // Update last free pull timestamp
   await redis.set(getLastFreePullKey(username), Date.now().toString());
 
-  return card;
+  // Record gacha pull in statistics
+  await recordGachaPull(username);
+
+  return { card, variant };
 }
 
 // Perform a paid pull
-export async function performPaidPull(username: string): Promise<Card> {
+export async function performPaidPull(username: string): Promise<{
+  card: Card;
+  variant: CardVariant;
+}> {
   const player = await getPlayer(username);
   if (!player) {
     throw new Error('Player not found');
@@ -129,26 +229,32 @@ export async function performPaidPull(username: string): Promise<Card> {
     throw new Error('Insufficient coins');
   }
 
-  // Get card pool based on player level
-  const cardPool = getCardPool(player.level);
-  if (cardPool.length === 0) {
+  // Build gacha pool with variants based on player level
+  const gachaPool = buildGachaPool(player.level);
+  if (gachaPool.length === 0) {
     throw new Error('No cards available for your level');
   }
 
-  // Select random card
-  const card = selectRandomCard(cardPool);
+  // Select random card with variant
+  const { card, variant } = selectRandomCardWithVariant(gachaPool);
 
   // Deduct coins
   await subtractCoins(username, PAID_PULL_COST);
 
-  // Add to inventory
-  await addCardToInventory(username, card.id);
+  // Add to inventory with variant
+  await addCardToInventory(username, card.id, variant.id);
 
-  return card;
+  // Record gacha pull in statistics
+  await recordGachaPull(username);
+
+  return { card, variant };
 }
 
 // Perform a multi-card pull (5 cards)
-export async function performMultiPull(username: string, count: number = 5): Promise<Card[]> {
+export async function performMultiPull(
+  username: string,
+  count: number = 5
+): Promise<Array<{ card: Card; variant: CardVariant }>> {
   const player = await getPlayer(username);
   if (!player) {
     throw new Error('Player not found');
@@ -161,19 +267,22 @@ export async function performMultiPull(username: string, count: number = 5): Pro
     throw new Error('Insufficient coins');
   }
 
-  // Get card pool based on player level
-  const cardPool = getCardPool(player.level);
-  if (cardPool.length === 0) {
+  // Build gacha pool with variants based on player level
+  const gachaPool = buildGachaPool(player.level);
+  if (gachaPool.length === 0) {
     throw new Error('No cards available for your level');
   }
 
-  const pulledCards: Card[] = [];
+  const pulledCards: Array<{ card: Card; variant: CardVariant }> = [];
 
   // Pull multiple cards
   for (let i = 0; i < count; i++) {
-    const card = selectRandomCard(cardPool);
-    await addCardToInventory(username, card.id);
-    pulledCards.push(card);
+    const { card, variant } = selectRandomCardWithVariant(gachaPool);
+    await addCardToInventory(username, card.id, variant.id);
+    pulledCards.push({ card, variant });
+    
+    // Record each gacha pull in statistics
+    await recordGachaPull(username);
   }
 
   // Deduct coins
@@ -183,25 +292,30 @@ export async function performMultiPull(username: string, count: number = 5): Pro
 }
 
 // Perform welcome pull for first-time users (free 5 cards)
-export async function performWelcomePull(username: string): Promise<Card[]> {
+export async function performWelcomePull(
+  username: string
+): Promise<Array<{ card: Card; variant: CardVariant }>> {
   const player = await getPlayer(username);
   if (!player) {
     throw new Error('Player not found');
   }
 
-  // Get card pool based on player level
-  const cardPool = getCardPool(player.level);
-  if (cardPool.length === 0) {
+  // Build gacha pool with variants based on player level
+  const gachaPool = buildGachaPool(player.level);
+  if (gachaPool.length === 0) {
     throw new Error('No cards available for your level');
   }
 
-  const pulledCards: Card[] = [];
+  const pulledCards: Array<{ card: Card; variant: CardVariant }> = [];
 
   // Pull 5 cards for free
   for (let i = 0; i < 5; i++) {
-    const card = selectRandomCard(cardPool);
-    await addCardToInventory(username, card.id);
-    pulledCards.push(card);
+    const { card, variant } = selectRandomCardWithVariant(gachaPool);
+    await addCardToInventory(username, card.id, variant.id);
+    pulledCards.push({ card, variant });
+    
+    // Record each gacha pull in statistics
+    await recordGachaPull(username);
   }
 
   return pulledCards;

@@ -4,11 +4,11 @@ import { Button } from '../components/Button';
 import { Faction } from '../../shared/types/game';
 import type { LeaderboardResponse, PlayerProfileResponse } from '../../shared/types/api';
 
-type FactionTab = Faction.White | Faction.Black;
+type FactionTab = Faction.West | Faction.East;
 
 export const LeaderboardScreen = () => {
   const { navigate } = useRouter();
-  const [activeTab, setActiveTab] = useState<FactionTab>(Faction.White);
+  const [activeTab, setActiveTab] = useState<FactionTab>(Faction.West);
   const [whiteLeaderboard, setWhiteLeaderboard] = useState<LeaderboardResponse | null>(null);
   const [blackLeaderboard, setBlackLeaderboard] = useState<LeaderboardResponse | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<PlayerProfileResponse | null>(null);
@@ -29,8 +29,8 @@ export const LeaderboardScreen = () => {
 
       // Fetch both leaderboards and player profile in parallel
       const [whiteRes, blackRes, playerRes] = await Promise.all([
-        fetch('/api/leaderboard/faction?faction=White&limit=50'),
-        fetch('/api/leaderboard/faction?faction=Black&limit=50'),
+        fetch('/api/leaderboard/faction?faction=West&limit=50'),
+        fetch('/api/leaderboard/faction?faction=East&limit=50'),
         fetch('/api/player/profile'),
       ]);
 
@@ -105,7 +105,7 @@ export const LeaderboardScreen = () => {
     );
   }
 
-  const currentLeaderboard = activeTab === Faction.White ? whiteLeaderboard : blackLeaderboard;
+  const currentLeaderboard = activeTab === Faction.West ? whiteLeaderboard : blackLeaderboard;
 
   return (
     <div className="flex flex-col h-full animate-fadeIn">
@@ -124,15 +124,15 @@ export const LeaderboardScreen = () => {
         {/* Faction Tabs */}
         <div className="flex gap-2">
           <FactionTabButton
-            active={activeTab === Faction.White}
-            onClick={() => setActiveTab(Faction.White)}
-            faction={Faction.White}
+            active={activeTab === Faction.West}
+            onClick={() => setActiveTab(Faction.West)}
+            faction={Faction.West}
             playerCount={whiteLeaderboard.leaderboard.entries.length}
           />
           <FactionTabButton
-            active={activeTab === Faction.Black}
-            onClick={() => setActiveTab(Faction.Black)}
-            faction={Faction.Black}
+            active={activeTab === Faction.East}
+            onClick={() => setActiveTab(Faction.East)}
+            faction={Faction.East}
             playerCount={blackLeaderboard.leaderboard.entries.length}
           />
         </div>
@@ -175,8 +175,8 @@ interface FactionTabButtonProps {
 }
 
 const FactionTabButton = ({ active, onClick, faction, playerCount }: FactionTabButtonProps) => {
-  const isWhite = faction === Faction.White;
-  const factionColor = isWhite
+  const isWest = faction === Faction.West;
+  const factionColor = isWest
     ? 'border-amber-400/50 text-amber-400'
     : 'border-purple-400/50 text-purple-400';
 
@@ -214,9 +214,9 @@ const LeaderboardEntry = ({
   isCurrentPlayer,
   animationDelay,
 }: LeaderboardEntryProps) => {
-  const isWhite = faction === Faction.White;
-  const factionColor = isWhite ? 'border-amber-400/30' : 'border-purple-400/30';
-  const factionGlow = isWhite ? 'shadow-amber-400/20' : 'shadow-purple-400/20';
+  const isWest = faction === Faction.West;
+  const factionColor = isWest ? 'border-amber-400/30' : 'border-purple-400/30';
+  const factionGlow = isWest ? 'shadow-amber-400/20' : 'shadow-purple-400/20';
 
   const getRankDisplay = () => {
     if (entry.rank === 1) return '🥇';

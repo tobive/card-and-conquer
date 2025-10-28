@@ -1,0 +1,19 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad103alt1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#312e81;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glow103alt1">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#312e81;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#grad103alt1)"/>
+  <circle cx="150" cy="200" r="100" fill="url(#glow103alt1)"/>
+  <text x="150" y="190" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#fbbf24" text-anchor="middle" stroke="#000000" stroke-width="2">Moonwalk</text>
+  <text x="150" y="220" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#fbbf24" text-anchor="middle" stroke="#000000" stroke-width="2">Madonna</text>
+  <text x="150" y="250" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#c084fc" text-anchor="middle" stroke="#000000" stroke-width="1">MOONLIGHT PERFORMER</text>
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="16" fill="#fbbf24" text-anchor="middle" stroke="#000000" stroke-width="1">Level 5 • RARE</text>
+  <rect x="10" y="10" width="280" height="380" fill="none" stroke="#c084fc" stroke-width="3"/>
+</svg>

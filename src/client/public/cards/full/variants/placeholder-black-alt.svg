@@ -1,0 +1,17 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blackAltGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d8b4fe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c084fc;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="starsBlack" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+      <circle cx="25" cy="25" r="2" fill="#fff" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="300" height="400" fill="url(#blackAltGrad)"/>
+  <rect width="300" height="400" fill="url(#starsBlack)"/>
+  <rect x="10" y="10" width="280" height="380" fill="none" stroke="#d8b4fe" stroke-width="4"/>
+  <text x="150" y="180" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8)">Black Faction</text>
+  <text x="150" y="210" font-family="Arial, sans-serif" font-size="18" fill="#fff" text-anchor="middle" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8)">Alternate Variant</text>
+  <text x="150" y="235" font-family="Arial, sans-serif" font-size="14" fill="#fff" text-anchor="middle" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8)">★ RARE ★</text>
+</svg>

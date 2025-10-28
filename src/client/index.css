@@ -106,20 +106,56 @@ button:disabled {
   transform: translateY(-4px);
 }
 
+/* Info box for tutorial pages */
+.info-box {
+  background: rgba(251, 191, 36, 0.1);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
 /* Glow effect for important elements */
 .glow {
   box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
 }
 
-/* Faction colors */
+/* Mythological Faction Colors - East (Red/Gold) and West (Blue/Silver) */
+.faction-east {
+  color: #dc2626;
+  border-color: #dc2626;
+  --faction-primary: #8b0000;
+  --faction-secondary: #ffd700;
+  --faction-accent: #ff6347;
+  --faction-glow: rgba(220, 38, 38, 0.5);
+}
+
+.faction-west {
+  color: #2563eb;
+  border-color: #2563eb;
+  --faction-primary: #1e3a8a;
+  --faction-secondary: #c0c0c0;
+  --faction-accent: #4169e1;
+  --faction-glow: rgba(37, 99, 235, 0.5);
+}
+
+/* Legacy faction color support for backward compatibility */
 .faction-white {
-  color: #fbbf24;
-  border-color: #fbbf24;
+  color: #2563eb;
+  border-color: #2563eb;
+  --faction-primary: #1e3a8a;
+  --faction-secondary: #c0c0c0;
+  --faction-accent: #4169e1;
+  --faction-glow: rgba(37, 99, 235, 0.5);
 }
 
 .faction-black {
-  color: #8b5cf6;
-  border-color: #8b5cf6;
+  color: #dc2626;
+  border-color: #dc2626;
+  --faction-primary: #8b0000;
+  --faction-secondary: #ffd700;
+  --faction-accent: #ff6347;
+  --faction-glow: rgba(220, 38, 38, 0.5);
 }
 
 /* Animations */
@@ -279,6 +315,22 @@ button:disabled {
   }
 }
 
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(192, 132, 252, 0.5),
+      0 0 40px rgba(192, 132, 252, 0.3),
+      inset 0 0 20px rgba(192, 132, 252, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(192, 132, 252, 0.8),
+      0 0 80px rgba(192, 132, 252, 0.5),
+      inset 0 0 30px rgba(192, 132, 252, 0.2);
+  }
+}
+
 @keyframes defeatShake {
   0%,
   100% {
@@ -329,6 +381,837 @@ button:disabled {
   to {
     opacity: 0;
     transform: translateX(-20px);
+  }
+}
+
+/* Tutorial Page Transitions - Bidirectional with Fade */
+
+/* Slide in from right (moving forward) */
+@keyframes tutorialSlideInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Slide in from left (moving backward) */
+@keyframes tutorialSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Tutorial page container with GPU acceleration */
+.tutorial-page {
+  /* Enable GPU acceleration for smooth 60fps animations */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  
+  /* Animation properties */
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+  
+  /* Optimize rendering */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Apply slide-right animation (moving forward) */
+.tutorial-page-transition-right {
+  animation-name: tutorialSlideInRight;
+  /* Only use will-change during animation */
+  will-change: transform, opacity;
+}
+
+/* Apply slide-left animation (moving backward) */
+.tutorial-page-transition-left {
+  animation-name: tutorialSlideInLeft;
+  /* Only use will-change during animation */
+  will-change: transform, opacity;
+}
+
+/* Remove will-change after animation completes */
+.tutorial-page-transition-right,
+.tutorial-page-transition-left {
+  animation-duration: 300ms;
+}
+
+@supports (animation-timeline: scroll()) {
+  /* Use modern animation features when available */
+  .tutorial-page-transition-right,
+  .tutorial-page-transition-left {
+    animation-composition: replace;
+  }
+}
+
+/* Legacy animation classes for backward compatibility */
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pageSlideOut {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.animate-pageSlideIn {
+  animation: pageSlideIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-pageSlideOut {
+  animation: pageSlideOut 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduced motion support for tutorial */
+@media (prefers-reduced-motion: reduce) {
+  .tutorial-page {
+    animation: none !important;
+    will-change: auto;
+  }
+  
+  .tutorial-page-transition-right,
+  .tutorial-page-transition-left {
+    animation: tutorialFadeIn 150ms ease-out;
+  }
+  
+  .animate-pageSlideIn,
+  .animate-pageSlideOut {
+    animation: tutorialFadeIn 150ms ease-out;
+  }
+  
+  /* Simple fade for reduced motion */
+  @keyframes tutorialFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ============================================
+   TUTORIAL SYSTEM RESPONSIVE DESIGN
+   ============================================ */
+
+/* Base Tutorial Styles - Mobile First (< 768px) */
+.tutorial-page {
+  /* Ensure minimum font size on mobile */
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.tutorial-page h1 {
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.tutorial-page h2 {
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.3;
+  margin-bottom: 0.875rem;
+}
+
+.tutorial-page h3 {
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.tutorial-page p,
+.tutorial-page li {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* Tutorial Cards - Mobile Optimized */
+.tutorial-page .card {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+}
+
+/* Tutorial Images - Responsive Scaling */
+.tutorial-page img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Tutorial Tables - Mobile Friendly */
+.tutorial-page table {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+}
+
+.tutorial-page th,
+.tutorial-page td {
+  padding: 0.5rem;
+  text-align: left;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+.tutorial-page th {
+  background: rgba(30, 41, 59, 0.8);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Tutorial Info Boxes - Mobile Optimized */
+.tutorial-page .info-box {
+  padding: 0.875rem;
+  margin: 1rem 0;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+/* Tutorial Lists - Better Spacing */
+.tutorial-page ul,
+.tutorial-page ol {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.tutorial-page li {
+  margin-bottom: 0.5rem;
+}
+
+/* Tutorial Buttons - Minimum Touch Targets */
+.tutorial-page button,
+.tutorial-page a.button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.75rem 1rem;
+  font-size: 14px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Tutorial Grid Layouts - Mobile Stack */
+.tutorial-page .grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* Tutorial Flex Layouts - Mobile Wrap */
+.tutorial-page .flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Tutorial Icons - Appropriate Sizing */
+.tutorial-page .icon-sm {
+  font-size: 1.25rem;
+}
+
+.tutorial-page .icon-md {
+  font-size: 1.75rem;
+}
+
+.tutorial-page .icon-lg {
+  font-size: 2.5rem;
+}
+
+.tutorial-page .icon-xl {
+  font-size: 3.5rem;
+}
+
+/* Tutorial Code Blocks - Mobile Friendly */
+.tutorial-page pre,
+.tutorial-page code {
+  font-size: 12px;
+  overflow-x: auto;
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+/* Tutorial Badges - Readable Size */
+.tutorial-page .badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  font-size: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Tutorial Dividers - Proper Spacing */
+.tutorial-page hr {
+  margin: 1.5rem 0;
+  border: none;
+  border-top: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+/* Tutorial Spacing Utilities */
+.tutorial-page .space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.tutorial-page .space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.tutorial-page .space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.tutorial-page .space-y-8 > * + * {
+  margin-top: 2rem;
+}
+
+/* ============================================
+   TABLET BREAKPOINT (768px - 1024px)
+   ============================================ */
+
+@media (min-width: 768px) {
+  .tutorial-page {
+    font-size: 15px;
+  }
+
+  .tutorial-page h1 {
+    font-size: 2rem; /* 32px */
+    margin-bottom: 1.25rem;
+  }
+
+  .tutorial-page h2 {
+    font-size: 1.75rem; /* 28px */
+    margin-bottom: 1rem;
+  }
+
+  .tutorial-page h3 {
+    font-size: 1.5rem; /* 24px */
+    margin-bottom: 0.875rem;
+  }
+
+  .tutorial-page p,
+  .tutorial-page li {
+    font-size: 15px;
+  }
+
+  /* Tutorial Cards - Tablet Padding */
+  .tutorial-page .card {
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Tutorial Tables - Tablet Size */
+  .tutorial-page table {
+    font-size: 14px;
+  }
+
+  .tutorial-page th,
+  .tutorial-page td {
+    padding: 0.625rem;
+  }
+
+  .tutorial-page th {
+    font-size: 13px;
+  }
+
+  /* Tutorial Info Boxes - Tablet Padding */
+  .tutorial-page .info-box {
+    padding: 1rem;
+    font-size: 14px;
+  }
+
+  /* Tutorial Grid Layouts - Tablet Columns */
+  .tutorial-page .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tutorial Buttons - Tablet Size */
+  .tutorial-page button,
+  .tutorial-page a.button {
+    padding: 0.875rem 1.25rem;
+    font-size: 15px;
+  }
+
+  /* Tutorial Code Blocks - Tablet Size */
+  .tutorial-page pre,
+  .tutorial-page code {
+    font-size: 13px;
+    padding: 0.625rem;
+  }
+
+  /* Tutorial Badges - Tablet Size */
+  .tutorial-page .badge {
+    padding: 0.3rem 0.75rem;
+    font-size: 13px;
+  }
+
+  /* Tutorial Spacing - Tablet */
+  .tutorial-page .space-y-8 > * + * {
+    margin-top: 2.5rem;
+  }
+}
+
+/* ============================================
+   DESKTOP BREAKPOINT (1024px+)
+   ============================================ */
+
+@media (min-width: 1024px) {
+  .tutorial-page {
+    font-size: 16px;
+  }
+
+  .tutorial-page h1 {
+    font-size: 2.25rem; /* 36px */
+    margin-bottom: 1.5rem;
+  }
+
+  .tutorial-page h2 {
+    font-size: 2rem; /* 32px */
+    margin-bottom: 1.25rem;
+  }
+
+  .tutorial-page h3 {
+    font-size: 1.75rem; /* 28px */
+    margin-bottom: 1rem;
+  }
+
+  .tutorial-page p,
+  .tutorial-page li {
+    font-size: 16px;
+  }
+
+  /* Tutorial Cards - Desktop Padding */
+  .tutorial-page .card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Tutorial Tables - Desktop Size */
+  .tutorial-page table {
+    font-size: 15px;
+  }
+
+  .tutorial-page th,
+  .tutorial-page td {
+    padding: 0.75rem;
+  }
+
+  .tutorial-page th {
+    font-size: 14px;
+  }
+
+  /* Tutorial Info Boxes - Desktop Padding */
+  .tutorial-page .info-box {
+    padding: 1.25rem;
+    font-size: 15px;
+  }
+
+  /* Tutorial Grid Layouts - Desktop Columns */
+  .tutorial-page .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Tutorial Buttons - Desktop Size */
+  .tutorial-page button,
+  .tutorial-page a.button {
+    padding: 1rem 1.5rem;
+    font-size: 16px;
+  }
+
+  /* Tutorial Code Blocks - Desktop Size */
+  .tutorial-page pre,
+  .tutorial-page code {
+    font-size: 14px;
+    padding: 0.75rem;
+  }
+
+  /* Tutorial Badges - Desktop Size */
+  .tutorial-page .badge {
+    padding: 0.35rem 0.875rem;
+    font-size: 14px;
+  }
+
+  /* Tutorial Spacing - Desktop */
+  .tutorial-page .space-y-8 > * + * {
+    margin-top: 3rem;
+  }
+
+  /* Enable hover effects on desktop */
+  .tutorial-page .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .tutorial-page button:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+}
+
+/* ============================================
+   LARGE DESKTOP BREAKPOINT (1280px+)
+   ============================================ */
+
+@media (min-width: 1280px) {
+  .tutorial-page h1 {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  .tutorial-page h2 {
+    font-size: 2.25rem; /* 36px */
+  }
+
+  /* Tutorial Cards - Large Desktop Padding */
+  .tutorial-page .card {
+    padding: 2rem;
+  }
+
+  /* Tutorial Grid Layouts - Large Desktop */
+  .tutorial-page .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Ensure all interactive elements meet touch target size */
+  .tutorial-page button,
+  .tutorial-page a,
+  .tutorial-page [role="button"],
+  .tutorial-page [tabindex="0"] {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Touch feedback for interactive elements */
+  .tutorial-page button:active:not(:disabled),
+  .tutorial-page a:active,
+  .tutorial-page .card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* Remove hover effects on touch devices */
+  .tutorial-page .card:hover,
+  .tutorial-page button:hover:not(:disabled) {
+    transform: none;
+  }
+
+  /* Optimize scrolling on touch devices */
+  .tutorial-page {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Increase tap target spacing */
+  .tutorial-page .flex {
+    gap: 1rem;
+  }
+
+  .tutorial-page .grid {
+    gap: 1.25rem;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE DEVICES (< 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+  .tutorial-page {
+    font-size: 14px;
+  }
+
+  .tutorial-page h1 {
+    font-size: 1.5rem; /* 24px */
+  }
+
+  .tutorial-page h2 {
+    font-size: 1.375rem; /* 22px */
+  }
+
+  .tutorial-page h3 {
+    font-size: 1.125rem; /* 18px */
+  }
+
+  /* Tutorial Cards - Small Mobile */
+  .tutorial-page .card {
+    padding: 0.875rem;
+    margin-bottom: 0.875rem;
+  }
+
+  /* Tutorial Tables - Small Mobile */
+  .tutorial-page table {
+    font-size: 12px;
+  }
+
+  .tutorial-page th,
+  .tutorial-page td {
+    padding: 0.375rem;
+  }
+
+  /* Tutorial Info Boxes - Small Mobile */
+  .tutorial-page .info-box {
+    padding: 0.75rem;
+    font-size: 13px;
+  }
+
+  /* Tutorial Icons - Smaller on Small Mobile */
+  .tutorial-page .icon-xl {
+    font-size: 3rem;
+  }
+
+  .tutorial-page .icon-lg {
+    font-size: 2rem;
+  }
+
+  /* Tutorial Buttons - Small Mobile */
+  .tutorial-page button,
+  .tutorial-page a.button {
+    padding: 0.625rem 0.875rem;
+    font-size: 14px;
+  }
+
+  /* Tutorial Spacing - Small Mobile */
+  .tutorial-page .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .tutorial-page .space-y-6 > * + * {
+    margin-top: 1.25rem;
+  }
+}
+
+/* ============================================
+   LANDSCAPE ORIENTATION OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape */
+  .tutorial-page .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .tutorial-page .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+
+  /* Optimize card padding in landscape */
+  .tutorial-page .card {
+    padding: 0.875rem;
+  }
+
+  /* Use horizontal layouts where possible */
+  .tutorial-page .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================
+   SAFE AREA INSETS (Notched Devices)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+  .tutorial-page {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* ============================================
+   IMAGE OPTIMIZATION FOR MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .tutorial-page img {
+    /* Optimize image rendering on mobile */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    /* Use GPU acceleration for images */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  /* Lazy loading optimization */
+  .tutorial-page img[loading="lazy"] {
+    /* Reserve space to prevent layout shift */
+    min-height: 100px;
+    /* Decode images asynchronously */
+    decoding: async;
+  }
+  
+  /* WebP support with fallback */
+  .tutorial-page picture {
+    display: block;
+  }
+  
+  .tutorial-page picture img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* ============================================
+   LOW-END DEVICE OPTIMIZATIONS
+   ============================================ */
+
+/* Detect low-end devices and reduce animation complexity */
+@media (max-width: 768px) and (prefers-reduced-motion: no-preference) {
+  /* Simplify animations on mobile for better performance */
+  .tutorial-page-transition-right,
+  .tutorial-page-transition-left {
+    /* Reduce animation duration on mobile */
+    animation-duration: 250ms;
+  }
+  
+  /* Disable complex animations on low-end devices */
+  @media (max-resolution: 1dppx) {
+    .animate-glow,
+    .animate-float,
+    .animate-shimmer,
+    .animate-pulse-glow {
+      animation: none !important;
+    }
+  }
+}
+
+/* Battery saving mode optimizations */
+@media (prefers-reduced-data: reduce) {
+  /* Disable non-essential animations to save battery */
+  .animate-glow,
+  .animate-float,
+  .animate-shimmer,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+  
+  /* Simplify transitions */
+  * {
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Use GPU acceleration for smooth scrolling */
+  .tutorial-page {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: scroll-position;
+  }
+
+  /* Optimize font rendering on mobile */
+  .tutorial-page {
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  /* Reduce animation complexity on mobile */
+  .tutorial-page .animate-float,
+  .tutorial-page .animate-glow {
+    animation: none;
+  }
+
+  /* Simplify transitions on mobile */
+  .tutorial-page * {
+    transition-duration: 0.2s !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Focus indicators for keyboard navigation */
+.tutorial-page *:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .tutorial-page {
+    border: 2px solid currentColor;
+  }
+
+  .tutorial-page .card {
+    border: 2px solid currentColor;
+  }
+
+  .tutorial-page button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .tutorial-page * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .tutorial-page .animate-pulse,
+  .tutorial-page .animate-float,
+  .tutorial-page .animate-glow {
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .tutorial-page {
+    background: white;
+    color: black;
+    font-size: 12pt;
+  }
+
+  .tutorial-page .card {
+    border: 1px solid black;
+    page-break-inside: avoid;
+  }
+
+  .tutorial-page button {
+    display: none;
   }
 }
 
@@ -384,6 +1267,10 @@ button:disabled {
   animation: defeatShake 0.5s ease-in-out;
 }
 
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
 .animate-shimmer {
   background: linear-gradient(
     90deg,
@@ -437,6 +1324,42 @@ button:disabled {
     width: 4px;
     height: 4px;
   }
+
+  /* Optimize images for mobile bandwidth */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* Enable hardware acceleration for smooth scrolling */
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* Optimize font rendering on mobile */
+  body {
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+}
+
+/* Small mobile devices (< 480px) */
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+
+  /* Further reduce animation complexity */
+  * {
+    animation-duration: 0.2s !important;
+  }
+
+  /* Optimize touch scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
 }
 
 /* Touch feedback for mobile */
@@ -470,7 +1393,7 @@ button:disabled {
 
 /* Performance optimizations for mobile */
 @media (max-width: 768px) {
-  /* Use GPU acceleration for animations */
+  /* Use GPU acceleration for animations - only during animation */
   .animate-fadeIn,
   .animate-slideIn,
   .animate-slideInRight,
@@ -478,7 +1401,23 @@ button:disabled {
   .animate-scaleIn,
   .animate-bounceIn,
   .animate-cardPlace {
-    will-change: transform, opacity;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  /* Optimize tutorial page rendering on mobile */
+  .tutorial-page {
+    /* Use contain for better rendering performance */
+    contain: layout style paint;
+  }
+  
+  /* Optimize scrolling performance */
+  .tutorial-page,
+  main {
+    /* Enable hardware-accelerated scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Optimize scroll performance */
+    scroll-behavior: smooth;
   }
 
   /* Reduce motion for users who prefer it */
@@ -504,5 +1443,1014 @@ button:disabled {
   body {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
+  }
+}
+
+/* GameCard Component Styles */
+.game-card-container {
+  /* Ensure proper touch targets on mobile */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Responsive GameCard sizing for mobile */
+@media (max-width: 640px) {
+  /* Scale down cards on small screens */
+  .game-card-container {
+    transform-origin: center;
+  }
+
+  /* Adjust text sizes for better readability on small screens */
+  .game-card-text {
+    font-size: clamp(10px, 2.5vw, 14px);
+  }
+}
+
+/* Optimize GameCard images for performance */
+.game-card-image {
+  /* Use GPU acceleration for smooth rendering */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Mythological Faction-specific GameCard styles */
+.game-card-east {
+  --card-primary: #dc2626;
+  --card-secondary: #ffd700;
+  --card-glow: rgba(220, 38, 38, 0.5);
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+}
+
+.game-card-west {
+  --card-primary: #2563eb;
+  --card-secondary: #c0c0c0;
+  --card-glow: rgba(37, 99, 235, 0.5);
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+/* Legacy GameCard faction support */
+.game-card-white {
+  --card-primary: #2563eb;
+  --card-secondary: #c0c0c0;
+  --card-glow: rgba(37, 99, 235, 0.5);
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+.game-card-black {
+  --card-primary: #dc2626;
+  --card-secondary: #ffd700;
+  --card-glow: rgba(220, 38, 38, 0.5);
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+}
+
+/* GameCard hover animation */
+@keyframes gameCardHover {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-4px) scale(1.02);
+  }
+}
+
+/* GameCard interactive states */
+.game-card-interactive:hover {
+  animation: gameCardHover 0.3s ease forwards;
+}
+
+.game-card-interactive:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Ensure GameCard text is always readable */
+.game-card-overlay-text {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile-specific GameCard optimizations */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .game-card-interactive:hover {
+    animation: none;
+  }
+
+  /* Simplify hover effects for touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .game-card-interactive:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
+    }
+  }
+}
+
+/* Accessibility: High contrast mode support */
+@media (prefers-contrast: high) {
+  .game-card-overlay-text {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+  }
+}
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .game-card-interactive {
+    transition: none;
+  }
+
+  .game-card-interactive:hover,
+  .game-card-interactive:active {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Screen reader only utility class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Visible focus indicators for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Enhanced focus indicators for buttons */
+button:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+}
+
+/* Enhanced focus indicators for links */
+a:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+}
+
+/* Focus indicators for interactive elements */
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+}
+
+/* High contrast mode enhancements */
+@media (prefers-contrast: high) {
+  /* Ensure all text has sufficient contrast */
+  .tutorial-page {
+    color: #ffffff;
+  }
+  
+  .tutorial-page .text-slate-300,
+  .tutorial-page .text-slate-400 {
+    color: #e2e8f0;
+  }
+  
+  /* Enhance borders in high contrast mode */
+  .tutorial-page .card,
+  .tutorial-page button,
+  .tutorial-page [role="button"] {
+    border: 2px solid currentColor;
+  }
+  
+  /* Enhance focus indicators in high contrast mode */
+  *:focus-visible {
+    outline: 3px solid #fbbf24;
+    outline-offset: 3px;
+  }
+}
+
+/* Ensure minimum contrast ratios for all text */
+.tutorial-page .text-slate-300 {
+  /* WCAG AA compliant: 7:1 contrast ratio on dark backgrounds */
+  color: #cbd5e1;
+}
+
+.tutorial-page .text-slate-400 {
+  /* WCAG AA compliant: 4.5:1 contrast ratio on dark backgrounds */
+  color: #94a3b8;
+}
+
+/* Ensure amber text has sufficient contrast */
+.tutorial-page .text-amber-400 {
+  /* WCAG AA compliant: 4.5:1 contrast ratio on dark backgrounds */
+  color: #fbbf24;
+}
+
+/* Ensure purple text has sufficient contrast */
+.tutorial-page .text-purple-400 {
+  /* WCAG AA compliant: 4.5:1 contrast ratio on dark backgrounds */
+  color: #c084fc;
+}
+
+/* Ensure blue text has sufficient contrast */
+.tutorial-page .text-blue-400 {
+  /* WCAG AA compliant: 4.5:1 contrast ratio on dark backgrounds */
+  color: #60a5fa;
+}
+
+/* Ensure red text has sufficient contrast */
+.tutorial-page .text-red-400 {
+  /* WCAG AA compliant: 4.5:1 contrast ratio on dark backgrounds */
+  color: #f87171;
+}
+
+/* Ensure green text has sufficient contrast */
+.tutorial-page .text-green-400 {
+  /* WCAG AA compliant: 4.5:1 contrast ratio on dark backgrounds */
+  color: #4ade80;
+}
+
+/* Spinner animation for loading states */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhanced spinner with smooth easing */
+@keyframes spinSmooth {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulsing animation for spinner */
+@keyframes spinnerPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+/* Card Loading Spinner Styles */
+.card-loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.spinner-ring {
+  border-style: solid;
+  border-radius: 50%;
+  border-color: rgba(251, 191, 36, 0.2);
+  border-top-color: #fbbf24;
+  animation: spinSmooth 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  /* Use GPU acceleration for smooth rotation */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ensure smooth spinner rotation */
+.animate-spin {
+  animation: spinSmooth 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Size variants for spinner */
+.card-loading-spinner[data-size='small'] {
+  padding: 0.5rem;
+}
+
+.card-loading-spinner[data-size='small'] .spinner-ring {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.card-loading-spinner[data-size='medium'] {
+  padding: 0.75rem;
+}
+
+.card-loading-spinner[data-size='medium'] .spinner-ring {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+.card-loading-spinner[data-size='large'] {
+  padding: 1rem;
+}
+
+.card-loading-spinner[data-size='large'] .spinner-ring {
+  width: 56px;
+  height: 56px;
+  border-width: 5px;
+}
+
+/* Spinner with background overlay for better visibility */
+.card-loading-spinner::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.card-loading-spinner[data-size='small']::before {
+  width: 50px;
+  height: 50px;
+}
+
+.card-loading-spinner[data-size='large']::before {
+  width: 100px;
+  height: 100px;
+}
+
+/* Faction-specific spinner colors */
+.spinner-ring-east {
+  border-color: rgba(220, 38, 38, 0.2);
+  border-top-color: #dc2626;
+}
+
+.spinner-ring-west {
+  border-color: rgba(37, 99, 235, 0.2);
+  border-top-color: #2563eb;
+}
+
+/* Alternative spinner style - dual ring */
+.spinner-dual-ring {
+  position: relative;
+}
+
+.spinner-dual-ring::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 90%;
+  border: 2px solid rgba(251, 191, 36, 0.1);
+  border-top-color: rgba(251, 191, 36, 0.5);
+  border-radius: 50%;
+  animation: spinSmooth 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+}
+
+/* Loading dots animation (alternative to spinner) */
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  background: #fbbf24;
+  border-radius: 50%;
+  animation: loadingDots 1.4s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Spinner fade in/out transitions */
+.spinner-fade-enter {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.spinner-fade-enter-active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.spinner-fade-exit {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.spinner-fade-exit-active {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Mobile optimization for spinner */
+@media (max-width: 768px) {
+  .card-loading-spinner {
+    /* Reduce spinner complexity on mobile for better performance */
+    will-change: transform;
+  }
+  
+  .spinner-ring {
+    /* Use GPU acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+
+/* Bonus Gacha Section Styles */
+.bonus-gacha-section {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.bonus-gacha-section h2 {
+  color: #fbbf24;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.bonus-gacha-section p {
+  text-align: center;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.bonus-gacha-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Bonus Pull Button Styles */
+.bonus-pull-button {
+  position: relative;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  min-width: 280px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.bonus-pull-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.bonus-pull-button:active::after {
+  width: 400px;
+  height: 400px;
+}
+
+.bonus-pull-button-east {
+  background: linear-gradient(135deg, #8b0000 0%, #dc2626 50%, #ff6347 100%);
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.bonus-pull-button-east:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+  transform: translateY(-2px);
+}
+
+.bonus-pull-button-west {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #4169e1 100%);
+  border-color: #c0c0c0;
+  color: #c0c0c0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.bonus-pull-button-west:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+  transform: translateY(-2px);
+}
+
+.bonus-pull-count {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Statistics Screen Styles */
+.stats-container {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.stats-section {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.stats-section-title {
+  color: #fbbf24;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(251, 191, 36, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  border-color: rgba(251, 191, 36, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  color: #e2e8f0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.stat-value-highlight {
+  color: #fbbf24;
+}
+
+.stat-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Quick Stats Bar (for Menu Screen) */
+.quick-stats-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.quick-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.quick-stat-icon {
+  font-size: 1.5rem;
+}
+
+.quick-stat-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quick-stat-value {
+  color: #fbbf24;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Mythological Theme Gradients */
+.mythological-gradient-east {
+  background: linear-gradient(135deg, #8b0000 0%, #dc2626 50%, #ff6347 100%);
+}
+
+.mythological-gradient-west {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #4169e1 100%);
+}
+
+.mythological-border-east {
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+}
+
+.mythological-border-west {
+  border: 2px solid #c0c0c0;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Mythological Glow Effects */
+@keyframes eastGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3), 0 0 40px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.5), 0 0 60px rgba(255, 215, 0, 0.3);
+  }
+}
+
+@keyframes westGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.3), 0 0 40px rgba(192, 192, 192, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.5), 0 0 60px rgba(192, 192, 192, 0.3);
+  }
+}
+
+.animate-east-glow {
+  animation: eastGlow 2s ease-in-out infinite;
+}
+
+.animate-west-glow {
+  animation: westGlow 2s ease-in-out infinite;
+}
+
+/* Mobile Responsiveness for Bonus Gacha and Stats */
+@media (max-width: 768px) {
+  .bonus-gacha-section {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .bonus-gacha-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .bonus-pull-button {
+    min-width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .stats-container {
+    padding: 0.5rem;
+  }
+
+  .stats-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .stats-section-title {
+    font-size: 1.1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .quick-stats-bar {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .quick-stat-icon {
+    font-size: 1.2rem;
+  }
+
+  .quick-stat-value {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bonus-gacha-section h2 {
+    font-size: 1rem;
+  }
+
+  .bonus-pull-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .stats-section-title {
+    font-size: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  .quick-stats-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .quick-stat {
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Enhanced Mobile Responsiveness for Touch Devices */
+@media (hover: none) and (pointer: coarse) {
+  /* Bonus Gacha Touch Optimizations */
+  .bonus-pull-button {
+    min-height: 48px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bonus-pull-button:active:not(:disabled) {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+  }
+
+  /* Statistics Touch Optimizations */
+  .stat-item {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  .stat-item:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* Remove hover effects on touch devices */
+  .stat-item:hover {
+    border-color: rgba(251, 191, 36, 0.1);
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Quick stats touch feedback */
+  .quick-stat {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Landscape orientation optimizations for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .bonus-gacha-section {
+    padding: 0.75rem;
+  }
+
+  .bonus-gacha-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bonus-pull-button {
+    min-width: 240px;
+    flex: 0 1 auto;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quick-stats-bar {
+    flex-direction: row;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: max(0px)) {
+  .bonus-gacha-section,
+  .stats-container,
+  .quick-stats-bar {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Optimize lazy loading for mobile performance */
+@media (max-width: 768px) {
+  /* Reduce intersection observer threshold for faster loading on mobile */
+  .lazy-load-container {
+    /* This class can be used by components to optimize lazy loading */
+    contain: layout style paint;
+  }
+
+  /* Optimize card loading spinner for mobile */
+  .card-loading-spinner {
+    /* Reduce complexity on mobile */
+    animation-duration: 0.6s;
+  }
+
+  .card-loading-spinner::before {
+    /* Simplify background overlay on mobile */
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  /* Reduce animation complexity for better mobile performance */
+  .spinner-dual-ring::after {
+    display: none;
+  }
+
+  /* Optimize faction glow animations for mobile */
+  .animate-east-glow,
+  .animate-west-glow {
+    animation-duration: 3s;
+  }
+}
+
+/* Very small screens (< 360px) */
+@media (max-width: 360px) {
+  .bonus-gacha-section {
+    padding: 0.75rem 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .bonus-pull-button {
+    min-width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.85rem;
+  }
+
+  .bonus-pull-count {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .stats-section {
+    padding: 0.75rem;
+  }
+
+  .stat-item {
+    padding: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+
+  .quick-stat-value {
+    font-size: 0.9rem;
+  }
+}
+
+/* High DPI displays optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Optimize text rendering on high DPI screens */
+  .bonus-gacha-section h2,
+  .stats-section-title,
+  .stat-value {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Dark mode support (if device prefers dark mode) */
+@media (prefers-color-scheme: dark) {
+  /* Already dark by default, but ensure consistency */
+  .bonus-gacha-section,
+  .stats-section {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .bonus-pull-button,
+  .stat-item,
+  .card-loading-spinner {
+    transition: none;
+    animation: none;
+  }
+
+  .spinner-ring {
+    animation: none;
+    border-top-color: #fbbf24;
+    border-right-color: #fbbf24;
+  }
+
+  .animate-east-glow,
+  .animate-west-glow {
+    animation: none;
+  }
+
+  .bonus-pull-button::after {
+    display: none;
+  }
+}
+
+/* Print styles (hide interactive elements) */
+@media print {
+  .bonus-gacha-section,
+  .bonus-pull-button,
+  .card-loading-spinner {
+    display: none;
+  }
+
+  .stats-container {
+    background: white;
+    color: black;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+.bonus-pull-button:focus-visible,
+.stat-item:focus-visible {
+  outline: 3px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* Improve text selection on mobile */
+@media (max-width: 768px) {
+  .stat-label,
+  .stat-value,
+  .quick-stat-label,
+  .quick-stat-value {
+    -webkit-user-select: none;
+    user-select: none;
   }
 }

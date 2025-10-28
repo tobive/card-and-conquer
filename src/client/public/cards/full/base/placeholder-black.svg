@@ -1,0 +1,12 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#c084fc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#blackGrad)"/>
+  <rect x="10" y="10" width="280" height="380" fill="none" stroke="#c084fc" stroke-width="3"/>
+  <text x="150" y="190" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8)">Black Faction</text>
+  <text x="150" y="220" font-family="Arial, sans-serif" font-size="18" fill="#fff" text-anchor="middle" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8)">Base Card</text>
+</svg>

@@ -139,7 +139,7 @@ This document outlines the complete user flows to test for the Card & Conquer ga
 
 1. Join battles until one side fills (10 cards)
 2. Battle automatically resolves
-3. Winner determined by surviving soldiers
+3. Winner determined by surviving devotees
 4. Rewards distributed:
    - Winners: 75 coins + 50 XP
    - Losers: 25 coins + 25 XP

@@ -23,6 +23,20 @@ import { getBattle, updateBattleStatus, isBattleFull } from './battle';
 import { addCoins, addXP, addFactionPoints } from './player';
 import { processBattleOutcome } from './war';
 import { updateLeaderboard } from './leaderboard';
+import { addBonusGachaPull } from './bonusGacha';
+import { recordBattleParticipation } from './statistics';
+import {
+  getOrCreateSession,
+  incrementSessionBattles,
+  addSessionCoins,
+  addSessionXP,
+  addSessionPoints,
+  shouldAwardFactionBonus,
+  calculateFactionBonus,
+  incrementFactionBonuses,
+} from './session';
+import { updateHallOfFame } from './hallOfFame';
+import { getPlayer } from './player';
 
 // Constants
 const BATTLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
@@ -57,34 +71,34 @@ export function shouldResolveBattle(battle: Battle): boolean {
 }
 
 /**
- * Calculate total surviving soldiers for a faction
+ * Calculate total surviving devotees for a faction
  * @param slots Faction slots
- * @returns Total soldiers from alive cards
+ * @returns Total devotees from alive cards
  */
-function calculateSurvivingSoldiers(
+function calculateSurvivingDevotees(
   slots: (import('../../shared/types/game').BattleCard | null)[]
 ): number {
   return slots.reduce((total, slot) => {
     if (slot && slot.isAlive) {
-      return total + slot.currentSoldiers;
+      return total + slot.currentDevotees;
     }
     return total;
   }, 0);
 }
 
 /**
- * Determine battle winner based on surviving soldiers
+ * Determine battle winner based on surviving devotees
  * @param battle Battle to evaluate
  * @returns Winner faction or 'Draw'
  */
 export function determineBattleWinner(battle: Battle): Faction | 'Draw' {
-  const whiteSoldiers = calculateSurvivingSoldiers(battle.whiteSlots);
-  const blackSoldiers = calculateSurvivingSoldiers(battle.blackSlots);
+  const westDevotees = calculateSurvivingDevotees(battle.westSlots);
+  const eastDevotees = calculateSurvivingDevotees(battle.eastSlots);
 
-  if (whiteSoldiers > blackSoldiers) {
-    return Faction.White;
-  } else if (blackSoldiers > whiteSoldiers) {
-    return Faction.Black;
+  if (westDevotees > eastDevotees) {
+    return Faction.West;
+  } else if (eastDevotees > westDevotees) {
+    return Faction.East;
   } else {
     return 'Draw';
   }
@@ -98,17 +112,17 @@ export function determineBattleWinner(battle: Battle): Faction | 'Draw' {
 function getBattleParticipants(battle: Battle): Map<string, Faction> {
   const participants = new Map<string, Faction>();
 
-  // Add White faction participants
-  battle.whiteSlots.forEach((slot) => {
+  // Add West faction participants
+  battle.westSlots.forEach((slot) => {
     if (slot) {
-      participants.set(slot.playerId, Faction.White);
+      participants.set(slot.playerId, Faction.West);
     }
   });
 
-  // Add Black faction participants
-  battle.blackSlots.forEach((slot) => {
+  // Add East faction participants
+  battle.eastSlots.forEach((slot) => {
     if (slot) {
-      participants.set(slot.playerId, Faction.Black);
+      participants.set(slot.playerId, Faction.East);
     }
   });
 
@@ -130,6 +144,7 @@ async function distributeRewards(
 
   for (const [playerId, faction] of participants.entries()) {
     let coinsEarned: number;
+    let factionBonus = 0;
 
     // Determine coin reward based on outcome
     if (winner === 'Draw') {
@@ -142,21 +157,63 @@ async function distributeRewards(
 
     // Award coins and XP
     try {
+      // Get or create session for tracking
+      const session = await getOrCreateSession(playerId);
+
+      // Track session stats (for all participants)
+      await incrementSessionBattles(playerId);
+      await addSessionXP(playerId, XP_PER_BATTLE);
+
+      // Award base rewards
       await addCoins(playerId, coinsEarned);
       await addXP(playerId, XP_PER_BATTLE);
+      await addSessionCoins(playerId, coinsEarned);
 
       // Update faction points and leaderboard for winners
       if (winner !== 'Draw' && winner === faction) {
+        // Add all-time faction points
         await addFactionPoints(playerId, faction, 1);
         await updateLeaderboard(playerId, faction, 1);
+
+        // Add session faction points
+        await addSessionPoints(playerId, faction, 1);
+
+        // Check for faction bonus
+        if (shouldAwardFactionBonus(session, winner)) {
+          factionBonus = calculateFactionBonus(session, winner);
+          await addCoins(playerId, factionBonus);
+          await addSessionCoins(playerId, factionBonus);
+          await incrementFactionBonuses(playerId);
+        }
+
+        // Award bonus gacha pull for winning faction
+        await addBonusGachaPull(playerId, faction);
+
+        // Update Hall of Fame with new all-time points
+        const player = await getPlayer(playerId);
+        if (player) {
+          await updateHallOfFame(playerId, player.eastPoints, player.westPoints);
+        }
+
+        // Record battle participation (won)
+        await recordBattleParticipation(playerId, true);
+      } else {
+        // Record battle participation (lost or draw)
+        await recordBattleParticipation(playerId, false);
       }
 
-      results.push({
+      const result: BattleResolution['participants'][0] = {
         playerId,
         faction,
         coinsEarned,
         xpEarned: XP_PER_BATTLE,
-      });
+      };
+
+      if (factionBonus > 0) {
+        result.factionBonus = factionBonus;
+      }
+
+      results.push(result);
     } catch (error) {
       console.error(`Failed to award rewards to player ${playerId}:`, error);
       // Continue with other players even if one fails
@@ -191,9 +248,9 @@ export async function resolveBattle(battleId: string): Promise<
   // Determine winner
   const winner = determineBattleWinner(battle);
 
-  // Calculate surviving soldiers
-  const whiteSurvivingSoldiers = calculateSurvivingSoldiers(battle.whiteSlots);
-  const blackSurvivingSoldiers = calculateSurvivingSoldiers(battle.blackSlots);
+  // Calculate surviving devotees
+  const westSurvivingDevotees = calculateSurvivingDevotees(battle.westSlots);
+  const eastSurvivingDevotees = calculateSurvivingDevotees(battle.eastSlots);
 
   // Distribute rewards
   const participants = await distributeRewards(battle, winner);
@@ -213,8 +270,8 @@ export async function resolveBattle(battleId: string): Promise<
   } = {
     battleId,
     winner,
-    whiteSurvivingSoldiers,
-    blackSurvivingSoldiers,
+    westSurvivingDevotees,
+    eastSurvivingDevotees,
     participants,
   };
 
@@ -256,32 +313,40 @@ export function formatResolutionMessage(
 
   lines.push('');
 
-  // Surviving soldiers
-  lines.push('**Final Soldier Count**:');
-  lines.push(`- White: ${resolution.whiteSurvivingSoldiers} soldiers`);
-  lines.push(`- Black: ${resolution.blackSurvivingSoldiers} soldiers`);
+  // Surviving devotees
+  lines.push('**Final Devotee Count**:');
+  lines.push(`- West: ${resolution.westSurvivingDevotees} devotees`);
+  lines.push(`- East: ${resolution.eastSurvivingDevotees} devotees`);
   lines.push('');
 
   // Participant rewards
   lines.push('**Rewards Distributed**:');
 
   // Group by faction
-  const whiteParticipants = resolution.participants.filter((p) => p.faction === Faction.White);
-  const blackParticipants = resolution.participants.filter((p) => p.faction === Faction.Black);
+  const westParticipants = resolution.participants.filter((p) => p.faction === Faction.West);
+  const eastParticipants = resolution.participants.filter((p) => p.faction === Faction.East);
 
-  if (whiteParticipants.length > 0) {
+  if (westParticipants.length > 0) {
     lines.push('');
-    lines.push('*White Faction*:');
-    whiteParticipants.forEach((p) => {
-      lines.push(`- ${p.playerId}: +${p.coinsEarned} coins, +${p.xpEarned} XP`);
+    lines.push('*West Faction*:');
+    westParticipants.forEach((p) => {
+      let reward = `- ${p.playerId}: +${p.coinsEarned} coins, +${p.xpEarned} XP`;
+      if (p.factionBonus) {
+        reward += ` (+${p.factionBonus} faction bonus 🎉)`;
+      }
+      lines.push(reward);
     });
   }
 
-  if (blackParticipants.length > 0) {
+  if (eastParticipants.length > 0) {
     lines.push('');
-    lines.push('*Black Faction*:');
-    blackParticipants.forEach((p) => {
-      lines.push(`- ${p.playerId}: +${p.coinsEarned} coins, +${p.xpEarned} XP`);
+    lines.push('*East Faction*:');
+    eastParticipants.forEach((p) => {
+      let reward = `- ${p.playerId}: +${p.coinsEarned} coins, +${p.xpEarned} XP`;
+      if (p.factionBonus) {
+        reward += ` (+${p.factionBonus} faction bonus 🎉)`;
+      }
+      lines.push(reward);
     });
   }
 

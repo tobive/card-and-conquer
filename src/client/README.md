@@ -168,7 +168,7 @@ Routes:
 Preloads images with progress tracking:
 
 ```typescript
-const { loaded, progress, error } = useAssetPreloader(['/image1.png', '/image2.png']);
+const { loaded, progress, error } = useAssetPreloader(['/image1.jpg', '/image2.jpg']);
 ```
 
 #### useResponsive

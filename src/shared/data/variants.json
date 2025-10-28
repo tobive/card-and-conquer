@@ -1,0 +1,136 @@
+{
+  "variants": [
+    {
+      "id": "101-base",
+      "baseCardId": 101,
+      "variantName": "Standard",
+      "variantType": "base",
+      "rarity": "common",
+      "imageAssets": {
+        "full": "/cards/full/base/101.jpg",
+        "thumbnail": "/cards/thumbnails/base/101.jpg"
+      }
+    },
+    {
+      "id": "101-alt-1",
+      "baseCardId": 101,
+      "variantName": "Golden Commander",
+      "variantType": "alternate",
+      "rarity": "epic",
+      "imageAssets": {
+        "full": "/cards/full/variants/101-alt-1.jpg",
+        "thumbnail": "/cards/thumbnails/variants/101-alt-1.jpg"
+      }
+    },
+    {
+      "id": "101-alt-2",
+      "baseCardId": 101,
+      "variantName": "Battle Scarred",
+      "variantType": "alternate",
+      "rarity": "legendary",
+      "imageAssets": {
+        "full": "/cards/full/variants/101-alt-2.jpg",
+        "thumbnail": "/cards/thumbnails/variants/101-alt-2.jpg"
+      }
+    },
+    {
+      "id": "103-base",
+      "baseCardId": 103,
+      "variantName": "Standard",
+      "variantType": "base",
+      "rarity": "common",
+      "imageAssets": {
+        "full": "/cards/full/base/103.jpg",
+        "thumbnail": "/cards/thumbnails/base/103.jpg"
+      }
+    },
+    {
+      "id": "103-alt-1",
+      "baseCardId": 103,
+      "variantName": "Moonlight Performer",
+      "variantType": "alternate",
+      "rarity": "rare",
+      "imageAssets": {
+        "full": "/cards/full/variants/103-alt-1.jpg",
+        "thumbnail": "/cards/thumbnails/variants/103-alt-1.jpg"
+      }
+    },
+    {
+      "id": "116-base",
+      "baseCardId": 116,
+      "variantName": "Standard",
+      "variantType": "base",
+      "rarity": "common",
+      "imageAssets": {
+        "full": "/cards/full/base/116.jpg",
+        "thumbnail": "/cards/thumbnails/base/116.jpg"
+      }
+    },
+    {
+      "id": "116-alt-1",
+      "baseCardId": 116,
+      "variantName": "Floral Warrior",
+      "variantType": "alternate",
+      "rarity": "epic",
+      "imageAssets": {
+        "full": "/cards/full/variants/116-alt-1.jpg",
+        "thumbnail": "/cards/thumbnails/variants/116-alt-1.jpg"
+      }
+    },
+    {
+      "id": "202-base",
+      "baseCardId": 202,
+      "variantName": "Standard",
+      "variantType": "base",
+      "rarity": "common",
+      "imageAssets": {
+        "full": "/cards/full/base/202.jpg",
+        "thumbnail": "/cards/thumbnails/base/202.jpg"
+      }
+    },
+    {
+      "id": "202-alt-1",
+      "baseCardId": 202,
+      "variantName": "Steppe Conqueror",
+      "variantType": "alternate",
+      "rarity": "legendary",
+      "imageAssets": {
+        "full": "/cards/full/variants/202-alt-1.jpg",
+        "thumbnail": "/cards/thumbnails/variants/202-alt-1.jpg"
+      }
+    },
+    {
+      "id": "203-base",
+      "baseCardId": 203,
+      "variantName": "Standard",
+      "variantType": "base",
+      "rarity": "common",
+      "imageAssets": {
+        "full": "/cards/full/base/203.jpg",
+        "thumbnail": "/cards/thumbnails/base/203.jpg"
+      }
+    },
+    {
+      "id": "203-alt-1",
+      "baseCardId": 203,
+      "variantName": "Crimson Night",
+      "variantType": "alternate",
+      "rarity": "rare",
+      "imageAssets": {
+        "full": "/cards/full/variants/203-alt-1.jpg",
+        "thumbnail": "/cards/thumbnails/variants/203-alt-1.jpg"
+      }
+    },
+    {
+      "id": "203-alt-2",
+      "baseCardId": 203,
+      "variantName": "Shadow Lord",
+      "variantType": "alternate",
+      "rarity": "legendary",
+      "imageAssets": {
+        "full": "/cards/full/variants/203-alt-2.jpg",
+        "thumbnail": "/cards/thumbnails/variants/203-alt-2.jpg"
+      }
+    }
+  ]
+}

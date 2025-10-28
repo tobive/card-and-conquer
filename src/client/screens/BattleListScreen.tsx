@@ -1,15 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import type { Battle } from '../../shared/types/game';
 import type { BattleListResponse } from '../../shared/types/api';
+import { useAssetPreloader } from '../hooks/useAssetPreloader';
+import { filterCardsByLevel } from '../../shared/utils/cardCatalog';
 
 export const BattleListScreen = () => {
   const { navigate, goBack } = useRouter();
   const [battles, setBattles] = useState<Battle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Preload commonly used card thumbnails (level 1-3 cards)
+  const commonCards = useMemo(() => {
+    return [...filterCardsByLevel(1), ...filterCardsByLevel(2), ...filterCardsByLevel(3)];
+  }, []);
+  const commonCardIds = useMemo(() => commonCards.map((card) => card.id), [commonCards]);
+  
+  const { loaded: assetsLoaded } = useAssetPreloader({
+    screen: 'BattleListScreen',
+    assets: {
+      cards: {
+        ids: commonCardIds,
+        size: 'thumbnail',
+      },
+    },
+  });
 
   useEffect(() => {
     void loadBattles();
@@ -57,12 +75,14 @@ export const BattleListScreen = () => {
     navigate('battle-view', { battleId });
   };
 
-  if (loading) {
+  if (loading || !assetsLoaded) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
           <div className="text-4xl mb-4 animate-pulse">⚔️</div>
-          <p className="text-slate-400">Loading battles...</p>
+          <p className="text-slate-400">
+            {!assetsLoaded ? 'Loading card images...' : 'Loading battles...'}
+          </p>
         </div>
       </div>
     );
