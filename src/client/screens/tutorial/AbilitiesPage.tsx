@@ -1,12 +1,19 @@
 import React from 'react';
+import { GameCard } from '../../components/GameCard';
+import { getCardById } from '../../../shared/utils/cardCatalog';
 
 /**
  * AbilitiesPage - Tutorial page explaining all card abilities
  * Organized by combat phase with detailed descriptions
  */
 export const AbilitiesPage: React.FC = () => {
+  // Get example cards with different abilities
+  const firstStrikeCard = getCardById(1); // Zeus - FirstStrike
+  const reinforcementsCard = getCardById(2); // Athena - Reinforcements
+  const precisionCard = getCardById(3); // Poseidon - Precision
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       {/* Page Title */}
       <div className="text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-amber-400 mb-2">
@@ -323,6 +330,57 @@ export const AbilitiesPage: React.FC = () => {
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Example Cards with Abilities */}
+      <div className="card p-3 sm:p-4 space-y-2 bg-gradient-to-br from-purple-900/20 to-slate-800/80 border border-purple-500/30">
+        <h3 className="text-base sm:text-lg font-bold text-purple-400 text-center">
+          Example Cards with Abilities
+        </h3>
+        
+        <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
+          {firstStrikeCard && (
+            <div className="space-y-1">
+              <GameCard
+                card={firstStrikeCard}
+                size="thumbnail"
+                showStats={true}
+                className="w-full"
+              />
+              <div className="text-center text-[9px] sm:text-[10px] text-purple-400 font-semibold">
+                FirstStrike
+              </div>
+            </div>
+          )}
+          
+          {reinforcementsCard && (
+            <div className="space-y-1">
+              <GameCard
+                card={reinforcementsCard}
+                size="thumbnail"
+                showStats={true}
+                className="w-full"
+              />
+              <div className="text-center text-[9px] sm:text-[10px] text-blue-400 font-semibold">
+                Reinforcements
+              </div>
+            </div>
+          )}
+          
+          {precisionCard && (
+            <div className="space-y-1">
+              <GameCard
+                card={precisionCard}
+                size="thumbnail"
+                showStats={true}
+                className="w-full"
+              />
+              <div className="text-center text-[9px] sm:text-[10px] text-red-400 font-semibold">
+                Precision
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

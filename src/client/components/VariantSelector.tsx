@@ -39,11 +39,18 @@ export const VariantSelector = memo(({
         setIsTransitioning(true);
         const selectedElement = scrollContainerRef.current.children[selectedIndex] as HTMLElement;
         if (selectedElement) {
-          selectedElement.scrollIntoView({
+          // Manually scroll within container only, don't affect page scroll
+          const container = scrollContainerRef.current;
+          const elementLeft = selectedElement.offsetLeft;
+          const elementWidth = selectedElement.offsetWidth;
+          const containerWidth = container.offsetWidth;
+          const scrollLeft = elementLeft - (containerWidth / 2) + (elementWidth / 2);
+          
+          container.scrollTo({
+            left: scrollLeft,
             behavior: animations.prefersReducedMotion() ? 'auto' : 'smooth',
-            block: 'nearest',
-            inline: 'center',
           });
+          
           // Reset transition flag after animation completes
           setTimeout(() => setIsTransitioning(false), animations.getDuration(300));
         } else {

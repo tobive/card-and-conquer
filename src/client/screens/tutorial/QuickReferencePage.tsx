@@ -30,7 +30,7 @@ export const QuickReferencePage: React.FC = () => {
             <tbody className="text-slate-200">
               <tr className="border-b border-slate-700/50">
                 <td className="py-2">Free Pull</td>
-                <td className="py-2 text-green-400">22-hour cooldown</td>
+                <td className="py-2 text-green-400">2-hour cooldown</td>
                 <td className="py-2">1</td>
               </tr>
               <tr className="border-b border-slate-700/50">

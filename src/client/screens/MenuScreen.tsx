@@ -6,7 +6,6 @@ import { useSession } from '../hooks';
 import { Faction } from '../../shared/types/game';
 import type { WarStatusResponse } from '../../shared/types/api';
 import { useAssetPreloader } from '../hooks/useAssetPreloader';
-import { filterCardsByLevel } from '../../shared/utils/cardCatalog';
 
 interface QuickStats {
   totalCards: number;
@@ -26,17 +25,21 @@ export const MenuScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Preload commonly used card thumbnails (level 1 and 2 cards)
-  const commonCards = [...filterCardsByLevel(1), ...filterCardsByLevel(2)];
-  const commonCardIds = commonCards.map((card) => card.id);
-  
-  const { loaded: assetsLoaded } = useAssetPreloader({
+  // Preload menu screen assets (background and button images)
+  // If assets don't exist, will complete immediately and use current styling
+  useAssetPreloader({
     screen: 'MenuScreen',
     assets: {
-      cards: {
-        ids: commonCardIds,
-        size: 'thumbnail',
-      },
+      images: [
+        '/menu-background.jpg',
+        '/menu-button-battle.png',
+        '/menu-button-gacha.png',
+        '/menu-button-collection.png',
+        '/menu-button-stats.png',
+        '/menu-button-leaderboard.png',
+        '/menu-button-hall.png',
+        '/menu-button-tutorial.png',
+      ],
     },
   });
 
@@ -113,13 +116,11 @@ export const MenuScreen = () => {
     }
   };
 
-  if (loading || !assetsLoaded) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
-          <div className="animate-pulse text-amber-400 text-xl">
-            {!assetsLoaded ? 'Loading assets...' : 'Loading war status...'}
-          </div>
+          <div className="animate-pulse text-amber-400 text-xl">Loading war status...</div>
         </div>
       </div>
     );

@@ -44,7 +44,7 @@ const SimpleCardThumbnail: React.FC<{ card: Card }> = ({ card }) => (
     }}
   >
     <div>
-      <div style={{ fontSize: '12px', color: '#888' }}>#{card.id}</div>
+      <div style={{ fontSize: '12px', color: '#888' }}>#{card.id - 100}</div>
       <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{card.name}</div>
     </div>
     <div style={{ fontSize: '12px', color: '#aaa' }}>

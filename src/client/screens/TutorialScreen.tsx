@@ -36,9 +36,15 @@ export const TutorialScreen = () => {
   const [animationDirection, setAnimationDirection] = useState<'left' | 'right'>('right');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Reset scroll position when page changes
+  // Reset scroll position when page changes - scroll to top instantly
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll the main content area to top
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+      mainContent.scrollTop = 0;
+    }
+    // Also scroll window to top
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [currentPage]);
 
   // Handle transition state and cleanup will-change

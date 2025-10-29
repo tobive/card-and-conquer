@@ -1,84 +1,90 @@
 import React from 'react';
+import { GameCard } from '../../components/GameCard';
+import { getCardById } from '../../../shared/utils/cardCatalog';
 
 export const BattleMechanicsPage: React.FC = () => {
+  // Get example cards for demonstration
+  const zeusCard = getCardById(1); // Zeus - West
+  const odinCard = getCardById(11); // Odin - East
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-3 sm:space-y-4">
       {/* Page Title */}
-      <div className="text-center space-y-2">
-        <div className="text-5xl sm:text-6xl mb-3">🛡️</div>
-        <h2 className="text-3xl sm:text-4xl font-bold text-amber-400">
+      <div className="text-center space-y-1">
+        <div className="text-3xl sm:text-4xl">🛡️</div>
+        <h2 className="text-xl sm:text-2xl font-bold text-amber-400">
           Battle Mechanics
         </h2>
-        <p className="text-base sm:text-lg text-slate-300">
+        <p className="text-sm text-slate-300">
           Master the art of strategic card battles
         </p>
       </div>
 
       {/* Battle Structure Overview */}
-      <div className="card p-6 sm:p-8 space-y-4">
-        <h3 className="text-xl sm:text-2xl font-bold text-amber-400 flex items-center gap-2">
-          <span>⚔️</span>
+      <div className="card p-3 sm:p-4 space-y-2">
+        <h3 className="text-base sm:text-lg font-bold text-amber-400 flex items-center gap-1.5">
+          <span className="text-lg">⚔️</span>
           <span>10v10 Battle Structure</span>
         </h3>
-        <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-          Every battle is a clash between two armies of 10 cards each. The West faction occupies 
-          the left side, while the East faction holds the right. Choose your side and deploy your 
-          strongest deities to secure victory!
+        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          Every battle is a clash between two armies of 10 cards each. West on top, East on bottom.
         </p>
       </div>
 
       {/* Battlefield Layout Diagram */}
-      <div className="card p-6 sm:p-8 space-y-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-2 border-slate-600">
-        <h3 className="text-xl sm:text-2xl font-bold text-purple-400 text-center flex items-center justify-center gap-2">
-          <span>🗺️</span>
+      <div className="card p-3 sm:p-4 space-y-2 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-slate-600">
+        <h3 className="text-base sm:text-lg font-bold text-purple-400 text-center flex items-center justify-center gap-1.5">
+          <span className="text-lg">🗺️</span>
           <span>Battlefield Layout</span>
         </h3>
         
-        {/* Battlefield Grid */}
-        <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+        {/* Battlefield Grid - 10 cards horizontal */}
+        <div className="space-y-2 sm:space-y-3 overflow-x-auto">
           {/* West Side */}
-          <div className="space-y-3">
+          <div className="space-y-1.5 sm:space-y-2">
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900/50 rounded-lg border-2 border-blue-500/50">
-                <span className="text-2xl">🛡️</span>
-                <span className="font-bold text-blue-400">West Faction</span>
+              <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-900/50 rounded border border-blue-500/50">
+                <span className="text-base sm:text-lg">🛡️</span>
+                <span className="text-xs sm:text-sm font-bold text-blue-400">West</span>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            {/* 10 cards in a single horizontal row */}
+            <div className="grid grid-cols-10 gap-1 sm:gap-1.5 min-w-[600px]">
               {[...Array(10)].map((_, i) => (
                 <div
                   key={`west-${i}`}
-                  className="aspect-square bg-blue-900/30 rounded-lg border-2 border-blue-500/30 flex items-center justify-center text-xs text-blue-400 font-semibold hover:border-blue-400/50 transition-all"
+                  className="aspect-[2/3] bg-blue-900/30 rounded border border-blue-500/30 flex items-center justify-center text-[9px] sm:text-[10px] text-blue-400 font-semibold"
                 >
-                  Slot {i + 1}
+                  {i + 1}
                 </div>
               ))}
             </div>
           </div>
 
           {/* East Side */}
-          <div className="space-y-3">
+          <div className="space-y-1.5 sm:space-y-2">
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-900/50 rounded-lg border-2 border-red-500/50">
-                <span className="text-2xl">⚡</span>
-                <span className="font-bold text-red-400">East Faction</span>
+              <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-red-900/50 rounded border border-red-500/50">
+                <span className="text-base sm:text-lg">⚡</span>
+                <span className="text-xs sm:text-sm font-bold text-red-400">East</span>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            {/* 10 cards in a single horizontal row */}
+            <div className="grid grid-cols-10 gap-1 sm:gap-1.5 min-w-[600px]">
               {[...Array(10)].map((_, i) => (
                 <div
                   key={`east-${i}`}
-                  className="aspect-square bg-red-900/30 rounded-lg border-2 border-red-500/30 flex items-center justify-center text-xs text-red-400 font-semibold hover:border-red-400/50 transition-all"
+                  className="aspect-[2/3] bg-red-900/30 rounded border border-red-500/30 flex items-center justify-center text-[9px] sm:text-[10px] text-red-400 font-semibold"
                 >
-                  Slot {i + 1}
+                  {i + 1}
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <p className="text-center text-sm text-slate-400 mt-4">
-          Each faction has 10 slots to fill with deity cards
+        <p className="text-center text-[10px] sm:text-xs text-slate-400 mt-2">
+          Each faction has 10 slots in a horizontal row
         </p>
       </div>
 
@@ -167,29 +173,39 @@ export const BattleMechanicsPage: React.FC = () => {
           deities clash in epic combat.
         </p>
         
-        {/* Combat Example */}
-        <div className="grid grid-cols-3 gap-3 items-center max-w-lg mx-auto mt-4">
-          <div className="text-center space-y-2">
-            <div className="aspect-[2/3] bg-gradient-to-br from-blue-700 to-blue-900 rounded-lg border-2 border-blue-500 flex flex-col items-center justify-center p-2">
-              <div className="text-2xl mb-1">🛡️</div>
-              <div className="text-xs text-blue-300 font-bold">Zeus</div>
-              <div className="text-xs text-blue-400">West</div>
-            </div>
-            <div className="text-xs text-slate-400">Slot 1</div>
+        {/* Combat Example with Real Cards */}
+        <div className="grid grid-cols-3 gap-2 items-center max-w-sm mx-auto mt-2">
+          <div className="text-center space-y-1">
+            {zeusCard && (
+              <div className="w-full max-w-[80px] mx-auto">
+                <GameCard
+                  card={zeusCard}
+                  size="thumbnail"
+                  showStats={false}
+                  className="w-full"
+                />
+              </div>
+            )}
+            <div className="text-[9px] sm:text-[10px] text-slate-400">Slot 1</div>
           </div>
           
           <div className="text-center">
-            <div className="text-4xl animate-pulse">⚔️</div>
-            <div className="text-xs text-amber-400 font-bold mt-1">VS</div>
+            <div className="text-xl sm:text-2xl animate-pulse">⚔️</div>
+            <div className="text-[9px] sm:text-[10px] text-amber-400 font-bold">VS</div>
           </div>
           
-          <div className="text-center space-y-2">
-            <div className="aspect-[2/3] bg-gradient-to-br from-red-700 to-red-900 rounded-lg border-2 border-red-500 flex flex-col items-center justify-center p-2">
-              <div className="text-2xl mb-1">⚡</div>
-              <div className="text-xs text-red-300 font-bold">Odin</div>
-              <div className="text-xs text-red-400">East</div>
-            </div>
-            <div className="text-xs text-slate-400">Slot 1</div>
+          <div className="text-center space-y-1">
+            {odinCard && (
+              <div className="w-full max-w-[80px] mx-auto">
+                <GameCard
+                  card={odinCard}
+                  size="thumbnail"
+                  showStats={false}
+                  className="w-full"
+                />
+              </div>
+            )}
+            <div className="text-[9px] sm:text-[10px] text-slate-400">Slot 1</div>
           </div>
         </div>
         

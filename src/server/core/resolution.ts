@@ -8,7 +8,7 @@
  * - No activity for 30 minutes (timeout)
  *
  * Winner Determination:
- * - Sum total surviving soldiers per faction
+ * - Sum total surviving devotees per faction
  * - Higher total = faction victory
  * - Equal totals = draw
  *

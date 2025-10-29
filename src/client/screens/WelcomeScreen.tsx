@@ -1,13 +1,29 @@
 import { useState } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
-import { Card, Faction } from '../../shared/types/game';
+import { GameCard } from '../components/GameCard';
+import { Card, Faction, CardVariant } from '../../shared/types/game';
 import type { GachaWelcomePullResponse } from '../../shared/types/api';
+
+// Type for card with variant info
+interface CardWithVariant {
+  card: Card;
+  variant: {
+    id: string;
+    variantName: string;
+    variantType: string;
+    rarity: string;
+    imageAssets: {
+      full: string;
+      thumbnail: string;
+    };
+  };
+}
 
 export const WelcomeScreen = () => {
   const { navigate } = useRouter();
   const [pulling, setPulling] = useState(false);
-  const [cards, setCards] = useState<Card[]>([]);
+  const [cards, setCards] = useState<CardWithVariant[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(-1);
   const [error, setError] = useState<string | null>(null);
 
@@ -116,14 +132,15 @@ export const WelcomeScreen = () => {
   }
 
   // Show card reveal animation
-  const currentCard = cards[currentCardIndex];
-  if (!currentCard) return null;
+  const currentCardWithVariant = cards[currentCardIndex];
+  if (!currentCardWithVariant) return null;
 
   const isLastCard = currentCardIndex === cards.length - 1;
 
   return (
     <CardRevealAnimation
-      card={currentCard}
+      card={currentCardWithVariant.card}
+      variant={currentCardWithVariant.variant}
       cardNumber={currentCardIndex + 1}
       totalCards={cards.length}
       isLastCard={isLastCard}
@@ -135,6 +152,7 @@ export const WelcomeScreen = () => {
 // Card Reveal Animation Component
 interface CardRevealAnimationProps {
   card: Card;
+  variant: CardWithVariant['variant'];
   cardNumber: number;
   totalCards: number;
   isLastCard: boolean;
@@ -143,23 +161,18 @@ interface CardRevealAnimationProps {
 
 const CardRevealAnimation = ({
   card,
+  variant,
   cardNumber,
   totalCards,
   isLastCard,
   onNext,
 }: CardRevealAnimationProps) => {
   const [isAnimating, setIsAnimating] = useState(true);
-  const [showDetails, setShowDetails] = useState(false);
 
   useState(() => {
     // Stop bounce animation after 1 second
     const timer = setTimeout(() => setIsAnimating(false), 1000);
-    // Show details after initial animation
-    const detailsTimer = setTimeout(() => setShowDetails(true), 600);
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(detailsTimer);
-    };
+    return () => clearTimeout(timer);
   });
 
   const getFactionColor = () => {
@@ -170,10 +183,6 @@ const CardRevealAnimation = ({
   const getFactionGlow = () => {
     if (card.faction === Faction.West) return 'shadow-amber-400/50';
     return 'shadow-purple-400/50';
-  };
-
-  const getLevelStars = () => {
-    return '★'.repeat(card.level);
   };
 
   return (
@@ -213,65 +222,17 @@ const CardRevealAnimation = ({
         </div>
 
         {/* Card Display */}
-        <div className="bg-slate-900 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
-          {/* Level Stars */}
-          <div
-            className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
-              card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
-            }`}
-            style={{ animationDelay: '200ms' }}
-          >
-            {getLevelStars()}
+        <div className="flex flex-col items-center mb-4 sm:mb-6">
+          {/* Card Image */}
+          <div className="animate-scaleIn">
+            <GameCard
+              card={card}
+              variant={variant as CardVariant}
+              size="full"
+              interactive={false}
+              showStats={true}
+            />
           </div>
-
-          {/* Card Icon */}
-          <div className="flex justify-center mb-3 sm:mb-4">
-            <div className="text-6xl sm:text-8xl animate-scaleIn">
-              {card.faction === Faction.West ? '⚪' : '⚫'}
-            </div>
-          </div>
-
-          {/* Card Name */}
-          <h3
-            className="text-xl sm:text-2xl font-bold text-center text-slate-100 mb-2 animate-slideUp"
-            style={{ animationDelay: '300ms' }}
-          >
-            {card.name}
-          </h3>
-          <p
-            className="text-xs sm:text-sm text-slate-400 text-center italic mb-3 sm:mb-4 animate-fadeIn"
-            style={{ animationDelay: '400ms' }}
-          >
-            Parody of {card.parody}
-          </p>
-
-          {/* Stats */}
-          {showDetails && (
-            <div className="space-y-2 border-t border-slate-700 pt-3 sm:pt-4 animate-slideUp">
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Faction:</span>
-                <span
-                  className={`font-semibold ${
-                    card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
-                  }`}
-                >
-                  {card.faction}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Devotees:</span>
-                <span className="font-semibold text-slate-200">
-                  {card.soldiers.toLocaleString()} 🪖
-                </span>
-              </div>
-              {card.ability && (
-                <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="text-slate-400">Ability:</span>
-                  <span className="font-semibold text-amber-400">{card.ability}</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Next Button */}

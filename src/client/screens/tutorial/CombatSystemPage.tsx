@@ -1,8 +1,14 @@
 import React from 'react';
+import { GameCard } from '../../components/GameCard';
+import { getCardById } from '../../../shared/utils/cardCatalog';
 
 export const CombatSystemPage: React.FC = () => {
+  // Get example cards for demonstration
+  const athenaCard = getCardById(2); // Athena - West
+  const thorCard = getCardById(12); // Thor - East
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Page Title */}
       <div className="text-center space-y-2">
         <div className="text-5xl sm:text-6xl mb-3">⚡</div>
@@ -200,36 +206,50 @@ export const CombatSystemPage: React.FC = () => {
           <div className="p-5 bg-slate-700/50 rounded-lg border-2 border-slate-600">
             <h4 className="font-bold text-center text-purple-400 mb-4">Damage Calculation Example</h4>
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center mb-4">
-              <div className="text-center space-y-2">
-                <div className="aspect-[2/3] bg-gradient-to-br from-blue-700 to-blue-900 rounded-lg border-2 border-blue-500 flex flex-col items-center justify-center p-3">
-                  <div className="text-3xl mb-2">🛡️</div>
-                  <div className="text-sm text-blue-300 font-bold">Zeus</div>
-                  <div className="mt-2 px-3 py-1 bg-blue-900/50 rounded-full border border-blue-400">
-                    <div className="text-xs text-blue-300">HP: 8</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 items-center mb-4">
+              <div className="text-center space-y-1.5 sm:space-y-2">
+                {athenaCard && (
+                  <div className="w-full max-w-[150px] mx-auto">
+                    <GameCard
+                      card={athenaCard}
+                      size="thumbnail"
+                      showStats={false}
+                      className="w-full"
+                    />
+                    <div className="mt-2 px-2 sm:px-3 py-1 bg-blue-900/50 rounded-full border border-blue-400 inline-block">
+                      <div className="text-[10px] sm:text-xs text-blue-300">HP: {athenaCard.devotees}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="text-xs text-slate-400">Attacker</div>
+                )}
+                <div className="text-[10px] sm:text-xs text-slate-400">Attacker</div>
               </div>
               
-              <div className="text-center space-y-2">
-                <div className="text-3xl">⚔️</div>
-                <div className="p-3 bg-red-900/30 rounded-lg border border-red-500/30">
-                  <div className="text-xs text-slate-400 mb-1">Damage Range:</div>
-                  <div className="text-lg font-bold text-red-400">1 - 8</div>
-                </div>
-                <div className="text-xs text-amber-400 font-semibold">Random!</div>
-              </div>
-              
-              <div className="text-center space-y-2">
-                <div className="aspect-[2/3] bg-gradient-to-br from-red-700 to-red-900 rounded-lg border-2 border-red-500 flex flex-col items-center justify-center p-3">
-                  <div className="text-3xl mb-2">⚡</div>
-                  <div className="text-sm text-red-300 font-bold">Odin</div>
-                  <div className="mt-2 px-3 py-1 bg-red-900/50 rounded-full border border-red-400">
-                    <div className="text-xs text-red-300">HP: 10</div>
+              <div className="text-center space-y-1.5 sm:space-y-2">
+                <div className="text-2xl sm:text-3xl">⚔️</div>
+                <div className="p-2 sm:p-3 bg-red-900/30 rounded-lg border border-red-500/30">
+                  <div className="text-[10px] sm:text-xs text-slate-400 mb-1">Damage Range:</div>
+                  <div className="text-base sm:text-lg font-bold text-red-400">
+                    1 - {athenaCard?.devotees || 8}
                   </div>
                 </div>
-                <div className="text-xs text-slate-400">Defender</div>
+                <div className="text-[10px] sm:text-xs text-amber-400 font-semibold">Random!</div>
+              </div>
+              
+              <div className="text-center space-y-1.5 sm:space-y-2">
+                {thorCard && (
+                  <div className="w-full max-w-[150px] mx-auto">
+                    <GameCard
+                      card={thorCard}
+                      size="thumbnail"
+                      showStats={false}
+                      className="w-full"
+                    />
+                    <div className="mt-2 px-2 sm:px-3 py-1 bg-red-900/50 rounded-full border border-red-400 inline-block">
+                      <div className="text-[10px] sm:text-xs text-red-300">HP: {thorCard.devotees}</div>
+                    </div>
+                  </div>
+                )}
+                <div className="text-[10px] sm:text-xs text-slate-400">Defender</div>
               </div>
             </div>
             

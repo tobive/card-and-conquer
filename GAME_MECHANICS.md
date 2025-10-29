@@ -281,7 +281,7 @@ Level 6+: Progressive increases (+350 XP per level)
 ### Pull Types
 
 **Free Pull:**
-- Available once every 22 hours
+- Available once every 2 hours
 - Countdown timer shows remaining time
 - Same card pool as paid pulls
 - Best value - always use when available
@@ -320,17 +320,37 @@ Level 5 cards: 3% chance
   - Epic: 30%
   - Legendary: 10%
 
-### Duplicate System
+### Card Inventory System
+
+**Consumable Cards:**
+- Cards are **consumable resources** that are used up when placed in battles
+- Each card has a **quantity** that shows how many copies you own
+- When you use a card in battle, the quantity decreases by 1
+- When quantity reaches 0, the card is no longer available until you collect more
 
 **Duplicate Cards:**
-- Pulling a card you already own increases quantity
+- Pulling a card you already own increases its quantity
 - No limit on duplicates
-- Duplicates allow multiple simultaneous battles
+- Multiple copies allow you to use the same card in multiple battles
+- Example: If you have 5 copies of Zeus, you can use Zeus in 5 different battles
 
 **Duplicate Variants:**
-- Each variant tracked separately
+- Each variant tracked separately with its own quantity
 - Pulling a variant you own increases that variant's quantity
-- Allows using same card with different art in multiple battles
+- Base and alternate variants have independent quantities
+- Example: 3× Zeus (Base) and 2× Zeus (Golden) are tracked separately
+
+**Quantity Display:**
+- Collection screen shows "×N" badge on each card
+- N = total quantity across all variants in base view
+- N = quantity of specific variant in variants view
+- Quantity updates in real-time as you collect and use cards
+
+**Strategic Implications:**
+- Must manage card resources carefully
+- Common cards become valuable as expendable resources
+- Gacha pulls are essential for maintaining card supply
+- May need to use lower-level cards when high-level cards run out
 
 ---
 
@@ -534,7 +554,7 @@ Result: West wins (1,234 > 1,089)
 
 ### Collection Strategy
 
-1. **Use Free Pulls**: Never miss the 22-hour free pull
+1. **Use Free Pulls**: Never miss the 2-hour free pull
 2. **Save for 5-Pulls**: Best coin value (170 vs 250)
 3. **Level Up**: Higher levels unlock stronger cards
 4. **Collect Variants**: Rare alternates add prestige

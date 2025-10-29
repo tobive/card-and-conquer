@@ -32,7 +32,7 @@ import {
   setVariantPreference,
   getAllVariantPreferences,
 } from './core/inventory';
-import { Faction, Card } from '../shared/types/game';
+import { Faction, Card, BattleStatus } from '../shared/types/game';
 import {
   performFreePull,
   performPaidPull,
@@ -41,6 +41,7 @@ import {
 } from './core/gacha';
 import { getBonusGachaStatus, useBonusGachaPull } from './core/bonusGacha';
 import { createBattle, addCardToBattle, getBattle, getActiveBattles } from './core/battle';
+import { checkAndResolveBattle } from './core/resolution';
 import { getWarState } from './core/war';
 import { getTopPlayers } from './core/leaderboard';
 import { getCardById } from '../shared/utils/cardCatalog';
@@ -68,14 +69,28 @@ router.get('/api/context', async (_req, res): Promise<void> => {
   try {
     const postId = context.postId;
     
+    console.log('🔍 /api/context called with postId:', postId);
+    
     // Try to get battle ID from Redis using post ID
     let battleId: string | null = null;
     if (postId) {
-      // Check if there's a battle associated with this post
-      const battles = await getActiveBattles();
-      const battle = battles.find((b) => b.postId === postId);
+      // First check active battles
+      const activeBattles = await getActiveBattles();
+      let battle = activeBattles.find((b) => b.postId === postId);
+      
       if (battle) {
+        console.log('✅ Found battle in active battles:', battle.id);
         battleId = battle.id;
+      } else {
+        // If not found in active battles, check all battles by scanning the post-to-battle mapping
+        // This handles completed/stalemate battles
+        const battleIdFromPost = await redis.get(`post:${postId}:battle`);
+        if (battleIdFromPost) {
+          console.log('✅ Found battle from post mapping:', battleIdFromPost);
+          battleId = battleIdFromPost;
+        } else {
+          console.log('❌ No battle found for this post');
+        }
       }
     }
     
@@ -141,7 +156,7 @@ router.get('/api/player/profile', async (_req, res): Promise<void> => {
   }
 });
 
-// GET /api/player/inventory - Get owned cards
+// GET /api/player/inventory - Get owned cards (only cards with quantity > 0)
 router.get('/api/player/inventory', async (_req, res): Promise<void> => {
   try {
     const username = await reddit.getCurrentUsername();
@@ -162,6 +177,32 @@ router.get('/api/player/inventory', async (_req, res): Promise<void> => {
     console.error('Error fetching player inventory:', error);
     res.status(500).json({
       error: error instanceof Error ? error.message : 'Failed to fetch inventory',
+    } as ErrorResponse);
+  }
+});
+
+// GET /api/player/collection - Get all cards with ownership status (for collection screen)
+router.get('/api/player/collection', async (_req, res): Promise<void> => {
+  try {
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      res.status(401).json({ error: 'User not authenticated' } as ErrorResponse);
+      return;
+    }
+
+    const { getAllCardsWithQuantity } = await import('./core/inventory');
+    const cards = await getAllCardsWithQuantity(username);
+
+    const response: PlayerInventoryResponse = {
+      cards,
+      totalCards: cards.length,
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error('Error fetching player collection:', error);
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Failed to fetch collection',
     } as ErrorResponse);
   }
 });
@@ -702,7 +743,7 @@ router.post('/api/battle/start', async (req, res): Promise<void> => {
       return;
     }
 
-    const { cardId } = req.body as { cardId?: number };
+    const { cardId, variantId } = req.body as { cardId?: number; variantId?: string };
     if (!cardId) {
       res.status(400).json({ error: 'Card ID is required' } as ErrorResponse);
       return;
@@ -722,13 +763,15 @@ router.post('/api/battle/start', async (req, res): Promise<void> => {
     // Create battle first to get the battle ID
     // We'll use a temporary postId that will be updated
     const tempPostId = `temp_${Date.now()}`;
-    const battle = await createBattle(tempPostId, cardId, username, location);
+    const battle = await createBattle(tempPostId, cardId, username, location, variantId);
 
     // Create Reddit post for battle with proper formatting and deep link
-    const post = await createBattlePost(battle.id, card.name, location.locationName, location.mapType);
+    const post = await createBattlePost(battle.id, card.name, location.locationName, location.mapType, card.faction);
 
-    // Update battle with actual post ID
+    // Update battle with actual post ID and create reverse mapping
     await redis.hSet(`battle:${battle.id}`, { postId: post.id });
+    await redis.set(`post:${post.id}:battle`, battle.id);
+    console.log(`✅ Created post-to-battle mapping: post:${post.id}:battle -> ${battle.id}`);
 
     const response: BattleStartResponse = {
       battle,
@@ -753,7 +796,7 @@ router.post('/api/battle/join', async (req, res): Promise<void> => {
       return;
     }
 
-    const { battleId, cardId } = req.body as { battleId?: string; cardId?: number };
+    const { battleId, cardId, variantId } = req.body as { battleId?: string; cardId?: number; variantId?: string };
     if (!battleId || !cardId) {
       res.status(400).json({ error: 'Battle ID and Card ID are required' } as ErrorResponse);
       return;
@@ -767,7 +810,7 @@ router.post('/api/battle/join', async (req, res): Promise<void> => {
     }
 
     // Add card to battle
-    const { battle, combatResult, resolution } = await addCardToBattle(battleId, cardId, username);
+    const { battle, combatResult, resolution } = await addCardToBattle(battleId, cardId, username, variantId);
 
     // Post combat log as comment if combat occurred
     if (combatResult) {
@@ -805,8 +848,32 @@ router.post('/api/battle/join', async (req, res): Promise<void> => {
       }
     }
 
+    // Build card lookup map and collect unique player IDs (same as battle/state endpoint)
+    const cards: { [cardId: number]: Card } = {};
+    const playerIds = new Set<string>();
+    const allSlots = [...battle.westSlots, ...battle.eastSlots];
+
+    for (const slot of allSlots) {
+      if (slot) {
+        const cardData = getCardById(slot.cardId);
+        if (cardData) {
+          cards[slot.cardId] = cardData;
+        }
+        playerIds.add(slot.playerId);
+      }
+    }
+
+    // Fetch variant preferences for all players in the battle
+    const variantPreferences: { [playerId: string]: { [cardId: number]: string } } = {};
+    for (const playerId of playerIds) {
+      const prefs = await getAllVariantPreferences(playerId);
+      variantPreferences[playerId] = prefs;
+    }
+
     const response: BattleJoinResponse = {
       battle,
+      cards,
+      variantPreferences,
     };
 
     if (combatResult) {
@@ -839,6 +906,17 @@ router.get('/api/battle/state', async (req, res): Promise<void> => {
     if (!battle) {
       res.status(404).json({ error: 'Battle not found' } as ErrorResponse);
       return;
+    }
+
+    // Check if battle should be auto-resolved due to timeout
+    // This ensures battles are resolved even if no one tries to join
+    if (battle.status === BattleStatus.Active) {
+      await checkAndResolveBattle(battleId);
+      // Reload battle to get updated status
+      const updatedBattle = await getBattle(battleId);
+      if (updatedBattle) {
+        Object.assign(battle, updatedBattle);
+      }
     }
 
     // Build card lookup map and collect unique player IDs
@@ -1079,8 +1157,10 @@ router.post('/internal/menu/battle-create', async (_req, res): Promise<void> => 
     // Create battle post with a placeholder card (moderator-initiated battles start empty)
     const post = await createBattlePost(battle.id, 'Moderator', location.locationName, location.mapType);
 
-    // Update battle with actual post ID
+    // Update battle with actual post ID and create reverse mapping
     await redis.hSet(`battle:${battle.id}`, { postId: post.id });
+    await redis.set(`post:${post.id}:battle`, battle.id);
+    console.log(`✅ Created post-to-battle mapping: post:${post.id}:battle -> ${battle.id}`);
 
     res.json({
       navigateTo: `https://reddit.com/r/${context.subredditName}/comments/${post.id}`,
@@ -1090,6 +1170,63 @@ router.post('/internal/menu/battle-create', async (_req, res): Promise<void> => 
     res.status(400).json({
       status: 'error',
       message: 'Failed to create battle',
+    });
+  }
+});
+
+// Scheduler endpoint for battle resolution
+router.post('/internal/scheduler/resolve-battles', async (_req, res): Promise<void> => {
+  try {
+    const { resolvePendingBattles } = await import('./core/battleScheduler');
+    const result = await resolvePendingBattles();
+
+    res.json({
+      status: 'success',
+      ...result,
+    });
+  } catch (error) {
+    console.error('[Scheduler] Error in resolve-battles job:', error);
+    res.status(500).json({
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Failed to resolve battles',
+    });
+  }
+});
+
+// Scheduler endpoint for leaderboard cache update
+router.post('/internal/scheduler/update-leaderboard', async (_req, res): Promise<void> => {
+  try {
+    const { updateLeaderboardCache } = await import('./core/leaderboardScheduler');
+    const result = await updateLeaderboardCache();
+
+    res.json({
+      status: 'success',
+      ...result,
+    });
+  } catch (error) {
+    console.error('[Scheduler] Error in update-leaderboard job:', error);
+    res.status(500).json({
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Failed to update leaderboard cache',
+    });
+  }
+});
+
+// Scheduler endpoint for Hall of Fame cache update
+router.post('/internal/scheduler/update-hall-of-fame', async (_req, res): Promise<void> => {
+  try {
+    const { updateHallOfFameCache } = await import('./core/hallOfFameScheduler');
+    const result = await updateHallOfFameCache();
+
+    res.json({
+      status: 'success',
+      ...result,
+    });
+  } catch (error) {
+    console.error('[Scheduler] Error in update-hall-of-fame job:', error);
+    res.status(500).json({
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Failed to update Hall of Fame cache',
     });
   }
 });

@@ -2,16 +2,18 @@
 
 ## Overview
 
-The `useAssetPreloader` hook provides a robust solution for preloading images with support for card assets, retry logic, fallback images, and progress tracking.
+The `useAssetPreloader` hook provides a robust solution for preloading images with support for card assets, retry logic, fallback images, progress tracking, and global caching.
 
 ## Features
 
+- **Global Caching**: Assets are cached globally across all screens - each asset is only loaded once per session
 - **Card Asset Support**: Preload card images by ID or variant
 - **Retry Logic**: Automatically retries failed loads up to 3 times
 - **Fallback Images**: Falls back to placeholder images on failure
 - **Progress Tracking**: Real-time progress updates during loading
 - **Error Handling**: Comprehensive error tracking and reporting
 - **Backward Compatible**: Supports simple array of URLs
+- **Performance Optimized**: Prevents redundant downloads and re-renders
 
 ## Usage
 
@@ -297,3 +299,62 @@ Warning: Using fallback for /cards/full/base/999.png: /cards/full/placeholder.pn
 ```
 
 Enable verbose logging by checking the browser console during development.
+
+
+## Global Caching
+
+The hook uses a global cache to prevent re-downloading assets that have already been loaded. This provides significant performance benefits:
+
+### How It Works
+
+1. When an asset is successfully preloaded, its URL is added to a global cache
+2. On subsequent preload requests, cached assets are skipped
+3. The cache persists across component mounts/unmounts and screen navigation
+4. Only new assets are downloaded, reducing bandwidth and load times
+
+### Example Behavior
+
+```
+First visit to MenuScreen:
+[MenuScreen] Preloading 90 new assets (0 cached)...
+[MenuScreen] Preloading complete
+
+First visit to GachaScreen:
+[GachaScreen] Preloading 40 new assets (90 cached)...
+[GachaScreen] Preloading complete
+
+Return to MenuScreen:
+[MenuScreen] All 90 assets already cached
+
+Return to GachaScreen:
+[GachaScreen] All 130 assets already cached
+```
+
+### Cache Management
+
+You can manage the cache using utility functions:
+
+```typescript
+import { clearPreloadCache, getCacheSize } from './hooks';
+
+// Check cache size
+const size = getCacheSize();
+console.log(`${size} assets cached`);
+
+// Clear cache (useful for testing or forcing refresh)
+clearPreloadCache();
+```
+
+### Performance Benefits
+
+- **Faster Navigation**: Returning to previously visited screens is instant
+- **Reduced Bandwidth**: Each asset is only downloaded once per session
+- **Better UX**: No loading delays when navigating between screens
+- **Efficient Memory**: Works with browser's native image caching
+
+### Browser Compatibility
+
+The global cache works in addition to browser caching:
+- **Browser Cache**: Prevents network requests for already-downloaded files
+- **Global Cache**: Prevents redundant Image object creation and load events
+- **Combined**: Maximum performance with minimal overhead

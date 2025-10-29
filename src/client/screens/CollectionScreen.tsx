@@ -87,7 +87,8 @@ export const CollectionScreen = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('/api/player/inventory');
+      // Use /api/player/collection to get ALL cards with quantity info (including 0)
+      const response = await fetch('/api/player/collection');
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch inventory');
@@ -118,11 +119,30 @@ export const CollectionScreen = () => {
   };
 
   const isCardOwned = (cardId: number): boolean => {
-    return inventory?.cards.some((c) => c.id === cardId) ?? false;
+    // Card is "owned" if it has ever been obtained (even if quantity is now 0)
+    const card = inventory?.cards.find((c) => c.id === cardId);
+    if (!card) return false;
+    // Check if card has everOwned property (from new API) or has quantity > 0
+    return ('everOwned' in card && (card as any).everOwned) || card.quantity > 0;
   };
 
   const isVariantOwned = (variantId: string): boolean => {
-    return inventory?.cards.some((c) => c.variantId === variantId) ?? false;
+    const card = inventory?.cards.find((c) => c.variantId === variantId);
+    if (!card) return false;
+    return ('everOwned' in card && (card as any).everOwned) || card.quantity > 0;
+  };
+
+  const getCardTotalQuantity = (cardId: number): number => {
+    if (!inventory) return 0;
+    return inventory.cards
+      .filter((c) => c.id === cardId)
+      .reduce((sum, c) => sum + c.quantity, 0);
+  };
+
+  const getVariantQuantity = (variantId: string): number => {
+    if (!inventory) return 0;
+    const card = inventory.cards.find((c) => c.variantId === variantId);
+    return card?.quantity ?? 0;
   };
 
   const getFilteredCards = (): Card[] => {
@@ -311,6 +331,7 @@ export const CollectionScreen = () => {
                   <CollectionCard
                     card={card}
                     owned={isCardOwned(card.id)}
+                    quantity={getCardTotalQuantity(card.id)}
                     onClick={() => handleCardClick(card)}
                     hasVariants={hasAlternateVariants(card.id)}
                     variantCount={getVariantCount(card.id)}
@@ -341,6 +362,7 @@ export const CollectionScreen = () => {
                   card={entry.card}
                   variant={entry.variant}
                   owned={entry.owned}
+                  quantity={getVariantQuantity(entry.variant.id)}
                   onClick={() => handleCardClick(entry.card)}
                   shouldLoad={loadedCardIds.has(entry.card.id)}
                   onRegister={(el) => registerCard(entry.card.id, el)}
@@ -407,6 +429,7 @@ const FilterButton = ({ active, onClick, label, count, total, faction }: FilterB
 interface CollectionCardProps {
   card: Card;
   owned: boolean;
+  quantity?: number;
   onClick: () => void;
   hasVariants?: boolean;
   variantCount?: number;
@@ -421,6 +444,7 @@ interface CollectionCardProps {
 const CollectionCard = ({
   card,
   owned,
+  quantity = 0,
   onClick,
   hasVariants = false,
   variantCount = 0,
@@ -492,6 +516,13 @@ const CollectionCard = ({
             {...(onImageError && { onImageError })}
           />
 
+          {/* Quantity Badge Overlay */}
+          {quantity > 0 && (
+            <div className="absolute bottom-1 left-1 bg-slate-900/90 rounded px-1.5 py-0.5 text-[10px] text-amber-400 font-bold shadow-lg z-10 border border-amber-400/30">
+              ×{quantity}
+            </div>
+          )}
+
           {/* Variant Badge Overlay */}
           {hasVariants && (
             <div className="absolute top-1 right-1 bg-purple-500/90 rounded px-1.5 py-0.5 text-[9px] text-white font-semibold shadow-lg z-10">
@@ -511,6 +542,7 @@ interface VariantCardProps {
   card: Card;
   variant: CardVariant;
   owned: boolean;
+  quantity?: number;
   onClick: () => void;
   shouldLoad?: boolean;
   onRegister?: (element: HTMLElement | null) => void;
@@ -524,6 +556,7 @@ const VariantCard = ({
   card,
   variant,
   owned,
+  quantity = 0,
   onClick,
   shouldLoad = true,
   onRegister,
@@ -624,6 +657,13 @@ const VariantCard = ({
             {...(onImageLoad && { onImageLoad })}
             {...(onImageError && { onImageError })}
           />
+
+          {/* Quantity Badge Overlay */}
+          {quantity > 0 && (
+            <div className="absolute top-1 left-1 bg-slate-900/90 rounded px-1.5 py-0.5 text-[10px] text-amber-400 font-bold shadow-lg z-10 border border-amber-400/30">
+              ×{quantity}
+            </div>
+          )}
 
           {/* Variant Type Badge Overlay */}
           {variant.variantType === 'alternate' && (

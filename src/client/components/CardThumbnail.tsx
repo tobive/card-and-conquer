@@ -93,7 +93,7 @@ export const CardThumbnail = ({
     top: 0,
     left: 0,
     right: 0,
-    height: '35%',
+    height: '15%',
     background: theme.gradient,
     zIndex: 2,
     display: 'flex',
@@ -108,7 +108,7 @@ export const CardThumbnail = ({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '45%',
+    height: '35%',
     background: theme.gradient,
     zIndex: 2,
     display: 'flex',
@@ -241,7 +241,7 @@ export const CardThumbnail = ({
       {/* Top Overlay - Card Number and Level */}
       <div style={topOverlayStyle} aria-hidden="true">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={cardNumberStyle}>#{card.id}</span>
+          <span style={cardNumberStyle}>#{getCardDisplayNumber(card.id)}</span>
           <span style={levelStarsStyle} aria-label={`Level ${card.level}`}>{stars}</span>
         </div>
       </div>
@@ -275,4 +275,12 @@ export const CardThumbnail = ({
 function formatAbilityName(ability: string): string {
   // Convert camelCase to space-separated words
   return ability.replace(/([A-Z])/g, ' $1').trim();
+}
+
+/**
+ * Helper function to get display card number (ID - 100)
+ * Card ID 101 displays as #1, ID 102 as #2, etc.
+ */
+function getCardDisplayNumber(cardId: number): number {
+  return cardId - 100;
 }

@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { useHallOfFame } from '../hooks';
 import { Button } from '../components/Button';
 import { Layout } from '../components/Layout';
+import { useRouter } from '../contexts/RouterContext';
 
 export const HallOfFameScreen: React.FC = () => {
+  const { navigate } = useRouter();
   const [leaderboard, setLeaderboard] = useState<'east' | 'west' | 'combined'>('combined');
   const { entries, playerStats, loading, error, refetch } = useHallOfFame(leaderboard, 100);
 
   if (loading) {
     return (
-      <Layout title="Hall of Fame">
+      <Layout>
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="text-2xl mb-2">🏛️</div>
@@ -22,12 +24,15 @@ export const HallOfFameScreen: React.FC = () => {
 
   if (error) {
     return (
-      <Layout title="Hall of Fame">
+      <Layout>
         <div className="bg-red-900/20 border border-red-700 rounded-lg p-6 text-center">
           <p className="text-red-400">Failed to load Hall of Fame</p>
-          <Button onClick={refetch} variant="secondary" className="mt-4">
-            Retry
-          </Button>
+          <div className="flex gap-2 justify-center mt-4">
+            <Button onClick={refetch} variant="secondary">
+              Retry
+            </Button>
+            <Button onClick={() => navigate('menu')}>Back to Menu</Button>
+          </div>
         </div>
       </Layout>
     );
@@ -41,12 +46,17 @@ export const HallOfFameScreen: React.FC = () => {
   };
 
   return (
-    <Layout title="Hall of Fame">
+    <Layout>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-amber-400 mb-2">🏛️ Hall of Fame 🏛️</h1>
-          <p className="text-slate-400">All-Time Faction Champions</p>
+        <div className="flex items-center justify-between mb-6">
+          <div className="text-center flex-1">
+            <h1 className="text-4xl font-bold text-amber-400 mb-2">🏛️ Hall of Fame 🏛️</h1>
+            <p className="text-slate-400">All-Time Faction Champions</p>
+          </div>
+          <Button onClick={() => navigate('menu')} variant="secondary">
+            Back
+          </Button>
         </div>
 
         {/* Tabs */}

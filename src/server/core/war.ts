@@ -207,8 +207,8 @@ async function resetWar(winningFaction: Faction): Promise<number> {
   await redis.set(WAR_BLACK_WINS_KEY, '0');
 
   // Clear faction player tracking
-  await redis.del(`war:faction_players:${Faction.White}`);
-  await redis.del(`war:faction_players:${Faction.Black}`);
+  await redis.del(`war:faction_players:${Faction.West}`);
+  await redis.del(`war:faction_players:${Faction.East}`);
 
   return playersRewarded;
 }

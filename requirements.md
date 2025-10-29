@@ -165,7 +165,7 @@ Each player has:
 ### 6.2 Gacha System
 
 - **Cost**: 50 coins per pull
-- **Free pull**: Once every 22 hours
+- **Free pull**: Once every 2 hours
 - **Level-gated**: Player can only obtain cards up to their current level
 - **Pull distribution**: Weighted toward lower levels (e.g., Level 3 player: mostly L1–L3 cards)
 

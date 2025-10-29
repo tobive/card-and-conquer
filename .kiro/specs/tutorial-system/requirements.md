@@ -56,7 +56,7 @@ The tutorial now covers 12 pages (expanded from 10) to include detailed explanat
 
 #### Acceptance Criteria
 
-1. WHEN viewing the card collection page THEN the system SHALL explain the three pull types: free (22-hour cooldown), paid (50 coins), and multi-pull (170 coins for 5 cards)
+1. WHEN viewing the card collection page THEN the system SHALL explain the three pull types: free (2-hour cooldown), paid (50 coins), and multi-pull (170 coins for 5 cards)
 2. WHEN viewing the card collection page THEN the system SHALL explain the level-gating system and how player level affects available cards
 3. WHEN viewing the card collection page THEN the system SHALL show example card rarities and the weighted distribution system
 4. WHEN viewing the card collection page THEN the system SHALL explain card variants and their 10x rarity multiplier

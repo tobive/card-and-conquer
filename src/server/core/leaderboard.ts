@@ -196,12 +196,12 @@ export async function clearLeaderboard(faction: Faction): Promise<void> {
  * @returns Object with wins for each faction
  */
 export async function getPlayerWins(username: string): Promise<{ white: number; black: number }> {
-  const whiteKey = getLeaderboardKey(Faction.White);
-  const blackKey = getLeaderboardKey(Faction.Black);
+  const westKey = getLeaderboardKey(Faction.West);
+  const eastKey = getLeaderboardKey(Faction.East);
 
   const [whiteWins, blackWins] = await Promise.all([
-    redis.zScore(whiteKey, username),
-    redis.zScore(blackKey, username),
+    redis.zScore(westKey, username),
+    redis.zScore(eastKey, username),
   ]);
 
   return {

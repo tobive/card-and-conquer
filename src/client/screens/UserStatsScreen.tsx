@@ -4,10 +4,12 @@ import { LoadingScreen } from '../components/LoadingScreen';
 import { StatsSection } from '../components/StatsSection';
 import { StatItem } from '../components/StatItem';
 import { Button } from '../components/Button';
+import { useRouter } from '../contexts/RouterContext';
 import type { UserStatisticsResponse } from '../../shared/types/api';
 import { Faction } from '../../shared/types/game';
 
 export const UserStatsScreen = () => {
+  const { navigate } = useRouter();
   const [stats, setStats] = useState<UserStatisticsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +60,7 @@ export const UserStatsScreen = () => {
 
   if (error || !stats) {
     return (
-      <Layout title="Your Statistics">
+      <Layout>
         <div className="flex items-center justify-center min-h-full p-4">
           <div className="card max-w-md p-6 border-2 border-red-400/50 bg-red-900/20">
             <div className="text-center">
@@ -67,9 +69,12 @@ export const UserStatsScreen = () => {
               <p className="text-slate-300 text-sm mb-6">
                 {error || 'Failed to load user statistics'}
               </p>
-              <Button onClick={() => fetchUserStats()} variant="primary" fullWidth>
-                Try Again
-              </Button>
+              <div className="flex gap-2 justify-center">
+                <Button onClick={() => fetchUserStats()} variant="secondary">
+                  Try Again
+                </Button>
+                <Button onClick={() => navigate('menu')}>Back to Menu</Button>
+              </div>
             </div>
           </div>
         </div>
@@ -89,8 +94,16 @@ export const UserStatsScreen = () => {
   const factionDisplay = getFactionDisplay();
 
   return (
-    <Layout title="Your Statistics">
+    <Layout>
       <div className="space-y-4 p-3 sm:p-4">
+        {/* Header with Back Button */}
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold text-amber-400">Your Statistics</h1>
+          <Button onClick={() => navigate('menu')} variant="secondary">
+            Back
+          </Button>
+        </div>
+
         {/* Collection Stats */}
         <StatsSection title="Collection" icon="📚">
           <StatItem label="Total Cards" value={stats.totalCards} icon="🎴" />

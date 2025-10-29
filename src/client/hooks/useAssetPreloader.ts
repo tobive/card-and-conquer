@@ -147,8 +147,30 @@ const configToAssetUrls = (config: PreloadConfig): string[] => {
   return urls;
 };
 
+// Global cache to track which assets have been preloaded
+// This prevents re-downloading the same images when navigating between screens
+const preloadedAssets = new Set<string>();
+
+/**
+ * Clears the global preload cache
+ * Useful for testing or forcing a refresh of all assets
+ */
+export const clearPreloadCache = () => {
+  preloadedAssets.clear();
+  console.log('[AssetPreloader] Cache cleared');
+};
+
+/**
+ * Gets the number of cached assets
+ * @returns Number of assets in the cache
+ */
+export const getCacheSize = () => {
+  return preloadedAssets.size;
+};
+
 /**
  * Enhanced asset preloader hook with card support, retry logic, and fallbacks
+ * Uses a global cache to prevent re-preloading the same assets
  * @param config - Preload configuration or simple array of asset URLs
  * @returns Preload result with loading state, progress, and errors
  */
@@ -160,18 +182,31 @@ export const useAssetPreloader = (
   const [error, setError] = useState<Error | null>(null);
   const [failedAssets, setFailedAssets] = useState<string[]>([]);
 
-  useEffect(() => {
-    // Convert config to asset URLs
-    const assets = Array.isArray(config) ? config : configToAssetUrls(config);
+  // Convert config to asset URLs and create a stable key
+  const assets = Array.isArray(config) ? config : configToAssetUrls(config);
+  const screenName = Array.isArray(config) ? 'unknown' : config.screen;
+  const assetsKey = assets.join('|'); // Create a stable key for dependency
 
+  useEffect(() => {
     if (assets.length === 0) {
       setLoaded(true);
       setProgress(100);
       return;
     }
 
+    // Filter out already preloaded assets
+    const assetsToLoad = assets.filter((asset) => !preloadedAssets.has(asset));
+
+    // If all assets are already loaded, mark as complete immediately
+    if (assetsToLoad.length === 0) {
+      setLoaded(true);
+      setProgress(100);
+      console.log(`[${screenName}] All ${assets.length} assets already cached`);
+      return;
+    }
+
     let loadedCount = 0;
-    const totalAssets = assets.length;
+    const totalAssets = assetsToLoad.length;
     const failed: string[] = [];
     let isCancelled = false;
 
@@ -203,7 +238,10 @@ export const useAssetPreloader = (
         useFallback: true,
       });
 
-      if (!result.success) {
+      if (result.success) {
+        // Add to global cache on success
+        preloadedAssets.add(src);
+      } else {
         failed.push(src);
       }
 
@@ -212,10 +250,12 @@ export const useAssetPreloader = (
 
     const loadAssets = async () => {
       try {
-        const screenName = Array.isArray(config) ? 'unknown' : config.screen;
-        console.log(`[${screenName}] Preloading ${totalAssets} assets...`);
+        const cachedCount = assets.length - assetsToLoad.length;
+        console.log(
+          `[${screenName}] Preloading ${assetsToLoad.length} new assets (${cachedCount} cached)...`
+        );
 
-        await Promise.all(assets.map((asset) => preloadAsset(asset)));
+        await Promise.all(assetsToLoad.map((asset) => preloadAsset(asset)));
 
         if (!isCancelled) {
           console.log(`[${screenName}] Preloading complete`);
@@ -236,7 +276,8 @@ export const useAssetPreloader = (
     return () => {
       isCancelled = true;
     };
-  }, [config]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assetsKey]); // Use stable key instead of config object
 
   return { loaded, progress, error, failedAssets };
 };

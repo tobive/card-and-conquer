@@ -97,7 +97,7 @@ Main layout wrapper providing:
 
 #### GachaScreen
 
-- Free pull system (22-hour cooldown)
+- Free pull system (2-hour cooldown)
 - Paid pull system (50 coins)
 - Live countdown timer for next free pull
 - Animated card reveal modal

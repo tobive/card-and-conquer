@@ -52,8 +52,9 @@ export const GameCard = memo(({
   };
 
   // Determine card dimensions based on size
-  const cardWidth = isThumbnail ? '120px' : '240px';
-  const cardHeight = isThumbnail ? '160px' : '320px';
+  // Use 100% width for thumbnails to be responsive, fixed width for full size
+  const cardWidth = isThumbnail ? '100%' : '240px';
+  const cardHeight = 'auto'; // Use aspect ratio instead
   
   // Get responsive text styles
   const responsiveTextStyles = getResponsiveCardTextStyles(size);
@@ -63,6 +64,7 @@ export const GameCard = memo(({
   const containerStyle: CSSProperties = useMemo(() => ({
     width: cardWidth,
     height: cardHeight,
+    aspectRatio: '2/3', // Maintain 2:3 aspect ratio (width:height)
     position: 'relative',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -98,7 +100,7 @@ export const GameCard = memo(({
     top: 0,
     left: 0,
     right: 0,
-    height: isThumbnail ? '35%' : '10%',
+    height: isThumbnail ? '15%' : '10%',
     background: theme.gradient,
     zIndex: 2,
     display: 'flex',
@@ -252,7 +254,7 @@ export const GameCard = memo(({
       {/* Top Overlay - Card Number and Level */}
       <div style={topOverlayStyle} aria-hidden="true">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={cardNumberStyle}>#{card.id}</span>
+          <span style={cardNumberStyle}>#{getCardDisplayNumber(card.id)}</span>
           <span style={levelStarsStyle} aria-label={`Level ${card.level}`}>{stars}</span>
         </div>
       </div>
@@ -305,4 +307,12 @@ GameCard.displayName = 'GameCard';
 function formatAbilityName(ability: string): string {
   // Convert camelCase to space-separated words
   return ability.replace(/([A-Z])/g, ' $1').trim();
+}
+
+/**
+ * Helper function to get display card number (ID - 100)
+ * Card ID 101 displays as #1, ID 102 as #2, etc.
+ */
+function getCardDisplayNumber(cardId: number): number {
+  return cardId - 100;
 }

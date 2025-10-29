@@ -47,13 +47,15 @@ export async function postComment(postId: string, text: string) {
  * @param cardName Name of the card starting the battle
  * @param locationName Name of the battle location
  * @param mapType Type of map/terrain
+ * @param faction Faction of the attacking card (for cover image)
  * @returns The created post
  */
 export async function createBattlePost(
   battleId: string,
   cardName: string,
   locationName: string,
-  mapType: string
+  mapType: string,
+  faction?: string
 ) {
   const { subredditName } = context;
   if (!subredditName) {
@@ -62,10 +64,17 @@ export async function createBattlePost(
 
   const title = `⚔️ Battle in ${locationName} led by ${cardName}`;
 
+  // Select cover image based on faction
+  const coverImage = faction === 'East' 
+    ? 'eastern-gods.png' 
+    : faction === 'West' 
+    ? 'western-gods.png' 
+    : 'default-splash.png';
+
   return await reddit.submitCustomPost({
     splash: {
       appDisplayName: 'Card And Conquer',
-      backgroundUri: 'default-splash.png',
+      backgroundUri: coverImage,
       buttonLabel: 'Join Battle',
       description: `A ${mapType} battle at ${locationName}. Join the fight!`,
       heading: `Battle at ${locationName}`,

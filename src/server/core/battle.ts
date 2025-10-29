@@ -17,38 +17,72 @@ const BATTLE_KEY_PREFIX = 'battle:';
 const ACTIVE_BATTLES_KEY = 'battles:active';
 const BATTLE_COUNTER_KEY = 'battle:counter';
 
-// Location names for battle generation
+// Mythological location names for battle generation
 const LOCATION_NAMES = [
-  'Waterloo',
-  'Thermopylae',
-  'Hastings',
-  'Gettysburg',
-  'Stalingrad',
-  'Normandy',
-  'Verdun',
-  'Agincourt',
-  'Marathon',
-  'Cannae',
-  'Salamis',
-  'Austerlitz',
-  'Trafalgar',
-  'Midway',
-  'Kursk',
-  'Yorktown',
-  'Lepanto',
-  'Tours',
-  'Vienna',
-  'Gaugamela',
-  'Actium',
-  'Zama',
-  'Pharsalus',
-  'Alesia',
-  'Teutoburg',
-  'Constantinople',
-  'Orleans',
-  'Saratoga',
-  'Antietam',
-  'Shiloh',
+  // Greek Mythology
+  'Mount Olympus',
+  'Elysian Fields',
+  'River Styx',
+  'Delphi',
+  'Tartarus',
+  'Hades Underworld',
+  'Ithaca',
+  'Troy',
+  'Crete Labyrinth',
+  'Thebes',
+  
+  // Norse Mythology
+  'Asgard',
+  'Valhalla',
+  'Midgard',
+  'Jotunheim',
+  'Niflheim',
+  'Bifrost Bridge',
+  'Yggdrasil',
+  'Helheim',
+  
+  // Egyptian Mythology
+  'Duat Underworld',
+  'Heliopolis',
+  'Memphis',
+  'Thebes Necropolis',
+  'Abu Simbel',
+  'Field of Reeds',
+  
+  // Irish Mythology
+  'Tir na nOg',
+  'Mag Mell',
+  'Tech Duinn',
+  'Emain Ablach',
+  'Newgrange',
+  
+  // Chinese Mythology
+  'Kunlun Mountain',
+  'Penglai Island',
+  'Diyu Underworld',
+  'Jade Palace',
+  'Dragon Gate',
+  
+  // Hindu Mythology
+  'Mount Meru',
+  'Svarga Heaven',
+  'Patala Underworld',
+  'Kailash',
+  'Vaikuntha',
+  'Ayodhya',
+  
+  // Japanese Mythology
+  'Takamagahara',
+  'Yomi Underworld',
+  'Ryugu Palace',
+  'Mount Fuji',
+  'Izumo',
+  
+  // Korean Mythology
+  'Baekdu Mountain',
+  'Jiri Mountain',
+  'Seorabeol',
+  'Samsin Mountain',
 ];
 
 // Helper to get battle key
@@ -105,7 +139,8 @@ export async function createBattle(
   postId: string,
   initialCardId: number,
   playerId: string,
-  location?: { mapType: MapType; locationName: string }
+  location?: { mapType: MapType; locationName: string },
+  variantId?: string
 ): Promise<Battle> {
   const battleId = await generateBattleId();
   const battleLocation = location || generateBattleLocation();
@@ -116,6 +151,19 @@ export async function createBattle(
   if (!card) {
     throw new Error('Card not found');
   }
+
+  // Import inventory functions to check and consume card
+  const { hasCardVariantAvailable, removeCardFromInventory } = await import('./inventory');
+  
+  // Check if player has this card available
+  const hasCard = await hasCardVariantAvailable(playerId, initialCardId, variantId);
+  
+  if (!hasCard) {
+    throw new Error('You do not have this card in your inventory');
+  }
+
+  // Consume the card from inventory
+  await removeCardFromInventory(playerId, initialCardId, variantId);
 
   // Initialize empty slots (10 per faction)
   const westSlots: (BattleCard | null)[] = Array(10).fill(null);
@@ -238,7 +286,8 @@ export async function getBattle(battleId: string): Promise<Battle | null> {
 export async function addCardToBattle(
   battleId: string,
   cardId: number,
-  playerId: string
+  playerId: string,
+  variantId?: string
 ): Promise<{
   battle: Battle;
   slotIndex: number;
@@ -260,6 +309,16 @@ export async function addCardToBattle(
     throw new Error('Card not found');
   }
 
+  // Import inventory functions to check and consume card
+  const { hasCardVariantAvailable, removeCardFromInventory } = await import('./inventory');
+  
+  // Check if player has this card available
+  const hasCard = await hasCardVariantAvailable(playerId, cardId, variantId);
+  
+  if (!hasCard) {
+    throw new Error('You do not have this card in your inventory');
+  }
+
   // Determine which faction slots to use
   const slots = card.faction === Faction.West ? battle.westSlots : battle.eastSlots;
 
@@ -268,6 +327,9 @@ export async function addCardToBattle(
   if (slotIndex === -1) {
     throw new Error(`${card.faction} faction slots are full`);
   }
+
+  // Consume the card from inventory
+  await removeCardFromInventory(playerId, cardId, variantId);
 
   // Create battle card
   const battleCard: BattleCard = {

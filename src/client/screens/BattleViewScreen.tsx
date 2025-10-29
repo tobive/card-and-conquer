@@ -3,11 +3,11 @@ import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
 import { Card as UICard } from '../components/Card';
 import { GameCard } from '../components/GameCard';
+import { useAssetPreloader } from '../hooks/useAssetPreloader';
 import { Faction, CardVariant, BattleStatus } from '../../shared/types/game';
 import { getVariantById } from '../../shared/utils/variantUtils';
 import type { Battle, Card, BattleCard, CombatResult } from '../../shared/types/game';
 import type { BattleStateResponse, BattleJoinResponse } from '../../shared/types/api';
-import { useAssetPreloader } from '../hooks/useAssetPreloader';
 
 interface CardSlotProps {
   battleCard: BattleCard | null;
@@ -35,62 +35,72 @@ const CardSlot = ({ battleCard, card, variant, faction, onJoin }: CardSlotProps)
     faction === Faction.West ? 'hover:border-amber-500/50' : 'hover:border-purple-500/50';
 
   if (isEmpty) {
+    // If onJoin is not provided, this slot is not joinable (player chose opposite faction)
+    if (!onJoin) {
+      return (
+        <div className="flex flex-col gap-1">
+          <div className="relative aspect-[2/3] rounded-lg border-2 border-dashed border-slate-700/50 bg-slate-800/20 flex items-center justify-center min-h-[60px]">
+            <span className="text-slate-600 text-[10px] sm:text-xs">
+              Empty
+            </span>
+          </div>
+        </div>
+      );
+    }
+    
     return (
-      <button
-        onClick={onJoin}
-        className={`relative aspect-[2/3] rounded-lg border-2 border-dashed border-slate-600 bg-slate-800/30 ${hoverBorderColor} hover:bg-slate-700/30 transition-all duration-200 flex items-center justify-center group min-h-[60px] touch-manipulation`}
-      >
-        <span className="text-slate-500 text-[10px] sm:text-xs group-hover:text-slate-400">
-          Empty
-        </span>
-      </button>
+      <div className="flex flex-col gap-1">
+        <button
+          onClick={onJoin}
+          className={`relative aspect-[2/3] rounded-lg border-2 border-dashed border-slate-600 bg-slate-800/30 ${hoverBorderColor} hover:bg-slate-700/30 transition-all duration-200 flex items-center justify-center group min-h-[60px] touch-manipulation`}
+        >
+          <span className="text-slate-500 text-[10px] sm:text-xs group-hover:text-slate-400">
+            Empty
+          </span>
+        </button>
+      </div>
     );
   }
 
   if (!card) {
     return (
-      <div className="relative aspect-[2/3] rounded-lg border-2 border-slate-600 bg-slate-800/30 flex items-center justify-center min-h-[60px]">
-        <span className="text-slate-500 text-[10px] sm:text-xs">Unknown</span>
+      <div className="flex flex-col gap-1">
+        <div className="relative aspect-[2/3] rounded-lg border-2 border-slate-600 bg-slate-800/30 flex items-center justify-center min-h-[60px]">
+          <span className="text-slate-500 text-[10px] sm:text-xs">Unknown</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={`relative ${justPlaced ? 'animate-cardPlace' : ''}`}>
-      {/* Use GameCard component with variant */}
-      <div className="w-full">
+    <div className="flex flex-col gap-1">
+      <div className={`relative w-full aspect-[2/3] ${justPlaced ? 'animate-cardPlace' : ''}`}>
+        {/* Use GameCard component with variant */}
         <GameCard
           card={card}
           {...(variant ? { variant } : {})}
           size="thumbnail"
           showStats={false}
-          className="w-full"
+          className="w-full h-full"
         />
+
+        {/* Dead indicator */}
+        {isDead && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-lg animate-fadeIn z-20">
+            <div className="text-red-500 text-2xl sm:text-4xl md:text-6xl font-bold animate-scaleIn">✕</div>
+          </div>
+        )}
       </div>
 
-      {/* Overlay with current devotees count */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
-        <div className="bg-black/70 backdrop-blur-sm rounded-lg px-2 py-1 border border-white/20">
-          <div className="text-white text-lg sm:text-2xl font-bold leading-tight">
-            {battleCard.currentSoldiers}
-          </div>
-          <div className="text-white text-[8px] sm:text-xs opacity-80 leading-tight text-center">
-            Devotees
-          </div>
+      {/* Info below card - devotees count and player name */}
+      <div className="flex flex-col gap-0.5 text-center">
+        <div className="text-white text-xs sm:text-sm font-bold leading-tight">
+          🪖 {battleCard.currentDevotees}
         </div>
-        <div className="mt-1 bg-black/70 backdrop-blur-sm rounded px-2 py-0.5 border border-white/20">
-          <div className="text-white text-[8px] sm:text-xs opacity-80 truncate max-w-[100px]">
-            {battleCard.playerId}
-          </div>
+        <div className="text-slate-400 text-[9px] sm:text-xs opacity-80 leading-tight truncate">
+          {battleCard.playerId}
         </div>
       </div>
-
-      {/* Dead indicator */}
-      {isDead && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-lg animate-fadeIn z-20">
-          <div className="text-red-500 text-4xl sm:text-6xl font-bold animate-scaleIn">✕</div>
-        </div>
-      )}
     </div>
   );
 };
@@ -112,7 +122,11 @@ const JoinBattleModal = ({
 }: JoinBattleModalProps) => {
   if (!isOpen) return null;
 
-  const factionCards = playerCards.filter((card) => card.faction === faction);
+  // Filter cards by faction and only show cards with quantity > 0
+  const factionCards = playerCards.filter((card) => {
+    const hasQuantity = 'quantity' in card && typeof card.quantity === 'number' && card.quantity > 0;
+    return card.faction === faction && hasQuantity;
+  });
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-2 sm:p-4">
@@ -134,28 +148,37 @@ const JoinBattleModal = ({
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
-              {factionCards.map((card) => (
-                <button
-                  key={card.id}
-                  onClick={() => onSelectCard(card.id)}
-                  className="aspect-[2/3] rounded-lg border-2 border-amber-500 bg-gradient-to-br from-slate-800 to-slate-900 p-2 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-200 min-h-[100px] touch-manipulation"
-                >
-                  <div className="h-full flex flex-col justify-between text-white">
-                    <div className="text-[10px] sm:text-xs font-bold truncate leading-tight">
-                      {card.name}
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg sm:text-xl font-bold leading-tight">
-                        {card.soldiers}
+              {factionCards.map((card) => {
+                const quantity = 'quantity' in card ? (card.quantity as number) : 0;
+                return (
+                  <button
+                    key={card.id}
+                    onClick={() => onSelectCard(card.id)}
+                    className="aspect-[2/3] rounded-lg border-2 border-amber-500 bg-gradient-to-br from-slate-800 to-slate-900 p-2 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-200 min-h-[100px] touch-manipulation relative"
+                  >
+                    {/* Quantity badge */}
+                    {quantity > 1 && (
+                      <div className="absolute top-1 right-1 bg-amber-500 text-slate-900 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                        ×{quantity}
                       </div>
-                      <div className="text-[9px] sm:text-xs opacity-80 leading-tight">Devotees</div>
+                    )}
+                    <div className="h-full flex flex-col justify-between text-white">
+                      <div className="text-[10px] sm:text-xs font-bold truncate leading-tight">
+                        {card.name}
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg sm:text-xl font-bold leading-tight">
+                          {card.devotees ?? 0}
+                        </div>
+                        <div className="text-[9px] sm:text-xs opacity-80 leading-tight">Devotees</div>
+                      </div>
+                      <div className="text-[9px] sm:text-xs opacity-80 leading-tight">
+                        Lvl {card.level}
+                      </div>
                     </div>
-                    <div className="text-[9px] sm:text-xs opacity-80 leading-tight">
-                      Lvl {card.level}
-                    </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -170,12 +193,95 @@ const JoinBattleModal = ({
   );
 };
 
+interface FactionSelectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelectFaction: (faction: Faction) => void;
+  suggestedFaction: Faction;
+}
+
+const FactionSelectModal = ({
+  isOpen,
+  onClose,
+  onSelectFaction,
+  suggestedFaction,
+}: FactionSelectModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+      <div className="bg-slate-900 rounded-xl border-2 border-amber-500 max-w-md w-full overflow-hidden">
+        <div className="p-4 sm:p-6 border-b border-slate-700">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white text-center mb-2">
+            Choose Your Side
+          </h3>
+          <p className="text-slate-400 text-sm text-center">
+            Select which faction you want to fight for in this battle. You can only place cards on your chosen side.
+          </p>
+        </div>
+
+        <div className="p-4 sm:p-6 space-y-3">
+          {/* West Faction Button */}
+          <button
+            onClick={() => onSelectFaction(Faction.West)}
+            className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
+              suggestedFaction === Faction.West
+                ? 'border-amber-400 bg-gradient-to-br from-amber-900/50 to-yellow-900/50 hover:from-amber-800/60 hover:to-yellow-800/60'
+                : 'border-amber-600/50 bg-slate-800/50 hover:border-amber-500 hover:bg-slate-700/50'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="text-left">
+                <div className="text-xl font-bold text-amber-400 mb-1">⚪ West Faction</div>
+                <div className="text-sm text-slate-300">
+                  Join the forces of light and order
+                </div>
+              </div>
+              {suggestedFaction === Faction.West && (
+                <div className="text-2xl">✓</div>
+              )}
+            </div>
+          </button>
+
+          {/* East Faction Button */}
+          <button
+            onClick={() => onSelectFaction(Faction.East)}
+            className={`w-full p-4 rounded-lg border-2 transition-all duration-200 ${
+              suggestedFaction === Faction.East
+                ? 'border-purple-400 bg-gradient-to-br from-purple-900/50 to-violet-900/50 hover:from-purple-800/60 hover:to-violet-800/60'
+                : 'border-purple-600/50 bg-slate-800/50 hover:border-purple-500 hover:bg-slate-700/50'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="text-left">
+                <div className="text-xl font-bold text-purple-400 mb-1">⚫ East Faction</div>
+                <div className="text-sm text-slate-300">
+                  Join the forces of shadow and chaos
+                </div>
+              </div>
+              {suggestedFaction === Faction.East && (
+                <div className="text-2xl">✓</div>
+              )}
+            </div>
+          </button>
+        </div>
+
+        <div className="p-4 border-t border-slate-700">
+          <Button variant="secondary" fullWidth onClick={onClose}>
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Helper function to determine battle winner from battle state
 const determineBattleWinner = (battle: Battle): Faction | 'Draw' => {
   const calculateSurvivingDevotees = (slots: (BattleCard | null)[]): number => {
     return slots.reduce((total, slot) => {
       if (slot && slot.isAlive) {
-        return total + slot.currentSoldiers;
+        return total + slot.currentDevotees;
       }
       return total;
     }, 0);
@@ -194,7 +300,7 @@ const determineBattleWinner = (battle: Battle): Faction | 'Draw' => {
 };
 
 export const BattleViewScreen = () => {
-  const { routeParams, goBack } = useRouter();
+  const { routeParams, navigate } = useRouter();
   const battleId = routeParams.battleId;
 
   const [battle, setBattle] = useState<Battle | null>(null);
@@ -206,7 +312,9 @@ export const BattleViewScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showFactionSelectModal, setShowFactionSelectModal] = useState(false);
   const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
+  const [playerChosenFaction, setPlayerChosenFaction] = useState<Faction | null>(null);
   const [combatLog, setCombatLog] = useState<string[]>([]);
   const [joining, setJoining] = useState(false);
   const [battleResult, setBattleResult] = useState<{ winner: string; show: boolean }>({
@@ -273,17 +381,42 @@ export const BattleViewScreen = () => {
         throw new Error(errorMessage);
       }
       const data: BattleStateResponse = await response.json();
+      
+      // Debug: Log the battle data received
+      console.log('📥 Battle State Loaded:', {
+        battleId: data.battle.id,
+        status: data.battle.status,
+        statusType: typeof data.battle.status,
+        statusValue: data.battle.status,
+        BattleStatusEnum: BattleStatus,
+        isCompleted: data.battle.status === BattleStatus.Completed,
+        isStalemate: data.battle.status === BattleStatus.Stalemate,
+        rawBattleObject: data.battle,
+      });
+      
       setBattle(data.battle);
       setCards(data.cards);
       setVariantPreferences(data.variantPreferences || {});
       setLoading(false);
       setError(null);
 
+      // Detect player's faction if they already have cards in the battle
+      const username = await (await fetch('/api/player/profile')).json().then((d: any) => d.player.username);
+      const allSlots = [...data.battle.westSlots, ...data.battle.eastSlots];
+      const playerSlot = allSlots.find((slot) => slot && slot.playerId === username);
+      
+      if (playerSlot) {
+        // Player already has a card in battle - determine their faction
+        const isInWest = data.battle.westSlots.some((slot) => slot && slot.playerId === username);
+        setPlayerChosenFaction(isInWest ? Faction.West : Faction.East);
+      }
+
       // Check if battle is already completed and show result
       if (
         data.battle.status === BattleStatus.Completed ||
         data.battle.status === BattleStatus.Stalemate
       ) {
+        console.log('⚠️ Battle is completed/stalemate - setting battleResult.show to TRUE');
         const winner = determineBattleWinner(data.battle);
         setBattleResult({ winner, show: true });
       }
@@ -319,6 +452,28 @@ export const BattleViewScreen = () => {
   };
 
   const handleJoinSlot = (faction: Faction) => {
+    // If player hasn't chosen a faction yet, show faction selection modal
+    if (!playerChosenFaction) {
+      setSelectedFaction(faction);
+      setShowFactionSelectModal(true);
+      return;
+    }
+
+    // If player tries to join opposite faction, show error
+    if (playerChosenFaction !== faction) {
+      setError(`You've already joined the ${playerChosenFaction} faction! You can only place cards on your chosen side.`);
+      setTimeout(() => setError(null), 3000); // Clear error after 3 seconds
+      return;
+    }
+
+    // Player is joining their chosen faction
+    setSelectedFaction(faction);
+    setShowJoinModal(true);
+  };
+
+  const handleFactionChoice = (faction: Faction) => {
+    setPlayerChosenFaction(faction);
+    setShowFactionSelectModal(false);
     setSelectedFaction(faction);
     setShowJoinModal(true);
   };
@@ -331,10 +486,18 @@ export const BattleViewScreen = () => {
     setError(null);
 
     try {
+      // Get player's preferred variant for this card
+      const variantPrefsResponse = await fetch('/api/player/variant-preferences');
+      let variantId: string | undefined;
+      if (variantPrefsResponse.ok) {
+        const prefs = await variantPrefsResponse.json();
+        variantId = prefs.preferences[cardId];
+      }
+
       const response = await fetch('/api/battle/join', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ battleId, cardId }),
+        body: JSON.stringify({ battleId, cardId, variantId }),
       });
 
       if (!response.ok) {
@@ -368,8 +531,13 @@ export const BattleViewScreen = () => {
         await showBattleAnimation(data.combatResult);
       }
 
-      // Update battle state after animation
+      // Update battle state, cards, and variant preferences after animation
       setBattle(data.battle);
+      setCards(data.cards);
+      setVariantPreferences(data.variantPreferences || {});
+
+      // Reload player inventory to reflect consumed card
+      await loadPlayerInventory();
 
       // Add combat result to log
       if (data.combatResult) {
@@ -434,10 +602,10 @@ export const BattleViewScreen = () => {
 
   const showBattleAnimation = async (combatResult: CombatResult): Promise<void> => {
     return new Promise((resolve) => {
-      const attackerMax = combatResult.attackerCard.soldiersBefore;
-      const defenderMax = combatResult.defenderCard.soldiersBefore;
-      const attackerFinal = combatResult.attackerCard.soldiersAfter;
-      const defenderFinal = combatResult.defenderCard.soldiersAfter;
+      const attackerMax = combatResult.attackerCard.devoteesBefore;
+      const defenderMax = combatResult.defenderCard.devoteesBefore;
+      const attackerFinal = combatResult.attackerCard.devoteesAfter;
+      const defenderFinal = combatResult.defenderCard.devoteesAfter;
 
       // Calculate number of turns based on damage dealt
       const totalDamage = combatResult.damage.attackerDealt + combatResult.damage.defenderDealt;
@@ -519,8 +687,8 @@ export const BattleViewScreen = () => {
     const attacker = combatResult.attackerCard;
     const defender = combatResult.defenderCard;
 
-    const attackerMaxHP = attacker.soldiersBefore;
-    const defenderMaxHP = defender.soldiersBefore;
+    const attackerMaxHP = attacker.devoteesBefore;
+    const defenderMaxHP = defender.devoteesBefore;
     const attackerHPPercent = (attackerHP / attackerMaxHP) * 100;
     const defenderHPPercent = (defenderHP / defenderMaxHP) * 100;
 
@@ -649,9 +817,14 @@ export const BattleViewScreen = () => {
                 ? 'The battle ended in a stalemate'
                 : `The ${battleResult.winner} faction has conquered this battlefield!`}
             </p>
-            <Button onClick={() => setBattleResult({ winner: '', show: false })} className="w-full">
-              Continue
-            </Button>
+            <div className="space-y-2">
+              <Button onClick={() => navigate('menu')} className="w-full" variant="primary">
+                Go to Main Menu
+              </Button>
+              <Button onClick={() => setBattleResult({ winner: '', show: false })} className="w-full" variant="secondary">
+                View Battle
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -683,7 +856,7 @@ export const BattleViewScreen = () => {
               <Button onClick={() => loadBattleState()} variant="secondary">
                 Try Again
               </Button>
-              <Button onClick={goBack}>Go Back</Button>
+              <Button onClick={() => navigate('menu')}>Go Back</Button>
             </div>
           </div>
         </div>
@@ -691,9 +864,89 @@ export const BattleViewScreen = () => {
     );
   }
 
-  const whiteSlotsFilled = battle.whiteSlots.filter((s) => s !== null).length;
-  const blackSlotsFilled = battle.blackSlots.filter((s) => s !== null).length;
-  const totalSlotsFilled = whiteSlotsFilled + blackSlotsFilled;
+  // Debug logging for battle status
+  console.log('🔍 Battle View Debug:', {
+    battleId: battle.id,
+    status: battle.status,
+    statusEnum: BattleStatus,
+    isCompleted: battle.status === BattleStatus.Completed,
+    isStalemate: battle.status === BattleStatus.Stalemate,
+    battleResultShow: battleResult.show,
+    shouldShowBattleOver:
+      (battle.status === BattleStatus.Completed || battle.status === BattleStatus.Stalemate) &&
+      !battleResult.show,
+  });
+
+  // Show "Battle Over" screen for resolved battles (unless user just witnessed the resolution)
+  if (
+    (battle.status === BattleStatus.Completed || battle.status === BattleStatus.Stalemate) &&
+    !battleResult.show
+  ) {
+    console.log('✅ Showing Battle Over screen');
+    const winner = determineBattleWinner(battle);
+    const isDraw = winner === 'Draw';
+    const isVictory = !isDraw;
+
+    return (
+      <div className="flex items-center justify-center min-h-full p-4">
+        <div
+          className={`card max-w-lg w-full p-6 sm:p-8 border-4 ${isVictory ? 'border-amber-400' : 'border-slate-500'}`}
+        >
+          <div className="text-center">
+            <div className="text-6xl sm:text-8xl mb-4 animate-bounceIn">
+              {isDraw ? '⚔️' : '🏆'}
+            </div>
+            <h2
+              className={`text-2xl sm:text-4xl font-bold mb-3 ${isVictory ? 'text-amber-400' : 'text-slate-400'}`}
+            >
+              Battle Over
+            </h2>
+            <div className="mb-6">
+              <p className="text-lg sm:text-xl text-white font-semibold mb-2">
+                {isDraw ? 'This battle ended in a draw' : `${winner} Faction Victory!`}
+              </p>
+              <p className="text-slate-400 text-sm sm:text-base">
+                {isDraw
+                  ? 'Both sides fought valiantly to a stalemate'
+                  : `The ${winner} faction has conquered this battlefield`}
+              </p>
+            </div>
+
+            <div className="card bg-slate-800/50 p-4 mb-6 border border-slate-700">
+              <p className="text-slate-300 text-sm sm:text-base mb-3">
+                This battle has concluded. Ready for more action?
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2 text-sm">
+                <div className="flex-1 text-center p-2 bg-amber-900/30 rounded border border-amber-700/50">
+                  <span className="text-amber-400">⚔️</span> Create a new battle
+                </div>
+                <div className="flex-1 text-center p-2 bg-purple-900/30 rounded border border-purple-700/50">
+                  <span className="text-purple-400">🎯</span> Join active battles
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Button onClick={() => navigate('menu')} className="w-full" variant="primary">
+                Go to Main Menu
+              </Button>
+              <Button
+                onClick={() => navigate('battle-list')}
+                className="w-full"
+                variant="secondary"
+              >
+                View Active Battles
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const westSlotsFilled = battle.westSlots?.filter((s) => s !== null).length ?? 0;
+  const eastSlotsFilled = battle.eastSlots?.filter((s) => s !== null).length ?? 0;
+  const totalSlotsFilled = westSlotsFilled + eastSlotsFilled;
 
   // Helper function to get variant for a battle card
   const getVariantForBattleCard = (battleCard: BattleCard | null): CardVariant | undefined => {
@@ -714,7 +967,7 @@ export const BattleViewScreen = () => {
       {/* Header */}
       <div className="sticky top-0 z-10 p-4 mb-4 border-b border-slate-700 bg-slate-900/95 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-2">
-          <Button variant="secondary" size="sm" onClick={goBack}>
+          <Button variant="secondary" size="sm" onClick={() => navigate('menu')}>
             ← Main
           </Button>
           <div className="text-center">
@@ -725,9 +978,9 @@ export const BattleViewScreen = () => {
         </div>
 
         <div className="flex justify-between items-center text-sm">
-          <div className="text-amber-400 font-semibold">West: {whiteSlotsFilled}/10</div>
+          <div className="text-amber-400 font-semibold">West: {westSlotsFilled}/10</div>
           <div className="text-slate-400">{totalSlotsFilled}/20 slots filled</div>
-          <div className="text-purple-400 font-semibold">East: {blackSlotsFilled}/10</div>
+          <div className="text-purple-400 font-semibold">East: {eastSlotsFilled}/10</div>
         </div>
       </div>
 
@@ -754,22 +1007,11 @@ export const BattleViewScreen = () => {
 
           {/* West faction slots */}
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-3">
+            <div className="mb-3">
               <h3 className="text-lg font-bold text-amber-400">⚪ West Faction</h3>
-              {whiteSlotsFilled < 10 &&
-                battle.status === BattleStatus.Active && (
-                  <Button
-                    variant="white"
-                    size="sm"
-                    onClick={() => handleJoinSlot(Faction.West)}
-                    disabled={joining}
-                  >
-                    Join West
-                  </Button>
-                )}
             </div>
             <div className="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-3">
-              {battle.whiteSlots.map((slot, index) => {
+              {battle.westSlots.map((slot, index) => {
                 const variant = getVariantForBattleCard(slot);
                 const slotProps: CardSlotProps = {
                   battleCard: slot,
@@ -777,10 +1019,15 @@ export const BattleViewScreen = () => {
                   ...(variant ? { variant } : {}),
                   faction: Faction.West,
                 };
-                if (whiteSlotsFilled < 10 && battle.status === BattleStatus.Active) {
+                // Only allow joining if: battle is active, slots available, and (no faction chosen OR chosen West)
+                if (
+                  westSlotsFilled < 10 && 
+                  battle.status === BattleStatus.Active &&
+                  (!playerChosenFaction || playerChosenFaction === Faction.West)
+                ) {
                   slotProps.onJoin = () => handleJoinSlot(Faction.West);
                 }
-                return <CardSlot key={`white-${index}`} {...slotProps} />;
+                return <CardSlot key={`west-${index}`} {...slotProps} />;
               })}
             </div>
           </div>
@@ -794,22 +1041,11 @@ export const BattleViewScreen = () => {
 
           {/* East faction slots */}
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-3">
+            <div className="mb-3">
               <h3 className="text-lg font-bold text-purple-400">⚫ East Faction</h3>
-              {blackSlotsFilled < 10 &&
-                battle.status === BattleStatus.Active && (
-                  <Button
-                    variant="black"
-                    size="sm"
-                    onClick={() => handleJoinSlot(Faction.East)}
-                    disabled={joining}
-                  >
-                    Join East
-                  </Button>
-                )}
             </div>
             <div className="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-3">
-              {battle.blackSlots.map((slot, index) => {
+              {battle.eastSlots.map((slot, index) => {
                 const variant = getVariantForBattleCard(slot);
                 const slotProps: CardSlotProps = {
                   battleCard: slot,
@@ -817,10 +1053,15 @@ export const BattleViewScreen = () => {
                   ...(variant ? { variant } : {}),
                   faction: Faction.East,
                 };
-                if (blackSlotsFilled < 10 && battle.status === BattleStatus.Active) {
+                // Only allow joining if: battle is active, slots available, and (no faction chosen OR chosen East)
+                if (
+                  eastSlotsFilled < 10 && 
+                  battle.status === BattleStatus.Active &&
+                  (!playerChosenFaction || playerChosenFaction === Faction.East)
+                ) {
                   slotProps.onJoin = () => handleJoinSlot(Faction.East);
                 }
-                return <CardSlot key={`black-${index}`} {...slotProps} />;
+                return <CardSlot key={`east-${index}`} {...slotProps} />;
               })}
             </div>
           </div>
@@ -859,6 +1100,14 @@ export const BattleViewScreen = () => {
         </div>
       </div>
 
+      {/* Faction selection modal */}
+      <FactionSelectModal
+        isOpen={showFactionSelectModal}
+        onClose={() => setShowFactionSelectModal(false)}
+        onSelectFaction={handleFactionChoice}
+        suggestedFaction={selectedFaction || Faction.West}
+      />
+
       {/* Join battle modal */}
       <JoinBattleModal
         isOpen={showJoinModal}
@@ -872,7 +1121,7 @@ export const BattleViewScreen = () => {
       <BattleAnimationModal />
 
       {/* Battle result modal */}
-      <BattleResultModal />
+      {/* <BattleResultModal /> */}
     </div>
   );
 };

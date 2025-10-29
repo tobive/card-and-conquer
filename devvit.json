@@ -36,5 +36,21 @@
   },
   "triggers": {
     "onAppInstall": "/internal/on-app-install"
+  },
+  "scheduler": {
+    "tasks": {
+      "resolve-battles": {
+        "cron": "*/5 * * * *",
+        "endpoint": "/internal/scheduler/resolve-battles"
+      },
+      "update-leaderboard": {
+        "cron": "*/15 * * * *",
+        "endpoint": "/internal/scheduler/update-leaderboard"
+      },
+      "update-hall-of-fame": {
+        "cron": "0 * * * *",
+        "endpoint": "/internal/scheduler/update-hall-of-fame"
+      }
+    }
   }
 }

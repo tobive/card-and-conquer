@@ -190,7 +190,7 @@ const FactionTabButton = ({ active, onClick, faction, playerCount }: FactionTabB
       `}
     >
       <div className="flex items-center justify-center gap-2">
-        <span className="text-2xl">{isWhite ? '⚪' : '⚫'}</span>
+        <span className="text-2xl">{isWest ? '⚪' : '⚫'}</span>
         <div className="text-left">
           <div className="font-bold text-lg">{faction}</div>
           <div className="text-xs opacity-75">{playerCount} warriors</div>
@@ -254,7 +254,7 @@ const LeaderboardEntry = ({
             <span
               className={`
               font-bold text-lg truncate
-              ${isCurrentPlayer ? (isWhite ? 'text-amber-400' : 'text-purple-400') : 'text-slate-200'}
+              ${isCurrentPlayer ? (isWest ? 'text-amber-400' : 'text-purple-400') : 'text-slate-200'}
             `}
             >
               {entry.username}
@@ -271,7 +271,7 @@ const LeaderboardEntry = ({
         </div>
 
         {/* Faction Icon */}
-        <div className="text-3xl opacity-50">{isWhite ? '⚪' : '⚫'}</div>
+        <div className="text-3xl opacity-50">{isWest ? '⚪' : '⚫'}</div>
       </div>
     </div>
   );

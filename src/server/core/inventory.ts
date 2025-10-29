@@ -2,6 +2,7 @@ import { redis } from '@devvit/web/server';
 import { Card, Faction, CardVariant } from '../../shared/types/game';
 import { loadCards, getCardById } from '../../shared/utils/cardCatalog';
 import { getVariantById, createDefaultBaseVariant } from '../../shared/utils/variantUtils';
+import { migrateInventoryToHash } from './inventoryMigration';
 
 const INVENTORY_KEY_PREFIX = 'inventory:';
 const VARIANT_PREFS_KEY_PREFIX = 'variant-prefs:';
@@ -32,38 +33,88 @@ export async function addCardToInventory(
   // If no variantId provided, use the base variant
   const finalVariantId = variantId || `${cardId}-base`;
 
-  // Store as "cardId:variantId" in sorted set
-  const member = `${cardId}:${finalVariantId}`;
-  await redis.zAdd(getInventoryKey(username), { member, score: Date.now() });
+  // Use hash to store quantities: inventory:username -> { "cardId:variantId": quantity }
+  const key = getInventoryKey(username);
+  const field = `${cardId}:${finalVariantId}`;
+  
+  // Increment quantity by 1
+  await redis.hIncrBy(key, field, 1);
 }
 
 // Get all inventory items with variant information
 export async function getInventoryItems(username: string): Promise<InventoryItem[]> {
-  const members = await redis.zRange(getInventoryKey(username), 0, -1);
-  const itemMap = new Map<string, InventoryItem>();
-
-  // Parse members and aggregate quantities
-  for (const m of members) {
-    const member = m.member as string;
-    const parts = member.split(':');
-    
-    // Handle both old format (just cardId) and new format (cardId:variantId)
-    if (!parts[0]) continue; // Skip invalid entries
-    
-    const cardIdStr = parts[0];
-    const cardId = parseInt(cardIdStr);
-    const variantId = parts[1] || `${cardId}-base`; // Default to base variant if not specified
-
-    const key = `${cardId}:${variantId}`;
-    if (itemMap.has(key)) {
-      const item = itemMap.get(key)!;
-      item.quantity += 1;
-    } else {
-      itemMap.set(key, { cardId, variantId, quantity: 1 });
-    }
+  const key = getInventoryKey(username);
+  
+  // Auto-migrate if needed (this will check if migration is needed and do it once)
+  try {
+    await migrateInventoryToHash(username);
+  } catch (error) {
+    console.error(`[Inventory] Migration error for ${username}:`, error);
+    // Continue anyway - migration might have already happened
+  }
+  
+  const data = await redis.hGetAll(key);
+  
+  if (!data || Object.keys(data).length === 0) {
+    return [];
   }
 
-  return Array.from(itemMap.values());
+  // Migrate old format entries to new format (one-time cleanup)
+  const fieldsToDelete: string[] = [];
+  const fieldsToAdd: Record<string, number> = {};
+  
+  for (const [field, quantityStr] of Object.entries(data)) {
+    const parts = field.split(':');
+    
+    // Check if this is old format (no colon, just cardId)
+    if (parts.length === 1 && !isNaN(parseInt(field))) {
+      const cardId = parseInt(field);
+      const quantity = parseInt(quantityStr || '0');
+      const newField = `${cardId}:${cardId}-base`;
+      
+      // Check if new format already exists
+      if (data[newField]) {
+        // Merge quantities
+        const existingQty = parseInt(data[newField] || '0');
+        fieldsToAdd[newField] = existingQty + quantity;
+      } else {
+        fieldsToAdd[newField] = quantity;
+      }
+      
+      fieldsToDelete.push(field);
+    }
+  }
+  
+  // Apply migrations
+  if (fieldsToDelete.length > 0) {
+    await redis.hDel(key, fieldsToDelete);
+  }
+  
+  if (Object.keys(fieldsToAdd).length > 0) {
+    for (const [field, quantity] of Object.entries(fieldsToAdd)) {
+      await redis.hSet(key, { [field]: quantity.toString() });
+    }
+  }
+  
+  // Re-fetch data after migration
+  const updatedData = await redis.hGetAll(key);
+
+  const items: InventoryItem[] = [];
+  
+  // Parse hash fields: "cardId:variantId" -> quantity
+  for (const [field, quantityStr] of Object.entries(updatedData)) {
+    const parts = field.split(':');
+    if (!parts[0]) continue; // Skip invalid entries
+    
+    const cardId = parseInt(parts[0]);
+    const variantId = parts[1] || `${cardId}-base`;
+    const quantity = parseInt(quantityStr || '0');
+    
+    // Include ALL cards, even with 0 quantity (to show as unlocked in Collection)
+    items.push({ cardId, variantId, quantity });
+  }
+
+  return items;
 }
 
 // Get all card IDs in player inventory (for backward compatibility)
@@ -75,6 +126,7 @@ export async function getInventoryCardIds(username: string): Promise<number[]> {
 }
 
 // Get full card objects with variant information for player inventory
+// Only returns cards with quantity > 0 (for battle modals)
 export async function getInventoryCards(
   username: string
 ): Promise<Array<Card & { variantId: string; quantity: number }>> {
@@ -82,17 +134,53 @@ export async function getInventoryCards(
   const cardsWithVariants: Array<Card & { variantId: string; quantity: number }> = [];
 
   for (const item of items) {
-    const card = getCardById(item.cardId);
-    if (card) {
-      cardsWithVariants.push({
-        ...card,
-        variantId: item.variantId,
-        quantity: item.quantity,
-      });
+    // Only include cards with quantity > 0 for battle usage
+    if (item.quantity > 0) {
+      const card = getCardById(item.cardId);
+      if (card) {
+        cardsWithVariants.push({
+          ...card,
+          variantId: item.variantId,
+          quantity: item.quantity,
+        });
+      }
     }
   }
 
   return cardsWithVariants;
+}
+
+// Get all cards with ownership information (for collection screen)
+// Returns ALL cards from catalog with quantity information
+export async function getAllCardsWithQuantity(
+  username: string
+): Promise<Array<Card & { variantId: string; quantity: number; everOwned: boolean }>> {
+  const items = await getInventoryItems(username); // Now includes 0 quantity cards
+  const allCards = loadCards();
+  const cardsWithQuantity: Array<Card & { variantId: string; quantity: number; everOwned: boolean }> = [];
+
+  // Create a map of owned cards for quick lookup
+  const ownedMap = new Map<string, number>();
+  for (const item of items) {
+    ownedMap.set(`${item.cardId}:${item.variantId}`, item.quantity);
+  }
+
+  // Add all cards with their quantities
+  for (const card of allCards) {
+    const baseVariantId = `${card.id}-base`;
+    const key = `${card.id}:${baseVariantId}`;
+    const quantity = ownedMap.get(key) || 0;
+    const everOwned = ownedMap.has(key); // If it's in the map, it was owned (even if quantity is 0)
+    
+    cardsWithQuantity.push({
+      ...card,
+      variantId: baseVariantId,
+      quantity,
+      everOwned,
+    });
+  }
+
+  return cardsWithQuantity;
 }
 
 // Filter inventory by faction
@@ -138,7 +226,9 @@ export async function hasVariant(username: string, variantId: string): Promise<b
 
 // Get inventory count
 export async function getInventoryCount(username: string): Promise<number> {
-  return await redis.zCard(getInventoryKey(username));
+  const items = await getInventoryItems(username);
+  // Sum all quantities
+  return items.reduce((total, item) => total + item.quantity, 0);
 }
 
 // Grant initial cards to new player
@@ -161,27 +251,52 @@ export async function grantInitialCards(username: string): Promise<Card[]> {
   return grantedCards;
 }
 
-// Remove card from inventory (for future use if needed)
+// Remove card from inventory (consumes one copy)
 export async function removeCardFromInventory(
   username: string,
   cardId: number,
   variantId?: string
 ): Promise<void> {
-  if (variantId) {
-    // Remove specific variant
-    const member = `${cardId}:${variantId}`;
-    await redis.zRem(getInventoryKey(username), [member]);
-  } else {
-    // Remove all variants of this card (backward compatibility)
-    const items = await getInventoryItems(username);
-    const membersToRemove = items
-      .filter((item) => item.cardId === cardId)
-      .map((item) => `${item.cardId}:${item.variantId}`);
-
-    if (membersToRemove.length > 0) {
-      await redis.zRem(getInventoryKey(username), membersToRemove);
-    }
+  const finalVariantId = variantId || `${cardId}-base`;
+  const key = getInventoryKey(username);
+  const field = `${cardId}:${finalVariantId}`;
+  
+  // Decrement quantity by 1
+  const newQuantity = await redis.hIncrBy(key, field, -1);
+  
+  // IMPORTANT: Keep the field even at 0 quantity so Collection screen knows card was unlocked
+  // Only reset if it goes negative (shouldn't happen, but safety check)
+  if (newQuantity < 0) {
+    await redis.hSet(key, { [field]: '0' });
   }
+}
+
+// Check if player has at least one copy of a card variant
+export async function hasCardVariantAvailable(
+  username: string,
+  cardId: number,
+  variantId?: string
+): Promise<boolean> {
+  const finalVariantId = variantId || `${cardId}-base`;
+  const items = await getInventoryItems(username);
+  const item = items.find(
+    (i) => i.cardId === cardId && i.variantId === finalVariantId
+  );
+  return item ? item.quantity > 0 : false;
+}
+
+// Get quantity of a specific card variant
+export async function getCardVariantQuantity(
+  username: string,
+  cardId: number,
+  variantId?: string
+): Promise<number> {
+  const finalVariantId = variantId || `${cardId}-base`;
+  const items = await getInventoryItems(username);
+  const item = items.find(
+    (i) => i.cardId === cardId && i.variantId === finalVariantId
+  );
+  return item ? item.quantity : 0;
 }
 
 // ============================================================================

@@ -436,7 +436,7 @@ Draw      | 35         | 50  | -             | No
 **Quick Facts:**
 ```
 Gacha Costs:
-- Free Pull: 22-hour cooldown
+- Free Pull: 2-hour cooldown
 - Paid Pull: 50 coins
 - Multi-Pull: 170 coins (5 cards)
 

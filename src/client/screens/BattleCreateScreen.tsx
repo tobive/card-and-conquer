@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
 import { Card as CardComponent } from '../components/Card';
 import { VariantSelector } from '../components/VariantSelector';
 import { GameCard } from '../components/GameCard';
-import { Card, Faction, MapType, CardVariant, VariantType, VariantRarity } from '../../shared/types/game';
+import { Card, Faction, CardVariant, VariantType, VariantRarity } from '../../shared/types/game';
 import {
   PlayerInventoryResponse,
   BattleStartResponse,
@@ -12,37 +12,20 @@ import {
   OwnedVariantsResponse,
 } from '../../shared/types/api';
 import { createDefaultBaseVariant } from '../../shared/utils/variantUtils';
-import { useAssetPreloader } from '../hooks/useAssetPreloader';
 
 export const BattleCreateScreen = () => {
   const { navigate } = useRouter();
   const [inventory, setInventory] = useState<Card[]>([]);
+  const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [previewLocation, setPreviewLocation] = useState<{
-    mapType: MapType;
-    locationName: string;
-  } | null>(null);
   
   // Variant selection state
   const [ownedVariants, setOwnedVariants] = useState<CardVariant[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<CardVariant | null>(null);
   const [loadingVariants, setLoadingVariants] = useState(false);
-
-  // Preload card images from inventory
-  const inventoryCardIds = useMemo(() => inventory.map((card) => card.id), [inventory]);
-  
-  const { loaded: assetsLoaded } = useAssetPreloader({
-    screen: 'BattleCreateScreen',
-    assets: {
-      cards: {
-        ids: inventoryCardIds,
-        size: 'full',
-      },
-    },
-  });
 
   // Fetch player inventory on mount
   useEffect(() => {
@@ -71,8 +54,6 @@ export const BattleCreateScreen = () => {
 
   const handleCardSelect = async (card: Card) => {
     setSelectedCard(card);
-    // Generate preview location when card is selected
-    generatePreviewLocation();
     // Load owned variants for the selected card
     await fetchOwnedVariants(card.id);
   };
@@ -80,7 +61,7 @@ export const BattleCreateScreen = () => {
   const fetchOwnedVariants = async (cardId: number) => {
     try {
       setLoadingVariants(true);
-      const response = await fetch(`/api/player/owned-variants/${cardId}`);
+      const response = await fetch(`/api/player/variants/${cardId}`);
 
       if (!response.ok) {
         const errorData = (await response.json()) as ErrorResponse;
@@ -145,30 +126,6 @@ export const BattleCreateScreen = () => {
     }
   };
 
-  const generatePreviewLocation = () => {
-    const mapTypes = Object.values(MapType);
-    const locationNames = [
-      'Waterloo',
-      'Thermopylae',
-      'Hastings',
-      'Gettysburg',
-      'Stalingrad',
-      'Normandy',
-      'Verdun',
-      'Agincourt',
-      'Marathon',
-      'Cannae',
-    ];
-
-    const randomMapType = mapTypes[Math.floor(Math.random() * mapTypes.length)];
-    const randomLocation = locationNames[Math.floor(Math.random() * locationNames.length)];
-
-    setPreviewLocation({
-      mapType: randomMapType || MapType.Plains,
-      locationName: randomLocation || 'Waterloo',
-    });
-  };
-
   const handleCreateBattle = async () => {
     if (!selectedCard) {
       setError('Please select a card to start the battle.');
@@ -201,7 +158,10 @@ export const BattleCreateScreen = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cardId: selectedCard.id }),
+        body: JSON.stringify({ 
+          cardId: selectedCard.id,
+          variantId: selectedVariant.id 
+        }),
       });
 
       if (!response.ok) {
@@ -241,14 +201,12 @@ export const BattleCreateScreen = () => {
     }
   };
 
-  if (loading || !assetsLoaded) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
-          <p className="mt-4 text-slate-400">
-            {!assetsLoaded ? 'Loading card images...' : 'Loading your cards...'}
-          </p>
+          <p className="mt-4 text-slate-400">Loading your cards...</p>
         </div>
       </div>
     );
@@ -298,12 +256,80 @@ export const BattleCreateScreen = () => {
     );
   }
 
+  // Filter cards by selected faction
+  const filteredInventory = selectedFaction
+    ? inventory.filter((card) => card.faction === selectedFaction)
+    : inventory;
+
+  // If no faction selected, show faction selection screen
+  if (!selectedFaction) {
+    return (
+      <div className="p-4 pb-20 max-w-4xl mx-auto animate-fadeIn">
+        <div className="mb-6 animate-slideUp">
+          <h1 className="text-3xl font-bold text-white mb-2">Start a Battle</h1>
+          <p className="text-slate-400">Choose which faction you want to fight for</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* West Faction */}
+          <button
+            onClick={() => setSelectedFaction(Faction.West)}
+            className="p-6 rounded-xl border-2 border-amber-600/50 bg-gradient-to-br from-amber-900/30 to-yellow-900/30 hover:from-amber-800/40 hover:to-yellow-800/40 hover:border-amber-500 transition-all duration-200 group"
+          >
+            <div className="text-center">
+              <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">⚪</div>
+              <h2 className="text-2xl font-bold text-amber-400 mb-2">West Faction</h2>
+              <p className="text-slate-300 mb-4">Forces of light and order</p>
+              <div className="text-sm text-slate-400">
+                {inventory.filter((c) => c.faction === Faction.West).length} cards available
+              </div>
+            </div>
+          </button>
+
+          {/* East Faction */}
+          <button
+            onClick={() => setSelectedFaction(Faction.East)}
+            className="p-6 rounded-xl border-2 border-purple-600/50 bg-gradient-to-br from-purple-900/30 to-violet-900/30 hover:from-purple-800/40 hover:to-violet-800/40 hover:border-purple-500 transition-all duration-200 group"
+          >
+            <div className="text-center">
+              <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">⚫</div>
+              <h2 className="text-2xl font-bold text-purple-400 mb-2">East Faction</h2>
+              <p className="text-slate-300 mb-4">Forces of shadow and chaos</p>
+              <div className="text-sm text-slate-400">
+                {inventory.filter((c) => c.faction === Faction.East).length} cards available
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div className="mt-6 text-center">
+          <Button onClick={() => navigate('menu')} variant="secondary">
+            ← Back to Menu
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 pb-20 max-w-6xl mx-auto animate-fadeIn">
       {/* Header */}
       <div className="mb-6 animate-slideUp">
-        <h1 className="text-3xl font-bold text-white mb-2">Start a Battle</h1>
-        <p className="text-slate-400">Select a card to lead your faction into battle</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Start a Battle</h1>
+            <p className="text-slate-400">
+              Selected: <span className={selectedFaction === Faction.West ? 'text-amber-400' : 'text-purple-400'}>{selectedFaction} Faction</span>
+            </p>
+          </div>
+          <Button onClick={() => {
+            setSelectedFaction(null);
+            setSelectedCard(null);
+            setSelectedVariant(null);
+          }} variant="secondary" size="sm">
+            Change Faction
+          </Button>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -318,12 +344,23 @@ export const BattleCreateScreen = () => {
         {/* Card Selection - Takes 2 columns on large screens */}
         <div className="lg:col-span-2">
           <CardComponent>
-            <h2 className="text-xl font-bold text-white mb-4">Choose Your Card</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-2">
-              {inventory.map((card) => (
+            <h2 className="text-xl font-bold text-white mb-4">Choose Your Card ({filteredInventory.length} available)</h2>
+            {filteredInventory.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-slate-400 mb-4">You don't have any {selectedFaction} faction cards.</p>
+                <Button onClick={() => setSelectedFaction(null)} variant="secondary">
+                  Choose Different Faction
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-2">
+                {filteredInventory.map((card) => (
                 <div
                   key={card.id}
-                  onClick={() => handleCardSelect(card)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleCardSelect(card);
+                  }}
                   className={`cursor-pointer rounded-lg border-2 p-3 transition-all duration-200 hover:scale-105 ${
                     selectedCard?.id === card.id
                       ? card.faction === Faction.West
@@ -354,13 +391,14 @@ export const BattleCreateScreen = () => {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
           </CardComponent>
         </div>
 
         {/* Battle Preview & Confirmation - Takes 1 column */}
         <div className="lg:col-span-1">
-          <CardComponent className="sticky top-4">
+          <CardComponent>
             <h2 className="text-xl font-bold text-white mb-4">Battle Preview</h2>
 
             {selectedCard ? (
@@ -393,19 +431,6 @@ export const BattleCreateScreen = () => {
                       selectedVariant={selectedVariant}
                       onSelect={handleVariantSelect}
                     />
-                  </div>
-                )}
-
-                {/* Location Preview */}
-                {previewLocation && (
-                  <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700">
-                    <div className="text-center">
-                      <div className="text-xs text-slate-400 mb-1">Battle Location</div>
-                      <div className="text-lg font-bold text-white">
-                        {previewLocation.locationName}
-                      </div>
-                      <div className="text-sm text-slate-300">{previewLocation.mapType}</div>
-                    </div>
                   </div>
                 )}
 

@@ -40,7 +40,7 @@ This implementation plan breaks down the Card And Conquer game into discrete, ma
 
   - Implement level-gated card selection algorithm with weighted distribution
   - Create coin deduction and validation logic
-  - Build free pull timer system (22-hour cooldown)
+  - Build free pull timer system (2-hour cooldown)
   - Implement card reveal data structure
   - _Requirements: 6.2, 8.4_
 

@@ -9,7 +9,7 @@ import {
 } from '../../shared/utils/variantUtils';
 import { recordGachaPull } from './statistics';
 
-const FREE_PULL_COOLDOWN = 22 * 60 * 60 * 1000; // 22 hours in milliseconds
+const FREE_PULL_COOLDOWN = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
 const PAID_PULL_COST = 50; // coins
 const LAST_FREE_PULL_KEY_PREFIX = 'lastFreePull:';
 

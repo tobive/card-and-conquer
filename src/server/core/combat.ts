@@ -5,23 +5,23 @@
  * - Turn-based 1v1 combat with randomized damage
  * - All 8 ability effect handlers
  * - Random opponent selection
- * - Card death and soldier reduction tracking
+ * - Card death and devotee reduction tracking
  *
  * Combat Flow:
  * 1. When a card is placed, selectRandomOpponent() chooses an alive enemy
  * 2. resolveCombat() applies pre-combat abilities and determines turn order
- * 3. Cards take turns attacking until one reaches 0 soldiers
- * 4. Each attack deals random damage (0 to max soldiers)
- * 5. Dead cards (soldiers <= 0) are marked as not alive
+ * 3. Cards take turns attacking until one reaches 0 devotees
+ * 4. Each attack deals random damage (0 to max devotees)
+ * 5. Dead cards (devotees <= 0) are marked as not alive
  * 6. Combat results are returned for logging
  *
  * Ability Effects:
- * - SiegeMaster: +300 max soldiers in City/Fortress (pre-combat)
- * - Spartan: +200 max soldiers vs stronger opponent (pre-combat)
+ * - SiegeMaster: +300 max devotees in City/Fortress (pre-combat)
+ * - Spartan: +200 max devotees vs stronger opponent (pre-combat)
  * - FirstStrike: 70% chance to attack first (determines order)
- * - Reinforcements: +100 max soldiers if NOT attacking first (pre-combat)
+ * - Reinforcements: +100 max devotees if NOT attacking first (pre-combat)
  * - Precision: Minimum 50% damage on each attack (during combat)
- * - TacticalRetreat: 20% chance to survive with 1 soldier (post-combat)
+ * - TacticalRetreat: 20% chance to survive with 1 devotee (post-combat)
  * - LastStand: Deal 1 final damage when defeated (post-combat)
  */
 
@@ -46,7 +46,7 @@ export function selectRandomOpponent(
   attackerFaction: Faction
 ): { card: BattleCard; slotIndex: number } | null {
   // Get opponent faction slots
-  const opponentSlots = attackerFaction === Faction.White ? battle.blackSlots : battle.whiteSlots;
+  const opponentSlots = attackerFaction === Faction.West ? battle.eastSlots : battle.westSlots;
 
   // Find all alive opponent cards
   const aliveOpponents: { card: BattleCard; slotIndex: number }[] = [];
@@ -292,7 +292,7 @@ export function executeCombat(
   attackerFaction: Faction
 ): CombatResult | null {
   // Get attacker card
-  const attackerSlots = attackerFaction === Faction.White ? battle.whiteSlots : battle.blackSlots;
+  const attackerSlots = attackerFaction === Faction.West ? battle.westSlots : battle.eastSlots;
   const attacker = attackerSlots[attackerSlotIndex];
 
   if (!attacker || !attacker.isAlive) {
@@ -307,7 +307,7 @@ export function executeCombat(
   }
 
   // Get defender card from battle
-  const defenderSlots = attackerFaction === Faction.White ? battle.blackSlots : battle.whiteSlots;
+  const defenderSlots = attackerFaction === Faction.West ? battle.eastSlots : battle.westSlots;
   const defender = defenderSlots[opponent.slotIndex];
 
   if (!defender) {
@@ -353,10 +353,10 @@ export function formatCombatLog(result: CombatResult): string {
   // Results
   lines.push('**Results:**');
   lines.push(
-    `- ${result.attackerCard.name}: ${result.attackerCard.soldiersBefore} → ${result.attackerCard.soldiersAfter} soldiers ${result.attackerCard.isAlive ? '✓' : '✘'}`
+    `- ${result.attackerCard.name}: ${result.attackerCard.devoteesBefore} → ${result.attackerCard.devoteesAfter} devotees ${result.attackerCard.isAlive ? '✓' : '✘'}`
   );
   lines.push(
-    `- ${result.defenderCard.name}: ${result.defenderCard.soldiersBefore} → ${result.defenderCard.soldiersAfter} soldiers ${result.defenderCard.isAlive ? '✓' : '✘'}`
+    `- ${result.defenderCard.name}: ${result.defenderCard.devoteesBefore} → ${result.defenderCard.devoteesAfter} devotees ${result.defenderCard.isAlive ? '✓' : '✘'}`
   );
 
   return lines.join('\n');

@@ -209,6 +209,14 @@ export type BattleJoinRequest = {
 
 export type BattleJoinResponse = {
   battle: Battle;
+  cards: {
+    [cardId: number]: Card;
+  };
+  variantPreferences: {
+    [playerId: string]: {
+      [cardId: number]: string; // Maps cardId to variantId
+    };
+  };
   combatResult?: CombatResult;
   battleResolution?: BattleResolution;
 };

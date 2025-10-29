@@ -29,7 +29,7 @@ function normalizeCardData(rawCard: RawCardData): Card {
   if (faction === 'Black') faction = 'East';
 
   // Handle devotees/soldiers field - prefer devotees, fallback to soldiers
-  const devotees = rawCard.devotees ?? rawCard.soldiers ?? 0;
+  const devotees = rawCard.devotees ?? 0;
 
   return {
     id: rawCard.id,

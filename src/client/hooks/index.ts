@@ -1,4 +1,9 @@
-export { useAssetPreloader, type PreloadConfig } from './useAssetPreloader';
+export {
+  useAssetPreloader,
+  clearPreloadCache,
+  getCacheSize,
+  type PreloadConfig,
+} from './useAssetPreloader';
 export { useResponsive } from './useResponsive';
 export { useCounter } from './useCounter';
 export { useApiCall, useApiGet, useApiPost } from './useApiCall';

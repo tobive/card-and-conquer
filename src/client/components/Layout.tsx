@@ -12,7 +12,7 @@ export const Layout = ({ children, showHeader = true }: LayoutProps) => {
         <header className="relative z-10 flex-shrink-0 px-4 py-3 border-b bg-slate-900/80 backdrop-blur-sm border-slate-700">
           <div className="flex items-center justify-between max-w-6xl mx-auto">
             <h1 className="text-xl font-bold text-transparent md:text-2xl bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text">
-              Card & Conquer
+              Battle of Pantheons
             </h1>
           </div>
         </header>

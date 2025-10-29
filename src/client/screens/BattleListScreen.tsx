@@ -1,33 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import type { Battle } from '../../shared/types/game';
 import type { BattleListResponse } from '../../shared/types/api';
-import { useAssetPreloader } from '../hooks/useAssetPreloader';
-import { filterCardsByLevel } from '../../shared/utils/cardCatalog';
 
 export const BattleListScreen = () => {
   const { navigate, goBack } = useRouter();
   const [battles, setBattles] = useState<Battle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Preload commonly used card thumbnails (level 1-3 cards)
-  const commonCards = useMemo(() => {
-    return [...filterCardsByLevel(1), ...filterCardsByLevel(2), ...filterCardsByLevel(3)];
-  }, []);
-  const commonCardIds = useMemo(() => commonCards.map((card) => card.id), [commonCards]);
-  
-  const { loaded: assetsLoaded } = useAssetPreloader({
-    screen: 'BattleListScreen',
-    assets: {
-      cards: {
-        ids: commonCardIds,
-        size: 'thumbnail',
-      },
-    },
-  });
 
   useEffect(() => {
     void loadBattles();
@@ -75,14 +57,12 @@ export const BattleListScreen = () => {
     navigate('battle-view', { battleId });
   };
 
-  if (loading || !assetsLoaded) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
           <div className="text-4xl mb-4 animate-pulse">⚔️</div>
-          <p className="text-slate-400">
-            {!assetsLoaded ? 'Loading card images...' : 'Loading battles...'}
-          </p>
+          <p className="text-slate-400">Loading battles...</p>
         </div>
       </div>
     );
@@ -134,9 +114,9 @@ export const BattleListScreen = () => {
         ) : (
           <div className="max-w-4xl mx-auto space-y-4">
             {battles.map((battle, index) => {
-              const whiteSlotsFilled = battle.whiteSlots.filter((s) => s !== null).length;
-              const blackSlotsFilled = battle.blackSlots.filter((s) => s !== null).length;
-              const totalSlotsFilled = whiteSlotsFilled + blackSlotsFilled;
+              const westSlotsFilled = battle.westSlots?.filter((s) => s !== null).length ?? 0;
+              const eastSlotsFilled = battle.eastSlots?.filter((s) => s !== null).length ?? 0;
+              const totalSlotsFilled = westSlotsFilled + eastSlotsFilled;
 
               return (
                 <Card
@@ -151,8 +131,8 @@ export const BattleListScreen = () => {
                       <h3 className="text-lg font-bold text-white">{battle.locationName}</h3>
                       <p className="text-sm text-slate-400">{battle.mapType}</p>
                       <div className="mt-2 flex items-center gap-4 text-sm">
-                        <span className="text-amber-400">⚪ {whiteSlotsFilled}/10</span>
-                        <span className="text-purple-400">⚫ {blackSlotsFilled}/10</span>
+                        <span className="text-amber-400">⚪ {westSlotsFilled}/10</span>
+                        <span className="text-purple-400">⚫ {eastSlotsFilled}/10</span>
                         <span className="text-slate-500">{totalSlotsFilled}/20 slots filled</span>
                       </div>
                     </div>

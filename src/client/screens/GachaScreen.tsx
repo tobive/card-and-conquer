@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
 import { BonusPullButton } from '../components/BonusPullButton';
-import { Card, Faction, VariantType, VariantRarity } from '../../shared/types/game';
+import { GameCard } from '../components/GameCard';
+import { Card, Faction, VariantType, VariantRarity, CardVariant } from '../../shared/types/game';
 import type {
   GachaPullResponse,
   GachaMultiPullResponse,
@@ -11,15 +12,14 @@ import type {
   BonusGachaStatusResponse,
   BonusGachaPullResponse,
 } from '../../shared/types/api';
-import { useAssetPreloader } from '../hooks/useAssetPreloader';
-import { getCardsUpToLevel } from '../../shared/utils/cardCatalog';
 
-// Variant info type for reveal modals
+// Variant info type for reveal modals (compatible with CardVariant)
 interface VariantInfo {
   id: string;
+  baseCardId?: number;
   variantName: string;
-  variantType: string;
-  rarity: string;
+  variantType: VariantType;
+  rarity: VariantRarity;
   imageAssets: {
     full: string;
     thumbnail: string;
@@ -40,21 +40,6 @@ export const GachaScreen = () => {
   const [currentMultiCardIndex, setCurrentMultiCardIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
   const [isNewVariant, setIsNewVariant] = useState(false);
-
-  // Preload full-size card images for gacha reveals
-  // Preload level 1-3 cards as they're most common in gacha
-  const gachaCards = getCardsUpToLevel(3);
-  const gachaCardIds = gachaCards.map((card) => card.id);
-  
-  const { loaded: assetsLoaded } = useAssetPreloader({
-    screen: 'GachaScreen',
-    assets: {
-      cards: {
-        ids: gachaCardIds,
-        size: 'full',
-      },
-    },
-  });
 
   useEffect(() => {
     void fetchData();
@@ -339,13 +324,11 @@ export const GachaScreen = () => {
     }
   };
 
-  if (loading || !assetsLoaded) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-full">
         <div className="text-center">
-          <div className="animate-pulse text-amber-400 text-xl">
-            {!assetsLoaded ? 'Loading card images...' : 'Loading gacha...'}
-          </div>
+          <div className="animate-pulse text-amber-400 text-xl">Loading gacha...</div>
         </div>
       </div>
     );
@@ -396,7 +379,7 @@ export const GachaScreen = () => {
               <h2 className="text-lg sm:text-xl font-bold text-green-400 mb-1 sm:mb-2">
                 Free Pull
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400">Available every 22 hours</p>
+              <p className="text-xs sm:text-sm text-slate-400">Available every 2 hours</p>
             </div>
 
             {freeStatus?.canUseFree ? (
@@ -587,7 +570,7 @@ export const GachaScreen = () => {
             <ul className="text-[10px] sm:text-xs text-slate-400 space-y-1">
               <li>• Cards are level-gated based on your player level</li>
               <li>• Lower level cards are more common</li>
-              <li>• Free pulls refresh every 22 hours</li>
+              <li>• Free pulls refresh every 2 hours</li>
               <li>• Earn coins by winning battles</li>
             </ul>
           </div>
@@ -628,17 +611,11 @@ interface CardRevealModalProps {
 
 const CardRevealModal = ({ card, variant, isNewVariant, onClose }: CardRevealModalProps) => {
   const [isAnimating, setIsAnimating] = useState(true);
-  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     // Stop bounce animation after 1 second
     const timer = setTimeout(() => setIsAnimating(false), 1000);
-    // Show details after initial animation
-    const detailsTimer = setTimeout(() => setShowDetails(true), 600);
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(detailsTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   const isAlternateVariant = variant.variantType === VariantType.Alternate;
@@ -677,10 +654,6 @@ const CardRevealModal = ({ card, variant, isNewVariant, onClose }: CardRevealMod
       default:
         return '';
     }
-  };
-
-  const getLevelStars = () => {
-    return '★'.repeat(card.level);
   };
 
   return (
@@ -749,7 +722,7 @@ const CardRevealModal = ({ card, variant, isNewVariant, onClose }: CardRevealMod
         </div>
 
         {/* Card Display */}
-        <div className="bg-slate-900 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="flex flex-col items-center mb-4 sm:mb-6">
           {/* Variant Info */}
           {isAlternateVariant && (
             <div className="text-center mb-3 animate-fadeIn">
@@ -762,68 +735,16 @@ const CardRevealModal = ({ card, variant, isNewVariant, onClose }: CardRevealMod
             </div>
           )}
 
-          {/* Level Stars */}
-          <div
-            className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
-              card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
-            }`}
-            style={{ animationDelay: '200ms' }}
-          >
-            {getLevelStars()}
+          {/* Card Image */}
+          <div className="animate-scaleIn">
+            <GameCard
+              card={card}
+              variant={variant as CardVariant}
+              size="full"
+              interactive={false}
+              showStats={true}
+            />
           </div>
-
-          {/* Card Icon */}
-          <div className="flex justify-center mb-3 sm:mb-4">
-            <div
-              className={`text-6xl sm:text-8xl animate-scaleIn ${
-                isAlternateVariant ? 'animate-pulse-glow' : ''
-              }`}
-            >
-              {card.faction === Faction.West ? '⚪' : '⚫'}
-            </div>
-          </div>
-
-          {/* Card Name */}
-          <h3
-            className="text-xl sm:text-2xl font-bold text-center text-slate-100 mb-2 animate-slideUp"
-            style={{ animationDelay: '300ms' }}
-          >
-            {card.name}
-          </h3>
-          <p
-            className="text-xs sm:text-sm text-slate-400 text-center italic mb-3 sm:mb-4 animate-fadeIn"
-            style={{ animationDelay: '400ms' }}
-          >
-            Parody of {card.parody}
-          </p>
-
-          {/* Stats */}
-          {showDetails && (
-            <div className="space-y-2 border-t border-slate-700 pt-3 sm:pt-4 animate-slideUp">
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Faction:</span>
-                <span
-                  className={`font-semibold ${
-                    card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
-                  }`}
-                >
-                  {card.faction}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Devotees:</span>
-                <span className="font-semibold text-slate-200">
-                  {card.soldiers.toLocaleString()} 🪖
-                </span>
-              </div>
-              {card.ability && (
-                <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="text-slate-400">Ability:</span>
-                  <span className="font-semibold text-amber-400">{card.ability}</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Close Button */}
@@ -856,17 +777,11 @@ const MultiCardRevealModal = ({
   onNext,
 }: MultiCardRevealModalProps) => {
   const [isAnimating, setIsAnimating] = useState(true);
-  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     // Stop bounce animation after 1 second
     const timer = setTimeout(() => setIsAnimating(false), 1000);
-    // Show details after initial animation
-    const detailsTimer = setTimeout(() => setShowDetails(true), 600);
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(detailsTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   const isAlternateVariant = variant.variantType === VariantType.Alternate;
@@ -905,10 +820,6 @@ const MultiCardRevealModal = ({
       default:
         return '';
     }
-  };
-
-  const getLevelStars = () => {
-    return '★'.repeat(card.level);
   };
 
   const isLastCard = cardNumber === totalCards;
@@ -991,7 +902,7 @@ const MultiCardRevealModal = ({
         </div>
 
         {/* Card Display */}
-        <div className="bg-slate-900 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="flex flex-col items-center mb-4 sm:mb-6">
           {/* Variant Info */}
           {isAlternateVariant && (
             <div className="text-center mb-3 animate-fadeIn">
@@ -1004,68 +915,16 @@ const MultiCardRevealModal = ({
             </div>
           )}
 
-          {/* Level Stars */}
-          <div
-            className={`text-center text-base sm:text-lg font-bold mb-2 sm:mb-3 animate-fadeIn ${
-              card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
-            }`}
-            style={{ animationDelay: '200ms' }}
-          >
-            {getLevelStars()}
+          {/* Card Image */}
+          <div className="animate-scaleIn">
+            <GameCard
+              card={card}
+              variant={variant as CardVariant}
+              size="full"
+              interactive={false}
+              showStats={true}
+            />
           </div>
-
-          {/* Card Icon */}
-          <div className="flex justify-center mb-3 sm:mb-4">
-            <div
-              className={`text-6xl sm:text-8xl animate-scaleIn ${
-                isAlternateVariant ? 'animate-pulse-glow' : ''
-              }`}
-            >
-              {card.faction === Faction.West ? '⚪' : '⚫'}
-            </div>
-          </div>
-
-          {/* Card Name */}
-          <h3
-            className="text-xl sm:text-2xl font-bold text-center text-slate-100 mb-2 animate-slideUp"
-            style={{ animationDelay: '300ms' }}
-          >
-            {card.name}
-          </h3>
-          <p
-            className="text-xs sm:text-sm text-slate-400 text-center italic mb-3 sm:mb-4 animate-fadeIn"
-            style={{ animationDelay: '400ms' }}
-          >
-            Parody of {card.parody}
-          </p>
-
-          {/* Stats */}
-          {showDetails && (
-            <div className="space-y-2 border-t border-slate-700 pt-3 sm:pt-4 animate-slideUp">
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Faction:</span>
-                <span
-                  className={`font-semibold ${
-                    card.faction === Faction.West ? 'text-amber-400' : 'text-purple-400'
-                  }`}
-                >
-                  {card.faction}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-slate-400">Devotees:</span>
-                <span className="font-semibold text-slate-200">
-                  {card.soldiers.toLocaleString()} 🪖
-                </span>
-              </div>
-              {card.ability && (
-                <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="text-slate-400">Ability:</span>
-                  <span className="font-semibold text-amber-400">{card.ability}</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Next Button */}
