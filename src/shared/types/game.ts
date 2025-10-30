@@ -114,6 +114,7 @@ export interface Player {
   username: string;
   level: number;
   xp: number;
+  xpToNextLevel?: number; // XP needed to reach next level (optional for backward compatibility)
   coins: number;
   factionPoints: {
     [Faction.East]: number;

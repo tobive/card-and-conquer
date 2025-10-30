@@ -24,7 +24,7 @@ import {
 } from '../shared/types/api';
 import { reddit, redis, createServer, context, getServerPort } from '@devvit/web/server';
 import { createPost, createBattlePost, postComment, postWarVictoryAnnouncement } from './core/post';
-import { getOrCreatePlayer, getPlayer } from './core/player';
+import { getOrCreatePlayer, getPlayer, xpToNextLevel } from './core/player';
 import {
   getInventoryCards,
   grantInitialCards,
@@ -131,11 +131,15 @@ router.get('/api/player/profile', async (_req, res): Promise<void> => {
       factionAffiliation = Faction.East;
     }
 
+    // Calculate XP needed for next level
+    const xpToNext = xpToNextLevel(player.xp);
+
     const response: PlayerProfileResponse = {
       player: {
         username: player.username,
         level: player.level,
         xp: player.xp,
+        xpToNextLevel: xpToNext,
         coins: player.coins,
         factionPoints: {
           [Faction.West]: westPoints,

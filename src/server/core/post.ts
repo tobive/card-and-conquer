@@ -12,8 +12,8 @@ export const createPost = async () => {
       appDisplayName: 'card-and-conquer',
       backgroundUri: 'default-splash.png',
       buttonLabel: 'Tap to Start',
-      description: 'An exciting interactive experience',
-      heading: 'Welcome to the Game!',
+      description: 'Collect the Gods, join the Battle!',
+      heading: ' ',
       appIconUri: 'default-icon.png',
     },
     postData: {
@@ -22,6 +22,7 @@ export const createPost = async () => {
     },
     subredditName: subredditName,
     title: 'card-and-conquer',
+    nsfw: false,
   });
 };
 
@@ -88,6 +89,7 @@ export async function createBattlePost(
     },
     subredditName: subredditName,
     title,
+    nsfw: false,
   });
 }
 
@@ -125,5 +127,6 @@ export async function postWarVictoryAnnouncement(
     },
     subredditName: subredditName,
     title,
+    nsfw: false,
   });
 }

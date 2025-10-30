@@ -107,14 +107,24 @@ Built natively for Reddit using Devvit, battles create Reddit posts with live up
    - New players receive **5 free cards** to start
    - These cards determine your initial faction affiliation
    - You start with **100 coins** and are at **Level 1**
+   - Your username is automatically pulled from your Reddit account
+
+3. **Main Menu Dashboard**
+   - See your personalized welcome message with username
+   - Track your level progression with an animated XP bar
+   - View quick stats: total cards, win rate, and bonus pulls
+   - Monitor the global faction war with the animated slider
+   - Check your session stats to see current game progress
 
 ### Main Menu Overview
 
 The main menu displays:
-- **War Status** - Current faction war slider position and leader
-- **Session Stats** - Your current game session progress
-- **Quick Stats** - Total cards, win rate, and bonus pulls available
-- **Action Buttons** - Access all game features
+- **Welcome Banner** - Personalized greeting with your username
+- **Level & XP Progress** - Visual progress bar showing your current level and XP toward next level
+- **Quick Stats** - Total cards collected, win rate percentage, and bonus pulls available
+- **War Status** - Animated faction war slider showing current position and leader
+- **Session Stats** - Compact widget showing your current game session progress
+- **Action Buttons** - Quick access to all game features (Battle, Gacha, Collection, etc.)
 
 ### Collecting Cards
 
@@ -296,9 +306,12 @@ If you win with your **favored faction** (⭐):
 - Bonus pulls guarantee cards from your winning faction
 
 #### Level Progression
-- Earn XP from battles
-- Level up to unlock higher-tier cards
+- Earn **50 XP per battle** (win, loss, or draw)
+- Level up to unlock higher-tier cards in gacha
 - Level thresholds: 100, 250, 450, 700, 1000+ XP
+- **Visual Progress Bar** on main menu shows XP toward next level
+- Current level and XP displayed prominently with your username
+- Higher levels unlock access to stronger cards (Level 5 = all cards)
 
 ### Game Sessions
 

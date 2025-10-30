@@ -10,7 +10,7 @@ export const WelcomePage: React.FC = () => {
           Card & Conquer
         </h2>
         <p className="text-lg sm:text-xl lg:text-2xl text-slate-300 font-semibold px-4">
-          Choose your faction. Conquer the land.
+          Choose your faction. Conquer the realm.
         </p>
       </div>
 

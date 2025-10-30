@@ -58,7 +58,7 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
           Card & Conquer
         </h1>
         <p className="text-sm tracking-widest text-slate-400 uppercase animate-fadeIn">
-          A Battle for Supremacy
+          Battle of Pantheons
         </p>
       </div>
 

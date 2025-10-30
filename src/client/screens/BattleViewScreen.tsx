@@ -985,11 +985,38 @@ export const BattleViewScreen = () => {
       </div>
 
       {/* Main content */}
-      <div className="pb-6">
-        <div className="max-w-6xl mx-auto">
+      <div className="pb-6 relative">
+        {/* Completed Battle Overlay */}
+        {(battle.status === BattleStatus.Completed || battle.status === BattleStatus.Stalemate) && (
+          <div className="absolute inset-0 bg-slate-900/60 z-10 pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-800/40 via-transparent to-slate-800/40" />
+          </div>
+        )}
+        
+        <div className="max-w-6xl mx-auto relative">
+          {/* Battle Completed Banner */}
+          {(battle.status === BattleStatus.Completed || battle.status === BattleStatus.Stalemate) && (
+            <div className="mb-4 card p-4 border-2 border-slate-500 bg-slate-800/80 backdrop-blur-sm relative z-20">
+              <div className="flex items-center justify-center gap-3">
+                <div className="text-3xl">🏛️</div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-slate-300 mb-1">
+                    {battle.status === BattleStatus.Stalemate ? 'Battle Ended in Stalemate' : 'Battle Completed'}
+                  </div>
+                  <div className="text-sm text-slate-400">
+                    {battle.status === BattleStatus.Stalemate 
+                      ? 'This battle ended with no clear victor'
+                      : `${determineBattleWinner(battle)} faction emerged victorious`}
+                  </div>
+                </div>
+                <div className="text-3xl">🏛️</div>
+              </div>
+            </div>
+          )}
+
           {/* Error Display */}
           {error && (
-            <div className="mb-4 card p-4 border-2 border-red-400/50 bg-red-900/20 animate-shake">
+            <div className="mb-4 card p-4 border-2 border-red-400/50 bg-red-900/20 animate-shake relative z-20">
               <div className="flex items-start gap-3">
                 <div className="text-2xl">⚠️</div>
                 <div className="flex-1">

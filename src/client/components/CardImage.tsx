@@ -53,6 +53,13 @@ export const CardImage = memo(({
     setIsLoading(true);
     setHasError(false);
     setUsedFallback(false);
+    
+    // Check if image is already cached/loaded
+    const cachedImg = getCachedImage(newOptimizedSrc);
+    if (cachedImg.complete && cachedImg.naturalHeight !== 0) {
+      // Image is already loaded, skip loading state
+      setIsLoading(false);
+    }
   }, [src, size]);
 
   const handleImageError = useCallback(() => {
@@ -152,7 +159,11 @@ export const CardImage = memo(({
       <img
         src={currentSrc}
         alt={alt}
-        style={style}
+        style={{
+          ...style,
+          opacity: isLoading ? 0 : 1,
+          transition: 'opacity 0.2s ease-in-out',
+        }}
         onError={handleImageError}
         onLoad={handleImageLoad}
         loading={loadingStrategy}
@@ -171,6 +182,7 @@ export const CardImage = memo(({
             justifyContent: 'center',
             backgroundColor: 'rgba(30, 41, 59, 0.9)',
             zIndex: 10,
+            pointerEvents: 'none',
           }}
         >
           <div

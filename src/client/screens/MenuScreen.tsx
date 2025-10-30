@@ -11,6 +11,10 @@ interface QuickStats {
   totalCards: number;
   winRate: number;
   bonusPulls: { east: number; west: number };
+  username: string;
+  level: number;
+  xp: number;
+  xpForNextLevel: number;
 }
 
 export const MenuScreen = () => {
@@ -21,6 +25,10 @@ export const MenuScreen = () => {
     totalCards: 0,
     winRate: 0,
     bonusPulls: { east: 0, west: 0 },
+    username: '',
+    level: 1,
+    xp: 0,
+    xpForNextLevel: 100,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -87,15 +95,28 @@ export const MenuScreen = () => {
 
   const fetchQuickStats = async () => {
     try {
+      // Fetch player profile for username, level, and XP
+      const profileResponse = await fetch('/api/player/profile');
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        setQuickStats((prev) => ({
+          ...prev,
+          username: profileData.username || '',
+          level: profileData.level || 1,
+          xp: profileData.xp || 0,
+          xpForNextLevel: profileData.xpToNextLevel || 100,
+        }));
+      }
+
       // Fetch user statistics
       const statsResponse = await fetch('/api/user/statistics');
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
-        setQuickStats({
+        setQuickStats((prev) => ({
+          ...prev,
           totalCards: statsData.totalCards || 0,
           winRate: statsData.winRate || 0,
-          bonusPulls: { east: 0, west: 0 },
-        });
+        }));
       }
 
       // Fetch bonus gacha status
@@ -152,7 +173,7 @@ export const MenuScreen = () => {
             Card And Conquer
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm md:text-base">
-            Choose your faction. Conquer the land.
+            Choose your faction. Conquer the realm.
           </p>
         </div>
 
@@ -167,9 +188,37 @@ export const MenuScreen = () => {
           }} 
         />
 
-        {/* Quick Stats Bar */}
-        <div className="card p-3 sm:p-4">
-          <div className="flex justify-around items-center gap-2 sm:gap-4">
+        {/* User Welcome & Stats */}
+        <div className="card p-4 sm:p-5 space-y-3">
+          {/* Welcome Message */}
+          <div className="text-center">
+            <h2 className="text-lg sm:text-xl font-bold text-amber-400">
+              Welcome, {quickStats.username || 'Warrior'}!
+            </h2>
+          </div>
+
+          {/* Level & XP Progress */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-slate-400">Level {quickStats.level}</span>
+              <span className="text-slate-400">
+                {quickStats.xp}/{quickStats.xp + quickStats.xpForNextLevel} XP
+              </span>
+            </div>
+            <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+              <div
+                className="absolute left-0 top-0 h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-500"
+                style={{
+                  width: `${Math.min(100, (quickStats.xp / (quickStats.xp + quickStats.xpForNextLevel)) * 100)}%`,
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-300/30 to-transparent animate-shimmer" />
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="flex justify-around items-center gap-2 sm:gap-4 pt-2 border-t border-slate-700">
             <QuickStat icon="📚" label="Cards" value={quickStats.totalCards} />
             <div className="h-8 w-px bg-slate-700" />
             <QuickStat
@@ -373,7 +422,7 @@ const WarInfo = ({ warStatus }: WarInfoProps) => {
     if (currentLeader === 'Neutral') {
       return 'Win battles to shift the balance';
     }
-    return `${battlesUntilVictory} ${battlesUntilVictory === 1 ? 'win' : 'wins'} until ${currentLeader} conquers the land!`;
+    return `${battlesUntilVictory} ${battlesUntilVictory === 1 ? 'win' : 'wins'} until ${currentLeader} conquers the realm!`;
   };
 
   return (
