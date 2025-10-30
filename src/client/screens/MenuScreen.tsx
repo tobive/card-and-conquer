@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from '../contexts/RouterContext';
 import { Button } from '../components/Button';
-import { SessionStats } from '../components/SessionStats';
-import { useSession } from '../hooks';
 import { Faction } from '../../shared/types/game';
 import type { WarStatusResponse } from '../../shared/types/api';
 import { useAssetPreloader } from '../hooks/useAssetPreloader';
@@ -15,11 +13,13 @@ interface QuickStats {
   level: number;
   xp: number;
   xpForNextLevel: number;
+  sessionBattles: number;
+  sessionBonuses: number;
+  favoredFaction: string;
 }
 
 export const MenuScreen = () => {
   const { navigate } = useRouter();
-  const { completeSession } = useSession();
   const [warStatus, setWarStatus] = useState<WarStatusResponse | null>(null);
   const [quickStats, setQuickStats] = useState<QuickStats>({
     totalCards: 0,
@@ -29,6 +29,9 @@ export const MenuScreen = () => {
     level: 1,
     xp: 0,
     xpForNextLevel: 100,
+    sessionBattles: 0,
+    sessionBonuses: 0,
+    favoredFaction: 'None',
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -101,10 +104,10 @@ export const MenuScreen = () => {
         const profileData = await profileResponse.json();
         setQuickStats((prev) => ({
           ...prev,
-          username: profileData.username || '',
-          level: profileData.level || 1,
-          xp: profileData.xp || 0,
-          xpForNextLevel: profileData.xpToNextLevel || 100,
+          username: profileData.player?.username || '',
+          level: profileData.player?.level || 1,
+          xp: profileData.player?.xp || 0,
+          xpForNextLevel: profileData.player?.xpToNextLevel || 100,
         }));
       }
 
@@ -129,6 +132,18 @@ export const MenuScreen = () => {
             east: bonusData.eastPulls || 0,
             west: bonusData.westPulls || 0,
           },
+        }));
+      }
+
+      // Fetch session data
+      const sessionResponse = await fetch('/api/session');
+      if (sessionResponse.ok) {
+        const sessionData = await sessionResponse.json();
+        setQuickStats((prev) => ({
+          ...prev,
+          sessionBattles: sessionData.session?.battlesThisSession || 0,
+          sessionBonuses: sessionData.session?.factionBonusesEarned || 0,
+          favoredFaction: sessionData.stats?.favoredFaction || 'None',
         }));
       }
     } catch (err) {
@@ -177,22 +192,11 @@ export const MenuScreen = () => {
           </p>
         </div>
 
-        {/* Session Stats */}
-        <SessionStats 
-          compact 
-          onCompleteSession={async () => {
-            const result = await completeSession();
-            if (result) {
-              console.log('Session completed:', result.summary);
-            }
-          }} 
-        />
-
-        {/* User Welcome & Stats */}
-        <div className="card p-4 sm:p-5 space-y-3">
+        {/* User Profile & Stats - Merged Panel */}
+        <div className="card p-4 sm:p-5 space-y-4">
           {/* Welcome Message */}
           <div className="text-center">
-            <h2 className="text-lg sm:text-xl font-bold text-amber-400">
+            <h2 className="text-xl sm:text-2xl font-bold text-amber-400">
               Welcome, {quickStats.username || 'Warrior'}!
             </h2>
           </div>
@@ -217,19 +221,28 @@ export const MenuScreen = () => {
             </div>
           </div>
 
-          {/* Quick Stats */}
-          <div className="flex justify-around items-center gap-2 sm:gap-4 pt-2 border-t border-slate-700">
-            <QuickStat icon="📚" label="Cards" value={quickStats.totalCards} />
+          {/* Session Stats */}
+          <div className="flex justify-around items-center gap-2 sm:gap-3 py-3 border-y border-slate-700">
+            <QuickStat icon="⚔️" label="Session Battles" value={quickStats.sessionBattles} />
+            <div className="h-8 w-px bg-slate-700" />
+            <QuickStat icon="⭐" label="Bonuses" value={quickStats.sessionBonuses} />
+            <div className="h-8 w-px bg-slate-700" />
+            <QuickStat icon="🏴" label="Favored" value={quickStats.favoredFaction} />
+          </div>
+
+          {/* Overall Stats */}
+          <div className="flex justify-around items-center gap-2 sm:gap-3">
+            <QuickStat icon="📚" label="Total Cards" value={quickStats.totalCards} />
             <div className="h-8 w-px bg-slate-700" />
             <QuickStat
-              icon="⚔️"
+              icon="🎯"
               label="Win Rate"
               value={quickStats.winRate > 0 ? `${quickStats.winRate}%` : 'N/A'}
             />
             <div className="h-8 w-px bg-slate-700" />
             <QuickStat
               icon="🎁"
-              label="Bonus"
+              label="Bonus Pulls"
               value={quickStats.bonusPulls.east + quickStats.bonusPulls.west}
             />
           </div>
